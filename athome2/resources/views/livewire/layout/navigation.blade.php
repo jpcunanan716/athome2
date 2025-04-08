@@ -5,63 +5,78 @@
             <div class="flex">
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
-                    <a href="{{ route('dashboard') }}" wire:navigate>
+                    <a href="{{ route('home') }}" wire:navigate>
                         <img src="{{ asset('storage/media/logo.png') }}" alt="Application Logo" class="block h-16 w-auto">
                     </a>
                 </div>
 
-                <!-- Navigation Links -->
+                <!-- Navigation Links
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" wire:navigate>
                         {{ __('Dashboard') }}
                     </x-nav-link>
-                </div>
+                </div> -->
+                
             </div>
 
-            <!-- Settings Dropdown -->
-            <div class="hidden sm:flex sm:items-center sm:ms-6">
-                <x-dropdown align="right" width="48">
-                    <x-slot name="trigger">
-                        <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
-                            <div x-data="{{ json_encode(['name' => auth()->user()?->name ?? 'Guest']) }}" x-text="name" x-on:profile-updated.window="name = $event.detail.name"></div>
-                            <div class="ms-1">
-                                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-                                </svg>
-                            </div>
-                        </button>
-                    </x-slot>
+            <div class="flex items-center">
+                <!-- Switch to Owner Link -->
+                <div class="hidden sm:flex mr-4">
+                    <a href="{{ route('rentals') }}" class="text-gray-600 hover:text-gray-900 text-sm font-medium transition duration-150 ease-in-out" wire:navigate>
+                        Switch to Owner
+                    </a>
+                </div>
 
-                    <x-slot name="content">
-                        @auth
-                            <!-- Display these options if the user is authenticated -->
-                            <x-responsive-nav-link :href="route('profile')" wire:navigate>
-                                {{ __('Profile') }}
-                            </x-responsive-nav-link>
+                <!-- Settings Dropdown -->
+                <div class="hidden sm:flex sm:items-center sm:ms-6">
+                    <x-dropdown align="right" width="48">
+                        <x-slot name="trigger">
+                            <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
+                                <div x-data="{{ json_encode(['name' => auth()->user()?->name ?? 'Guest']) }}" x-text="name" x-on:profile-updated.window="name = $event.detail.name"></div>
+                                <div class="ms-1">
+                                    <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                    </svg>
+                                </div>
+                            </button>
+                        </x-slot>
 
-                             <!-- Favorites -->
-                             <x-responsive-nav-link :href="route('favorites')" wire:navigate>
-                                {{ __('Favorites') }}
-                            </x-responsive-nav-link>
+                        <x-slot name="content">
+                            @auth
+                                <!-- Display these options if the user is authenticated -->
+                                <x-responsive-nav-link :href="route('profile')" wire:navigate>
+                                    {{ __('Profile') }}
+                                </x-responsive-nav-link>
 
-                            <!-- Authentication -->
-                                <button wire:click="logout" class="w-full text-start">
-                                    <x-dropdown-link>
-                                        {{ __('Log Out') }}
-                                    </x-dropdown-link>
-                                </button>
-                        @else
-                            <!-- Display these options if the user is a guest -->
-                            <x-dropdown-link :href="route('login')" wire:navigate>
-                                {{ __('Log In') }}
-                            </x-dropdown-link>
+                                 <!-- Favorites -->
+                                 <x-responsive-nav-link :href="route('favorites')" wire:navigate>
+                                    {{ __('Favorites') }}
+                                </x-responsive-nav-link>
 
-                            <x-dropdown-link :href="route('register')" wire:navigate>
-                                {{ __('Sign Up') }}
-                            </x-dropdown-link>
-                        @endauth
-                    </x-slot>
-                </x-dropdown>
+                                <!-- My Rentals -->
+                                <x-responsive-nav-link :href="route('my-rentals')" wire:navigate>
+                                    {{ __('My Rentals') }}
+                                </x-responsive-nav-link>
+
+                                <!-- Authentication -->
+                                    <button wire:click="logout" class="w-full text-start">
+                                        <x-dropdown-link>
+                                            {{ __('Log Out') }}
+                                        </x-dropdown-link>
+                                    </button>
+                            @else
+                                <!-- Display these options if the user is a guest -->
+                                <x-dropdown-link :href="route('login')" wire:navigate>
+                                    {{ __('Log In') }}
+                                </x-dropdown-link>
+
+                                <x-dropdown-link :href="route('register')" wire:navigate>
+                                    {{ __('Sign Up') }}
+                                </x-dropdown-link>
+                            @endauth
+                        </x-slot>
+                    </x-dropdown>
+                </div>
             </div>
 
             <!-- Hamburger -->
@@ -81,6 +96,11 @@
         <div class="pt-2 pb-3 space-y-1">
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" wire:navigate>
                 {{ __('Dashboard') }}
+            </x-responsive-nav-link>
+            
+            <!-- Mobile Switch to Owner Link -->
+            <x-responsive-nav-link :href="route('rentals')" wire:navigate>
+                {{ __('Switch to Owner') }}
             </x-responsive-nav-link>
         </div>
 
@@ -102,6 +122,11 @@
                      <x-dropdown-link :href="route('profile')" wire:navigate>
                                 {{ __('Favorites') }}
                      </x-dropdown-link>
+
+                     <!-- My Rentals -->
+                     <x-responsive-nav-link :href="route('my-rentals')" wire:navigate>
+                                {{ __('My Rentals') }}
+                    </x-responsive-nav-link>
 
                     <!-- Authentication -->
                     <button wire:click="logout" class="w-full text-start">

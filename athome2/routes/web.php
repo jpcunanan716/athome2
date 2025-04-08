@@ -9,6 +9,7 @@ use App\Livewire\MediaManager;
 use App\Livewire\HouseDetails;
 use App\Livewire\FavoritesList;
 use App\Livewire\RentalManagement;
+use App\Livewire\UserRentals;
 use Livewire\Livewire;
 
 Route::view('/', 'welcome');
@@ -42,6 +43,7 @@ Route::get('/new-listing', CreateListing::class);
 Route::get('/add-images', MediaManager::class);
 Route::get('/house/{houseId}', HouseDetails::class)->name('house.show');
 Route::get('/favorites', FavoritesList::class)->name('favorites');
-Route::get('/rentals', RentalManagement::class)->middleware(['auth', 'admin']);
+Route::get('/rentals', RentalManagement::class)->middleware(['auth'])->name('rentals');
+Route::get('/my-rentals', UserRentals::class)->name('my-rentals')->middleware('auth');
 
 require __DIR__.'/auth.php';

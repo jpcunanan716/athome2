@@ -10,9 +10,9 @@
     <div x-data="{ current: 0, images: {{ json_encode($house->media->pluck('image_path')) }} }">
         
         <!-- Main Display Image -->
-        <div class="relative w-full h-96">
+        <div class="relative w-full h-full">
             <img :src="'{{ asset('storage') }}/' + images[current]"
-                class="w-full h-96 object-cover rounded-md shadow-md transition-opacity duration-500"
+                class="w-full h-full object-cover rounded-md shadow-md transition-opacity duration-500"
                 x-transition:enter="opacity-0"
                 x-transition:enter-start="opacity-0"
                 x-transition:enter-end="opacity-100">
