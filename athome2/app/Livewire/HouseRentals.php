@@ -18,6 +18,8 @@ class HouseRentals extends Component
     public function mount(House $house)
     {
         $this->house = $house;
+        $this->start_date = now()->format('Y-m-d');
+        $this->end_date = now()->addDay()->format('Y-m-d');
     }
 
     public function calculatePrice()
@@ -32,6 +34,11 @@ class HouseRentals extends Component
 
     public function rent()
     {
+
+        if (auth()->guest()) {
+            return;
+        }
+        
         $this->validate([
             'start_date' => 'required|date|after_or_equal:today',
             'end_date' => 'required|date|after:start_date',
@@ -50,6 +57,16 @@ class HouseRentals extends Component
         $this->reset(['start_date', 'end_date', 'total_price', 'showForm']);
     }
     
+    public function updatedStartDate($value)
+    {
+        // Ensure end date is always after start date
+        if ($this->end_date < $value) {
+            $this->end_date = $value;
+        }
+        $this->calculatePrice();
+    }
+    
+
     public function render()
     {
         return view('livewire.house-rentals')->layout('layouts.app');

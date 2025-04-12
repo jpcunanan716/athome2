@@ -68,4 +68,13 @@ class User extends Authenticatable
         return $this->belongsToMany(House::class, 'favorites');
     }
 
+    public function conversations()
+    {
+        return $this->belongsToMany(Conversation::class, 'message_participants');
+    }
+
+    public function messages()
+    {
+        return $this->hasMany(Message::class, 'sender_id');
+    }   
 }

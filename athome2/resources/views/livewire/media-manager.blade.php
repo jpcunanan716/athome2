@@ -29,32 +29,4 @@
             Upload Images
         </button>
     </form>
-
-    <!-- List of media entries -->
-    <div class="mt-8">
-        <table class="min-w-full bg-white border border-gray-200">
-            <thead>
-                <tr class="bg-gray-100">
-                    <th class="py-2 px-4 border-b">ID</th>
-                    <th class="py-2 px-4 border-b">Image</th>
-                    <th class="py-2 px-4 border-b">Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($mediaList as $media)
-                    <tr class="hover:bg-gray-50">
-                        <td class="py-2 px-4 border-b">{{ $media->id }}</td>
-                        <td class="py-2 px-4 border-b">
-                            <img src="{{ asset('storage/' . $media->image_path) }}" alt="Image" class="w-16 h-16 object-cover rounded">
-                        </td>
-                        <td class="py-2 px-4 border-b">
-                            <button wire:click="delete({{ $media->id }})" class="text-red-500 hover:text-red-700">
-                                Delete
-                            </button>
-                        </td>
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
-    </div>
 </div>

@@ -51,17 +51,6 @@
                     <p class="text-sm text-red-600">{{ $message }}</p>
                 @enderror
 
-
-                <!-- Province -->
-                <div>
-                    <label for="province" class="block text-sm font-medium text-gray-700">Province</label>
-                    <input type="text" wire:model="province" id="province" placeholder="Enter province"
-                           class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-                </div>
-                @error('province')
-                    <p class="text-sm text-red-600">{{ $message }}</p>
-                @enderror
-
                 <!-- City -->
                 <div>
                     <label for="city" class="block text-sm font-medium text-gray-700">City/Municipality</label>
@@ -71,33 +60,21 @@
                 @error('city')
                     <p class="text-sm text-red-600">{{ $message }}</p>
                 @enderror
-               
+
+                 <!-- Province -->
+                 <div>
+                    <label for="province" class="block text-sm font-medium text-gray-700">Province</label>
+                    <input type="text" wire:model="province" id="province" placeholder="Enter province"
+                           class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                @error('province')
+                    <p class="text-sm text-red-600">{{ $message }}</p>
+                @enderror
+
                 <!-- Total Occupants -->
-                <!-- <div x-data="{ count: @entangle('total_occupants').defer || 1 }">
-                    <label for="total_occupants" class="block text-sm font-medium text-gray-700">
-                        Total Occupants
-                    </label>
-
-                    <div class="mt-1 flex rounded-md shadow-sm">
-                        <button type="button" @click="count > 1 ? count-- : count" 
-                                class="px-3 py-2 bg-gray-200 rounded-l-md border border-gray-300 hover:bg-gray-300">
-                            -
-                        </button>
-
-                        <input type="text" x-model="count" id="total_occupants" wire:model="total_occupants"
-                            @input="count = count.replace(/[^0-9]/g, '')"
-                            class="w-full px-3 py-2 border border-gray-300 text-center focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            inputmode="numeric" pattern="[0-9]*" autocomplete="off" />
-                            
-                        <button type="button" @click="count++" 
-                                class="px-3 py-2 bg-gray-200 rounded-r-md border border-gray-300 hover:bg-gray-300">
-                            +
-                        </button>
-                    </div>
-                </div> -->
                 <div>
                     <label for="total_occupants" class="block text-sm font-medium text-gray-700">Occupants</label>
-                    <input type="text" wire:model="total_occupants" id="total_occupants" placeholder="Enter total_occupants"
+                    <input type="text" wire:model="total_occupants" id="total_occupants" placeholder="Enter Total Occupants"
                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
                 </div>
                 @error('total_occupants')

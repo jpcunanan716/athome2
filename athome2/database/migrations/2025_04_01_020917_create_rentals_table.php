@@ -18,6 +18,7 @@ return new class extends Migration
             $table->integer('house_id')->unsigned();
             $table->date('start_date');
             $table->date('end_date');
+            $table->integer('number_of_guests');
             $table->float('total_price');
             $table->string('status')->default('pending'); // pending, confirmed, cancelled, completed
             $table->text('notes')->nullable();
