@@ -6,7 +6,7 @@
              alt="{{ $conversation->otherParticipant->name }}">
         <div>
             <h3 class="font-medium">{{ $conversation->otherParticipant->name }}</h3>
-            <p class="text-sm text-gray-500">{{ $conversation->property->title }}</p>
+            <p class="text-sm text-gray-500">{{ $conversation->House->housename }}</p>
         </div>
     </div>
     

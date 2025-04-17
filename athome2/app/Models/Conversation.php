@@ -10,15 +10,23 @@ class Conversation extends Model
 
     public function property()
     {
-        return $this->belongsTo(Property::class);
+        return $this->belongsTo(House::class);
     }
 
     public function participants()
     {
         return $this->belongsToMany(User::class, 'message_participants')
-            ->withPivot('is_read')
-            ->withTimestamps();
+                    ->withPivot(['is_read', 'last_read_at'])
+                    ->withTimestamps();
     }
+
+    public function getOtherParticipantAttribute()
+    {
+        return $this->participants()
+                    ->where('users.id', '!=', auth()->id())
+                    ->first();
+    }
+
 
     public function messages()
     {
@@ -27,7 +35,10 @@ class Conversation extends Model
 
     public function otherParticipant()
     {
-        return $this->participants()->where('user_id', '!=', auth()->id())->first();
+        return $this->belongsToMany(User::class, 'message_participants')
+                    ->where('users.id', '!=', auth()->id())
+                    ->withPivot(['is_read', 'last_read_at'])
+                    ->limit(1); // Still returns a relation instance
     }
 
     public function unreadCount()
