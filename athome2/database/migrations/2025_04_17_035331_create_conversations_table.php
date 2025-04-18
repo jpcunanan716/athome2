@@ -9,18 +9,18 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
+    public function up()
     {
         Schema::create('conversations', function (Blueprint $table) {
-            $table->increments('id');   // Primary key
+            $table->increments('id');
             $table->integer('house_id')->unsigned();
-
-            // Foreign key to the houses table
-            $table->foreign('house_id')->references('id')->on('houses')->onDelete('cascade');
+            $table->string('subject')->nullable();
             $table->timestamps();
-        }); 
+            
+            // Foreign key constraints
+            $table->foreign('house_id')->references('id')->on('houses')->onDelete('cascade');
+        });
     }
-    
 
     /**
      * Reverse the migrations.

@@ -127,8 +127,11 @@
                             </div>
 
                             <!-- Contact Button -->
-                    
-                            <livewire:start-conversation-button :house="$house" />
+                            
+                            <button onclick="$dispatch('open-new-conversation-modal', { houseId: {{ $house->id }} })"">
+                                Contact about this property
+                            </button>
+                            
                         
             </div>
         </div>

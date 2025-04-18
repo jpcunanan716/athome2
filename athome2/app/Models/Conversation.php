@@ -3,63 +3,47 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Conversation extends Model
 {
-    protected $fillable = ['house_id'];
-
-    public function property()
-    {
-        return $this->belongsTo(House::class);
-    }
-
-    public function participants()
-    {
-        return $this->belongsToMany(User::class, 'message_participants')
-                    ->withPivot(['is_read', 'last_read_at'])
-                    ->withTimestamps();
-    }
-
-    public function getOtherParticipantAttribute()
-    {
-        return $this->participants()
-                    ->where('users.id', '!=', auth()->id())
-                    ->first();
-    }
-
-
-    public function messages()
-    {
-        return $this->hasMany(Message::class)->latest();
-    }
-
-    public function otherParticipant()
-    {
-        return $this->belongsToMany(User::class, 'message_participants')
-                    ->where('users.id', '!=', auth()->id())
-                    ->withPivot(['is_read', 'last_read_at'])
-                    ->limit(1); // Still returns a relation instance
-    }
-
-    public function unreadCount()
-    {
-        return $this->messages()
-            ->where('sender_id', '!=', auth()->id())
-            ->whereNull('read_at')
-            ->count();
-    }
-
-    public function markAsRead()
-    {
-        $this->messages()
-            ->where('sender_id', '!=', auth()->id())
-            ->whereNull('read_at')
-            ->update(['read_at' => now()]);
-    }
-
+    use HasFactory;
+    
+    protected $fillable = ['house_id', 'subject'];
+    
     public function house()
     {
         return $this->belongsTo(House::class);
     }
     
+    public function users()
+    {
+        return $this->belongsToMany(User::class)
+                    ->withPivot('last_read_at')
+                    ->withTimestamps();
+    }
+    
+    public function messages()
+    {
+        return $this->hasMany(Message::class);
+    }
+    
+    public function latestMessage()
+    {
+        return $this->hasOne(Message::class)->latest();
+    }
+    
+    public function unreadMessagesForUser($userId)
+    {
+        $pivotData = $this->users()->where('user_id', $userId)->first()?->pivot;
+        $lastReadAt = $pivotData ? $pivotData->last_read_at : null;
+        
+        $query = $this->messages()->where('user_id', '!=', $userId);
+        
+        if ($lastReadAt) {
+            $query->where('created_at', '>', $lastReadAt);
+        }
+        
+        return $query->count();
+    }
 }

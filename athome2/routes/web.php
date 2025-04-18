@@ -10,8 +10,8 @@ use App\Livewire\HouseDetails;
 use App\Livewire\FavoritesList;
 use App\Livewire\RentalManagement;
 use App\Livewire\UserRentals;
-use App\Livewire\ConversationList;
-use App\Livewire\ConversationWindow;
+use App\Livewire\ConversationsList;
+use App\Livewire\ConversationMessages;
 use Livewire\Livewire;
 
 Route::view('/', 'welcome');
@@ -41,19 +41,18 @@ Route::middleware(['auth', 'verified'])->group(function () {
 });
 
 Route::get('/home', HouseListings::class)->name('home');
-Route::get('/new-listing', CreateListing::class);
+Route::get('/new-listing', CreateListing::class)->name('new-listing')->middleware(['auth']);
 Route::get('/add-images', MediaManager::class);
 Route::get('/house/{houseId}', HouseDetails::class)->name('house.show');
 Route::get('/favorites', FavoritesList::class)->name('favorites');
 Route::get('/rentals', RentalManagement::class)->middleware(['auth'])->name('rentals');
 Route::get('/my-rentals', UserRentals::class)->name('my-rentals')->middleware('auth');
 
-Route::middleware('auth')->group(function() {
-    // For the list view
-    Route::get('/messages', ConversationList::class)->name('messages.index');
-    
-    // For individual conversations
-    Route::get('/messages/{conversation}', ConversationWindow::class)->name('messages.show');
+Route::middleware(['auth'])->group(function () {
+    Route::get('/conversations', ConversationsList::class)->name('conversations.index');
+    Route::get('/conversations/{conversation}', function($conversation) {
+        return view('conversations.show', ['conversationId' => $conversation]);
+    })->name('conversations.show');
 });
 
 require __DIR__.'/auth.php';

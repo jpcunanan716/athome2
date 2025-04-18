@@ -1,6 +1,16 @@
 <div>
-    <h2 class="text-2xl font-bold mb-6">Rental Requests for My Properties</h2>
-    
+    <div class="flex justify-between items-center mb-6 p-6">
+        <h2 class="text-2xl font-bold mb-6">Rental Requests for My Properties</h2>
+        <a href="{{ route('new-listing') }}" 
+        class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
+            </svg>
+            New Listing
+        </a>
+    </div>
+
+
     @if($rentals->isEmpty())
         <div class="bg-white p-6 rounded-lg shadow text-center">
             <p class="text-gray-500">No rental requests for your properties yet.</p>

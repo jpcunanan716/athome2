@@ -9,22 +9,20 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
+    public function up()
     {
         Schema::create('messages', function (Blueprint $table) {
-            $table->increments('id'); // Primary key
+            $table->increments('id');
             $table->integer('conversation_id')->unsigned();
-            $table->integer('sender_id')->unsigned();
-            
-            // Foreign key constraints
-            $table->foreign('conversation_id')->references('id')->on('conversations')->onDelete('cascade');
-            $table->foreign('sender_id')->references('id')->on('users')->onDelete('cascade');
+            $table->integer('user_id')->unsigned();
             $table->text('content');
-            $table->timestamp('read_at')->nullable();
+            $table->boolean('is_read')->default(false);
             $table->timestamps();
+            
+            $table->foreign('conversation_id')->references('id')->on('conversations')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
-
     /**
      * Reverse the migrations.
      */

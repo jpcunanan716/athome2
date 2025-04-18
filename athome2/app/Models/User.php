@@ -70,11 +70,22 @@ class User extends Authenticatable
 
     public function conversations()
     {
-        return $this->belongsToMany(Conversation::class, 'message_participants');
+        return $this->belongsToMany(Conversation::class)
+                    ->withPivot('last_read_at')
+                    ->withTimestamps();
     }
 
     public function messages()
     {
-        return $this->hasMany(Message::class, 'sender_id');
-    }   
+        return $this->hasMany(Message::class);
+    }
+
+    public function unreadMessages()
+    {
+        $count = 0;
+        foreach ($this->conversations as $conversation) {
+            $count += $conversation->unreadMessagesForUser($this->id);
+        }
+        return $count;
+    }
 }
