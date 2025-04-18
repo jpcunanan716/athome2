@@ -18,19 +18,23 @@ class ConversationMessages extends Component
         'messageText' => 'required|string'
     ];
     
-    protected $listeners = [
-        'refreshMessages',
-        'messageAdded' => '$refresh'
-    ];
+    // In Livewire v3, listeners are defined differently
+    protected function getListeners()
+    {
+        return [
+            'refresh-messages' => 'refreshMessages',
+            'message-added' => '$refresh'
+        ];
+    }
     
     public function mount($conversationId)
     {
         $this->conversationId = $conversationId;
     }
     
-    public function refreshMessages($conversationId)
+    public function refreshMessages($conversationId = null)
     {
-        if ($this->conversationId == $conversationId) {
+        if (!$conversationId || $this->conversationId == $conversationId) {
             $this->resetPage();
         }
     }
@@ -53,9 +57,9 @@ class ConversationMessages extends Component
         // Reset form
         $this->reset('messageText');
         
-        // Emit event to refresh the conversation
-        $this->emitSelf('messageAdded');
-        $this->emitTo('conversations-list', 'conversationAdded');
+        // In Livewire v3, use $this->dispatch() instead of emit methods
+        $this->dispatch('message-added');
+        $this->dispatch('conversation-added')->to('ConversationsList');
     }
     
     public function render()
@@ -75,6 +79,6 @@ class ConversationMessages extends Component
         return view('livewire.conversation-messages', [
             'conversation' => $conversation,
             'messages' => $messages
-        ]);
+        ])->layout('layouts.app');
     }
 }

@@ -129,7 +129,15 @@
                             <!-- Contact Button -->
                             
                             <button onclick="$dispatch('open-new-conversation-modal', { houseId: {{ $house->id }} })"">
-                                Contact about this property
+                                <a 
+                                    href="{{ route('conversations.create', ['house_id' => $house->id]) }}"
+                                    class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                    <svg class="-ml-1 mr-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+                                    </svg>
+                                    Contact about this property
+                                </a>
+
                             </button>
                             
                         

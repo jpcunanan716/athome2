@@ -7,9 +7,8 @@ use App\Models\House;
 use App\Models\User;
 use App\Models\Conversation;
 
-class NewConversation extends Component
+class CreateConversation extends Component
 {
-    public $showModal = false;
     public $houseId;
     public $subject;
     public $selectedUsers = [];
@@ -23,38 +22,26 @@ class NewConversation extends Component
         'message' => 'required|string'
     ];
 
-    public function mount()
+    // Capture house_id from URL if provided
+    public function mount($house_id = null)
     {
-        $this->listeners = [
-            'open-new-conversation-modal' => 'openModal'
-        ];
-    }
-
-    public function openModal($houseId = null)
-{
-    $this->reset();
-    $this->houseId = $houseId;
-    
-    if ($houseId) {
-        $house = House::findOrFail($houseId);
-        // Auto-add house owner to recipients
-        if ($house->owner_id) {
-            $this->selectedUsers[] = $house->owner_id;
-        }
+        $this->houseId = $house_id;
         
-        // For existing rentals, add all tenants
-        if (auth()->user()->id === $house->owner_id) {
-            $tenantIds = $house->rentals->pluck('user_id')->toArray();
-            $this->selectedUsers = array_merge($this->selectedUsers, $tenantIds);
+        // Pre-populate recipients if house_id is provided
+        if ($this->houseId) {
+            $house = House::find($this->houseId);
+            if ($house) {
+                // If current user is house owner, add all tenants
+                if (auth()->id() === $house->user_id) {
+                    $tenantIds = $house->rentals->pluck('user_id')->toArray();
+                    $this->selectedUsers = array_values(array_diff($tenantIds, [auth()->id()]));
+                } 
+                // If current user is tenant, add the owner
+                else {
+                    $this->selectedUsers = [$house->user_id];
+                }
+            }
         }
-    }
-    
-    $this->showModal = true;
-}
-    
-    public function closeModal()
-    {
-        $this->showModal = false;
     }
     
     public function startConversation()
@@ -77,21 +64,16 @@ class NewConversation extends Component
             'content' => $this->message
         ]);
         
-        $this->closeModal();
-        
-        // Emit event to refresh conversations list
-        $this->emitTo('conversations-list', 'conversationAdded');
-        
         // Redirect to the conversation
         return redirect()->route('conversations.show', $conversation);
     }
     
     public function render()
     {
-        $houses = auth()->user()->houses;
-        $users = User::all();
+        $houses = House::all(); // Or filter based on user permissions
+        $users = User::where('id', '!=', auth()->id())->get();
         
-        return view('livewire.new-conversation', [
+        return view('livewire.create-conversation', [
             'houses' => $houses,
             'users' => $users
         ])->layout('layouts.app');

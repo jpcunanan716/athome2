@@ -48,6 +48,11 @@
                                     {{ __('Profile') }}
                                 </x-responsive-nav-link>
 
+                                <!-- Messages -->
+                                <x-responsive-nav-link :href="route('conversations.index')" wire:navigate>
+                                    {{ __('Messages') }}
+                                </x-responsive-nav-link>
+
                                  <!-- Favorites -->
                                  <x-responsive-nav-link :href="route('favorites')" wire:navigate>
                                     {{ __('Favorites') }}
@@ -116,6 +121,11 @@
                     <!-- Display these options if the user is authenticated -->
                     <x-responsive-nav-link :href="route('profile')" wire:navigate>
                         {{ __('Profile') }}
+                    </x-responsive-nav-link>
+
+                    <!-- Messages -->
+                    <x-responsive-nav-link :href="route('conversations.index')" wire:navigate>
+                                {{ __('Messages') }}
                     </x-responsive-nav-link>
 
                      <!-- Favorites -->

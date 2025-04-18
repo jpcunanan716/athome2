@@ -22,7 +22,7 @@ class ConversationsList extends Component
                         
         return view('livewire.conversations-list', [
             'conversations' => $conversations
-        ]);
+        ])->layout('layouts.app');
     }
     
     public function markAsRead($conversationId)
@@ -32,8 +32,6 @@ class ConversationsList extends Component
         // Update last read timestamp
         $conversation->users()->updateExistingPivot(auth()->id(), [
             'last_read_at' => now()
-        ]);
-        
-        $this->emitTo('conversation-messages', 'refreshMessages', $conversationId);
+        ])->layout('layouts.app');
     }
 }

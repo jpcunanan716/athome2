@@ -1,12 +1,12 @@
 <div>
     <div class="flex justify-between items-center mb-4">
         <h2 class="text-xl font-semibold">Conversations</h2>
-        <button 
+        <a 
+            href="{{ route('conversations.create') }}"
             class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-            onclick="Livewire.emit('openNewConversationModal')"
         >
             New Conversation
-        </button>
+        </a>
     </div>
     
     <div class="space-y-4">
