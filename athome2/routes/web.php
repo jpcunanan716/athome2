@@ -51,7 +51,7 @@ Route::get('/my-rentals', UserRentals::class)->name('my-rentals')->middleware('a
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/conversations', ConversationsList::class)->name('conversations.index');
-    Route::get('/conversations/create', CreateConversation::class)->name('conversations.create');
+    Route::get('/conversations/create/{house_id?}', CreateConversation::class)->name('conversations.create');
     Route::get('/conversations/{conversation}', function($conversation) {
         return view('conversations.show', ['conversationId' => $conversation]);
     })->name('conversations.show');

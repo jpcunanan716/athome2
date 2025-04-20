@@ -3,26 +3,35 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
                 <div class="p-6">
-                    <h2 class="text-lg font-medium text-gray-900 mb-6">Start New Conversation</h2>
+                    @if(isset($users[0]) && isset($houses[0]))
+                        <h2 class="text-lg font-medium text-gray-900 mb-2">Start New Conversation with {{ $users[0]->name }}</h2>
+                        @if($houseId)
+                            <p class="text-sm text-gray-600 mb-6">You are messaging {{ $users[0]->name }} about their "{{ $houses->firstWhere('id', $houseId)->houseName ?? 'Property' }}" listing</p>
+                        @endif
+                    @else
+                        <h2 class="text-lg font-medium text-gray-900 mb-6">Start New Conversation</h2>
+                    @endif
                     
                     <form wire:submit.prevent="startConversation">
                         <div class="grid grid-cols-1 gap-6">
-                            <!-- Property Selection -->
-                            <div>
-                                <label for="house" class="block text-sm font-medium text-gray-700">Property</label>
-                                <select
-                                    id="house"
-                                    wire:model="houseId"
-                                    class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
-                                    {{ $houseId ? 'disabled' : '' }}
+
+                            <!-- Hidden Property Selection -->
+                            <input
+                                type="hidden"
+                                id="house"
+                                wire:model="houseId"
+                            >
+                            @error('houseId') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+
+                            <!-- Hidden Selected Users - Using Livewire's array binding -->
+                            @foreach($users as $index => $user)
+                                <input 
+                                    type="hidden" 
+                                    wire:model="selectedUsers.{{ $index }}" 
+                                    value="{{ $user->id }}"
                                 >
-                                    <option value="">Select a property</option>
-                                    @foreach($houses as $house)
-                                        <option value="{{ $house->id }}">{{ $house->name ?? 'Property #' . $house->id }}</option>
-                                    @endforeach
-                                </select>
-                                @error('houseId') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
-                            </div>
+                            @endforeach
+                            @error('selectedUsers') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
 
                             <!-- Subject -->
                             <div>
@@ -35,25 +44,6 @@
                                     placeholder="Enter a subject for this conversation"
                                 >
                                 @error('subject') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
-                            </div>
-
-                            <!-- Recipients -->
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Recipients</label>
-                                <div class="border border-gray-300 rounded-md p-3 max-h-60 overflow-y-auto">
-                                    @foreach($users as $user)
-                                        <label class="inline-flex items-center py-1 px-2 mr-2 mb-2 bg-gray-100 rounded">
-                                            <input
-                                                type="checkbox"
-                                                wire:model="selectedUsers"
-                                                value="{{ $user->id }}"
-                                                class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
-                                            >
-                                            <span class="ml-2 text-sm">{{ $user->name }}</span>
-                                        </label>
-                                    @endforeach
-                                </div>
-                                @error('selectedUsers') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
                             </div>
 
                             <!-- Message -->

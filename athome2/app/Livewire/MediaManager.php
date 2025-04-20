@@ -27,10 +27,28 @@ class MediaManager extends Component
 
     public function updatedImages()
     {
+        $this->validate([
+            'images.*' => 'image', // Validate each image
+        ]);
+
         $this->imagesPreview = [];
 
         foreach ($this->images as $image) {
             $this->imagesPreview[] = $image->temporaryUrl(); // Generate preview URLs
+        }
+    }
+
+    public function removeImage($index)
+    {
+        // Remove the image from both arrays
+        if (isset($this->images[$index])) {
+            unset($this->images[$index]);
+            $this->images = array_values($this->images); // Reindex array
+        }
+        
+        if (isset($this->imagesPreview[$index])) {
+            unset($this->imagesPreview[$index]);
+            $this->imagesPreview = array_values($this->imagesPreview); // Reindex array
         }
     }
 

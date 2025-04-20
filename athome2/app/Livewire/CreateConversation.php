@@ -14,34 +14,29 @@ class CreateConversation extends Component
     public $selectedUsers = [];
     public $message;
     
-    protected $rules = [
-        'houseId' => 'required|exists:houses,id',
-        'subject' => 'required|string|max:255',
-        'selectedUsers' => 'required|array|min:1',
-        'selectedUsers.*' => 'exists:users,id',
-        'message' => 'required|string'
-    ];
+    protected function rules()
+    {
+        return [
+            'houseId' => 'required|exists:houses,id',
+            'subject' => 'required|string|max:255',
+            'selectedUsers' => 'required|array|min:1',
+            'selectedUsers.*' => 'exists:users,id',
+            'message' => 'required|string'
+        ];
+    }
 
-    // Capture house_id from URL if provided
     public function mount($house_id = null)
     {
+        // Set house ID from route parameter
         $this->houseId = $house_id;
         
-        // Pre-populate recipients if house_id is provided
-        if ($this->houseId) {
-            $house = House::find($this->houseId);
-            if ($house) {
-                // If current user is house owner, add all tenants
-                if (auth()->id() === $house->user_id) {
-                    $tenantIds = $house->rentals->pluck('user_id')->toArray();
-                    $this->selectedUsers = array_values(array_diff($tenantIds, [auth()->id()]));
-                } 
-                // If current user is tenant, add the owner
-                else {
-                    $this->selectedUsers = [$house->user_id];
-                }
-            }
+        // If no house_id is provided but user is viewing a specific house elsewhere
+        if (!$this->houseId && session()->has('current_house_id')) {
+            $this->houseId = session()->get('current_house_id');
         }
+        
+        // Auto-populate selectedUsers with all users except auth user
+        $this->selectedUsers = User::where('id', '!=', auth()->id())->pluck('id')->toArray();
     }
     
     public function startConversation()
@@ -73,9 +68,13 @@ class CreateConversation extends Component
         $houses = House::all(); // Or filter based on user permissions
         $users = User::where('id', '!=', auth()->id())->get();
         
+        // Get the current house for display if needed
+        $currentHouse = $this->houseId ? House::find($this->houseId) : null;
+        
         return view('livewire.create-conversation', [
             'houses' => $houses,
-            'users' => $users
+            'users' => $users,
+            'currentHouse' => $currentHouse
         ])->layout('layouts.app');
     }
 }

@@ -1,4 +1,4 @@
-<div>
+<div class="container mx-auto p-6">
     <div class="flex justify-between items-center mb-4">
         <h2 class="text-xl font-semibold">Conversations</h2>
         <a 

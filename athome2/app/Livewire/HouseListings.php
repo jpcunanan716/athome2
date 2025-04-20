@@ -11,7 +11,7 @@ use Livewire\WithPagination;
 class HouseListings extends Component
 {
     use WithPagination;
-
+    
     public function toggleFavorite($houseId)
     {
         if (!Auth::check()) {
