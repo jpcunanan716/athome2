@@ -43,7 +43,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 Route::get('/home', HouseListings::class)->name('home');
 Route::get('/new-listing', CreateListing::class)->name('new-listing')->middleware(['auth']);
-Route::get('/add-images', MediaManager::class);
+Route::get('/add-images', MediaManager::class)->name('add-images')->middleware(['auth']);
 Route::get('/house/{houseId}', HouseDetails::class)->name('house.show');
 Route::get('/favorites', FavoritesList::class)->name('favorites');
 Route::get('/rentals', RentalManagement::class)->middleware(['auth'])->name('rentals');
