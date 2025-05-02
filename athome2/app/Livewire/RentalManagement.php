@@ -16,6 +16,7 @@ class RentalManagement extends Component
     // Property editing variables
     public $editingProperty = null;
     public $isEditing = false;
+    public $showEditModal = false;
     
     // Form fields
     public $houseName;
@@ -98,10 +99,10 @@ class RentalManagement extends Component
         $this->loadRentals(); // Refresh the list
     }
 
-    public function editProperty($houseId)
+    public function editProperty($id)
     {
         $this->isEditing = true;
-        $this->editingProperty = House::findOrFail($houseId);
+        $this->editingProperty = House::findOrFail($id);
         
         // Fill the form fields
         $this->houseName = $this->editingProperty->houseName;
@@ -120,6 +121,9 @@ class RentalManagement extends Component
         $this->has_parking = $this->editingProperty->has_parking;
         $this->has_gym = $this->editingProperty->has_gym;
         $this->price = $this->editingProperty->price;
+        
+        // Open modal
+        $this->showEditModal = true;
     }
 
     public function updateProperty()
@@ -150,9 +154,9 @@ class RentalManagement extends Component
         session()->flash('message', 'Property updated successfully.');
     }
 
-    public function toggleActive($houseId)
+    public function toggleActive($id)
     {
-        $property = House::findOrFail($houseId);
+        $property = House::findOrFail($id);
         $property->update([
             'isActive' => !$property->isActive
         ]);
@@ -162,10 +166,16 @@ class RentalManagement extends Component
         session()->flash('message', "Property {$status} successfully.");
     }
 
+    public function closeModal()
+    {
+        $this->showEditModal = false;
+    }
+
     public function resetEdit()
     {
         $this->isEditing = false;
         $this->editingProperty = null;
+        $this->showEditModal = false;
         $this->reset([
             'houseName', 'housetype', 'street', 'province', 'city', 'barangay', 
             'total_occupants', 'total_rooms', 'total_bathrooms', 'description',

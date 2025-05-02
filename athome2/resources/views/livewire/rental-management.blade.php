@@ -121,10 +121,110 @@
             </a>
         </div>
 
-        @if($isEditing)
-            <!-- Edit Property Form -->
-            <div class="bg-white p-6 rounded-lg shadow mb-6">
-                <h3 class="text-lg font-medium mb-4">Edit Property</h3>
+        @if($properties->isEmpty())
+            <div class="bg-white p-6 rounded-lg shadow text-center">
+                <p class="text-gray-500">You haven't listed any properties yet.</p>
+                <a href="{{ route('new-listing') }}" class="inline-block mt-4 text-blue-600 hover:text-blue-800">
+                    Create your first listing
+                </a>
+            </div>
+        @else
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                @foreach($properties as $property)
+                    <div class="bg-white rounded-lg shadow overflow-hidden">
+                        @if($property->media && $property->media->isNotEmpty())
+                            <img src="{{ asset('storage/' . $property->media->first()->image_path) }}" 
+                                alt="{{ $property->houseName }}" 
+                                class="w-full h-48 object-cover">
+                        @else
+                            <div class="w-full h-48 bg-gray-200 flex items-center justify-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 22V12h6v10" />
+                                </svg>
+                            </div>
+                        @endif
+                        
+                        <div class="p-4">
+                            <div class="flex justify-between items-start">
+                                <h3 class="text-lg font-semibold text-gray-900">{{ $property->houseName }}</h3>
+                                <span class="px-2 py-1 text-xs font-semibold rounded-full {{ $property->isActive ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
+                                    {{ $property->isActive ? 'Active' : 'Inactive' }}
+                                </span>
+                            </div>
+                            <p class="text-gray-600 mt-1">{{ $property->barangay }}, {{ $property->city }}</p>
+                            <p class="text-gray-800 font-medium mt-2">₱{{ number_format($property->price, 2) }} / night</p>
+                            
+                            <div class="flex items-center mt-3 text-sm text-gray-600">
+                                <span class="flex items-center mr-3">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z" />
+                                    </svg>
+                                    {{ $property->total_rooms }} room(s)
+                                </span>
+                                <span class="flex items-center mr-3">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                    </svg>
+                                    {{ $property->total_bathrooms }} bath(s)
+                                </span>
+                                <span class="flex items-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                                    </svg>
+                                    {{ $property->total_occupants }} guest(s)
+                                </span>
+                            </div>
+                            
+                            <!-- Amenities display -->
+                            <div class="mt-3 flex flex-wrap gap-2">
+                                @if($property->has_aircon)
+                                <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">Air Conditioning</span>
+                                @endif
+                                @if($property->has_wifi)
+                                <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">WiFi</span>
+                                @endif
+                                @if($property->has_kitchen)
+                                <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">Kitchen</span>
+                                @endif
+                                @if($property->has_parking)
+                                <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">Parking</span>
+                                @endif
+                                @if($property->has_gym)
+                                <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">Gym</span>
+                                @endif
+                            </div>
+                            
+                            <div class="mt-4 pt-4 border-t border-gray-200 flex space-x-2">
+                                <button wire:click="editProperty({{ $property->id }})" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm flex-1">
+                                    Edit
+                                </button>
+                                <button wire:click="toggleActive({{ $property->id }})" 
+                                    class="{{ $property->isActive ? 'bg-red-500 hover:bg-red-600' : 'bg-green-500 hover:bg-green-600' }} text-white px-3 py-1 rounded text-sm flex-1">
+                                    {{ $property->isActive ? 'Disable' : 'Enable' }}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        @endif
+    @endif
+
+    <!-- Edit Property Modal -->
+    @if($showEditModal)
+    <div class="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center z-50">
+        <div class="bg-white rounded-lg shadow-xl max-w-4xl w-full mx-4 max-h-screen overflow-y-auto">
+            <div class="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
+                <h3 class="text-lg font-medium text-gray-900">Edit Property</h3>
+                <button wire:click="closeModal" class="text-gray-400 hover:text-gray-500">
+                    <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            
+            <div class="px-6 py-4">
                 <form wire:submit.prevent="updateProperty">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
@@ -224,105 +324,17 @@
                         </div>
                     </div>
                     
-                    <div class="mt-6 flex space-x-3">
+                    <div class="mt-6 flex justify-end space-x-3">
+                        <button type="button" wire:click="closeModal" class="bg-gray-300 hover:bg-gray-400 text-gray-800 px-4 py-2 rounded-lg">
+                            Cancel
+                        </button>
                         <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg">
                             Update Property
-                        </button>
-                        <button type="button" wire:click="resetEdit" class="bg-gray-300 hover:bg-gray-400 text-gray-800 px-4 py-2 rounded-lg">
-                            Cancel
                         </button>
                     </div>
                 </form>
             </div>
-        @endif
-
-        @if($properties->isEmpty())
-            <div class="bg-white p-6 rounded-lg shadow text-center">
-                <p class="text-gray-500">You haven't listed any properties yet.</p>
-                <a href="{{ route('new-listing') }}" class="inline-block mt-4 text-blue-600 hover:text-blue-800">
-                    Create your first listing
-                </a>
-            </div>
-        @else
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                @foreach($properties as $property)
-                    <div class="bg-white rounded-lg shadow overflow-hidden">
-                        @if($property->media && $property->media->isNotEmpty())
-                            <img src="{{ asset('storage/' . $property->media->first()->image_path) }}" 
-                                alt="{{ $property->houseName }}" 
-                                class="w-full h-48 object-cover">
-                        @else
-                            <div class="w-full h-48 bg-gray-200 flex items-center justify-center">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 22V12h6v10" />
-                                </svg>
-                            </div>
-                        @endif
-                        
-                        <div class="p-4">
-                            <div class="flex justify-between items-start">
-                                <h3 class="text-lg font-semibold text-gray-900">{{ $property->houseName }}</h3>
-                                <span class="px-2 py-1 text-xs font-semibold rounded-full {{ $property->isActive ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
-                                    {{ $property->isActive ? 'Active' : 'Inactive' }}
-                                </span>
-                            </div>
-                            <p class="text-gray-600 mt-1">{{ $property->barangay }}, {{ $property->city }}</p>
-                            <p class="text-gray-800 font-medium mt-2">₱{{ number_format($property->price, 2) }} / night</p>
-                            
-                            <div class="flex items-center mt-3 text-sm text-gray-600">
-                                <span class="flex items-center mr-3">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z" />
-                                    </svg>
-                                    {{ $property->total_rooms }} room(s)
-                                </span>
-                                <span class="flex items-center mr-3">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                    </svg>
-                                    {{ $property->total_bathrooms }} bath(s)
-                                </span>
-                                <span class="flex items-center">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-                                    </svg>
-                                    {{ $property->total_occupants }} guest(s)
-                                </span>
-                            </div>
-                            
-                            <!-- Amenities display -->
-                            <div class="mt-3 flex flex-wrap gap-2">
-                                @if($property->has_aircon)
-                                <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">Air Conditioning</span>
-                                @endif
-                                @if($property->has_wifi)
-                                <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">WiFi</span>
-                                @endif
-                                @if($property->has_kitchen)
-                                <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">Kitchen</span>
-                                @endif
-                                @if($property->has_parking)
-                                <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">Parking</span>
-                                @endif
-                                @if($property->has_gym)
-                                <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">Gym</span>
-                                @endif
-                            </div>
-                            
-                            <div class="mt-4 pt-4 border-t border-gray-200 flex space-x-2">
-                                <button wire:click="editProperty({{ $property->house_id }})" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm flex-1">
-                                    Edit
-                                </button>
-                                <button wire:click="toggleActive({{ $property->house_id }})" 
-                                    class="{{ $property->isActive ? 'bg-red-500 hover:bg-red-600' : 'bg-green-500 hover:bg-green-600' }} text-white px-3 py-1 rounded text-sm flex-1">
-                                    {{ $property->isActive ? 'Disable' : 'Enable' }}
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                @endforeach
-            </div>
-        @endif
+        </div>
+    </div>
     @endif
 </div>
