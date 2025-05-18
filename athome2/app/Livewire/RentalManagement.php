@@ -34,6 +34,8 @@ class RentalManagement extends Component
     public $has_wifi = false;
     public $has_parking = false;
     public $has_gym = false;
+    public $electric_meter = false;
+    public $water_meter = false;
     public $price;
 
     protected $rules = [
@@ -52,6 +54,8 @@ class RentalManagement extends Component
         'has_wifi' => 'boolean',
         'has_parking' => 'boolean',
         'has_gym' => 'boolean',
+        'electric_meter' => 'boolean',
+        'water_meter' => 'boolean',
         'price' => 'required|numeric|min:0'
     ];
 
@@ -120,6 +124,8 @@ class RentalManagement extends Component
         $this->has_wifi = $this->editingProperty->has_wifi;
         $this->has_parking = $this->editingProperty->has_parking;
         $this->has_gym = $this->editingProperty->has_gym;
+        $this->electric_meter = $this->editingProperty->electric_meter;
+        $this->water_meter = $this->editingProperty->water_meter;
         $this->price = $this->editingProperty->price;
         
         // Open modal
@@ -146,6 +152,9 @@ class RentalManagement extends Component
             'has_wifi' => $this->has_wifi,
             'has_parking' => $this->has_parking,
             'has_gym' => $this->has_gym,
+            'electric_meter' => $this->electric_meter,
+            'water_meter' => $this->water_meter,
+
             'price' => $this->price
         ]);
 
@@ -154,15 +163,16 @@ class RentalManagement extends Component
         session()->flash('message', 'Property updated successfully.');
     }
 
-    public function toggleActive($id)
+     public function toggleActive($id)
     {
         $property = House::findOrFail($id);
+        $newStatus = $property->status ? 0 : 1; // Toggle between 1 and 0
         $property->update([
-            'isActive' => !$property->isActive
+            'status' => $newStatus
         ]);
         
         $this->loadProperties();
-        $status = $property->isActive ? 'enabled' : 'disabled';
+        $status = $newStatus ? 'enabled' : 'disabled';
         session()->flash('message', "Property {$status} successfully.");
     }
 
@@ -179,7 +189,8 @@ class RentalManagement extends Component
         $this->reset([
             'houseName', 'housetype', 'street', 'province', 'city', 'barangay', 
             'total_occupants', 'total_rooms', 'total_bathrooms', 'description',
-            'has_aircon', 'has_kitchen', 'has_wifi', 'has_parking', 'has_gym', 'price'
+            'has_aircon', 'has_kitchen', 'has_wifi', 'has_parking', 'has_gym',
+            'electric_meter', 'water_meter', 'price'
         ]);
         $this->resetValidation();
     }

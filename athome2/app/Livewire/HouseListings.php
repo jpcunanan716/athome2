@@ -38,6 +38,7 @@ class HouseListings extends Component
     public function render()
     {
         $houses = House::with(['media', 'favoritedBy'])
+                    ->where('status', 1) // Only show enabled houses (status = 1)
                     ->withCount('favoritedBy')
                     ->paginate(12);
                     

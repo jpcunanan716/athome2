@@ -44,7 +44,7 @@
 
                             <!-- House Details -->
                             <div class="px-8 py-6">
-                                <h2 class="text-2xl font-semibold">{{ $house->houseName }}</h2>
+                                <h2 class="text-black text-2xl font-semibold">{{ $house->houseName }}</h2>
                                 <p class="text-gray-600 text-lg font-semibold">{{ $house->city }}, {{ $house->province }}</p>
                                 <p class="text-gray-700 mt-3 text-lg">Type: {{ $house->housetype }}</p>
                                 <p class="text-green-600 font-bold text-xl mt-3">₱{{ number_format($house->price, 2) }} / month</p>

@@ -29,7 +29,10 @@ return new class extends Migration
             $table->boolean('has_wifi');
             $table->boolean('has_parking');
             $table->boolean('has_gym');
+            $table->boolean('electric_meter');
+            $table->boolean('water_meter');
             $table->float('price');
+            $table->boolean('status')->default('1');
 
             // Foreign key constraint
             $table->integer('user_id')->unsigned();

@@ -73,7 +73,7 @@
 
                 <!-- Total Occupants -->
                 <div>
-                    <label for="total_occupants" class="block text-sm font-medium text-gray-700">Occupants</label>
+                    <label for="total_occupants" class="block text-sm font-medium text-gray-700">Maximum Numver of Occupants</label>
                     <input type="text" wire:model="total_occupants" id="total_occupants" placeholder="Enter Total Occupants"
                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
                 </div>
@@ -83,7 +83,7 @@
 
                 <!-- Total Rooms -->
                 <div>
-                    <label for="total_rooms" class="block text-sm font-medium text-gray-700">Total Rooms</label>
+                    <label for="total_rooms" class="block text-sm font-medium text-gray-700">Total Room(s)</label>
                     <input type="number" wire:model="total_rooms" id="total_rooms" placeholder="Enter total rooms"
                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
                 </div>
@@ -93,7 +93,7 @@
 
                 <!-- Total Bathrooms -->
                 <div>
-                    <label for="total_bathrooms" class="block text-sm font-medium text-gray-700">Total Bathrooms</label>
+                    <label for="total_bathrooms" class="block text-sm font-medium text-gray-700">Total Bathroom(s)</label>
                     <input type="number" wire:model="total_bathrooms" id="total_bathrooms" placeholder="Enter total bathrooms"
                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
                 </div>
@@ -135,6 +135,15 @@
                             <input type="checkbox" wire:model="has_gym" class="form-checkbox h-5 w-5 text-blue-600">
                             <span class="ml-2 text-gray-700">Gym</span>
                         </label>
+                        <label class="inline-flex items-center">
+                            <input type="checkbox" wire:model="electric_meter" class="form-checkbox h-5 w-5 text-blue-600">
+                            <span class="ml-2 text-gray-700">Own Electric Meter</span>
+                        </label>
+                        <label class="inline-flex items-center">
+                            <input type="checkbox" wire:model="water_meter" class="form-checkbox h-5 w-5 text-blue-600">
+                            <span class="ml-2 text-gray-700">Own Water Meter</span>
+                        </label>
+                        
                     </div>
                 </div>
 

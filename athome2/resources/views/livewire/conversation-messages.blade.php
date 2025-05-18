@@ -3,7 +3,7 @@
         <div class="border-b px-4 py-3">
             <h2 class="text-lg font-semibold">{{ $conversation->subject }}</h2>
             <div class="text-sm text-gray-500">
-                Property: {{ $conversation->house->name ?? 'Unknown' }} | 
+                Property: {{ $conversation->house->houseName ?? 'Unknown' }} | 
                 Participants: {{ $conversation->users->pluck('name')->join(', ') }}
             </div>
         </div>

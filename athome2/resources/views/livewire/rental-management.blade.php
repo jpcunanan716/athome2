@@ -193,6 +193,12 @@
                                 @if($property->has_gym)
                                 <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">Gym</span>
                                 @endif
+                                @if($property->electric_meter)
+                                <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">Own Electric Meter</span>
+                                @endif
+                                @if($property->water_meter)
+                                <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">Own Water Meter</span>
+                                @endif
                             </div>
                             
                             <div class="mt-4 pt-4 border-t border-gray-200 flex space-x-2">
@@ -200,8 +206,8 @@
                                     Edit
                                 </button>
                                 <button wire:click="toggleActive({{ $property->id }})" 
-                                    class="{{ $property->isActive ? 'bg-red-500 hover:bg-red-600' : 'bg-green-500 hover:bg-green-600' }} text-white px-3 py-1 rounded text-sm flex-1">
-                                    {{ $property->isActive ? 'Disable' : 'Enable' }}
+                                    class="{{ $property->status ? 'bg-red-500 hover:bg-red-600' : 'bg-green-500 hover:bg-green-600' }} text-white px-3 py-1 rounded text-sm flex-1">
+                                    {{ $property->status ? 'Disable Property' : 'Enable Property' }}
                                 </button>
                             </div>
                         </div>
@@ -319,6 +325,14 @@
                                 <label class="flex items-center">
                                     <input type="checkbox" wire:model="has_gym" class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
                                     <span class="ml-2 text-sm text-gray-700">Gym</span>
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="checkbox" wire:model="electric_meter" class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                                    <span class="ml-2 text-sm text-gray-700">Own Electric Meter</span>
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="checkbox" wire:model="water_meter" class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                                    <span class="ml-2 text-sm text-gray-700">Own Water Meter</span>
                                 </label>
                             </div>
                         </div>

@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class House extends Model
 {
+    use HasFactory;
+
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -29,8 +31,11 @@ class House extends Model
         'has_wifi',
         'has_parking',
         'has_gym',
+        'electric_meter',
+        'water_meter',
         'price',
         'user_id',
+        'status', // Added status field
     ];
 
     // Casts
@@ -40,8 +45,15 @@ class House extends Model
         'has_wifi' => 'boolean',
         'has_parking' => 'boolean',
         'has_gym' => 'boolean',
+        'electric_meter' => 'boolean',
+        'water_meter' => 'boolean',
+        'status' => 'boolean', // Cast status as boolean
     ];
     
+    // Constants for status (optional but recommended)
+    const STATUS_ENABLED = true;
+    const STATUS_DISABLED = false;
+
     public function media(): HasMany
     {
         return $this->hasMany(Media::class);
@@ -67,5 +79,21 @@ class House extends Model
     public function conversations()
     {
         return $this->hasMany(Conversation::class);
+    }
+
+    // Helper methods for status (optional)
+    public function isEnabled(): bool
+    {
+        return $this->status === self::STATUS_ENABLED;
+    }
+
+    public function enable(): void
+    {
+        $this->update(['status' => self::STATUS_ENABLED]);
+    }
+
+    public function disable(): void
+    {
+        $this->update(['status' => self::STATUS_DISABLED]);
     }
 }

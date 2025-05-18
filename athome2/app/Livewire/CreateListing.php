@@ -25,6 +25,9 @@ class CreateListing extends Component
     public $has_wifi = false;
     public $has_parking = false;
     public $has_gym = false;
+    public $electric_meter = false;
+    public $water_meter = false;
+  
     public $price;
 
 
@@ -47,6 +50,8 @@ class CreateListing extends Component
             'has_wifi' => 'boolean',
             'has_parking' => 'boolean',
             'has_gym' => 'boolean',
+            'electric_meter' => 'boolean',
+            'water_meter' => 'boolean',
             'price' => 'required|numeric|min:0',
         ]);
 
@@ -71,6 +76,8 @@ class CreateListing extends Component
                 'has_wifi' => $this->has_wifi,
                 'has_parking' => $this->has_parking,
                 'has_gym' => $this->has_gym,
+                'electric_meter' => $this->electric_meter,
+                'water_meter' => $this->water_meter,
                 'price' => $this->price,
                 'user_id' => $user_id,
         ]);
