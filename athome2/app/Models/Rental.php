@@ -18,6 +18,7 @@ class Rental extends Model
         'start_date',
         'end_date',
         'total_price',
+        'number_of_guests',
         'status',
         'notes'
     ];
