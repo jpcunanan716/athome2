@@ -42,7 +42,7 @@
             </div>
         @empty
             <div class="text-center py-8 text-gray-500">
-                No conversations yet. Start a new one!
+                No conversations yet. Rent a property to start a conversation.
             </div>
         @endforelse
     </div>

@@ -149,7 +149,7 @@
 
                 <!-- Price -->
                 <div>
-                    <label for="price" class="block text-sm font-medium text-gray-700">Price</label>
+                    <label for="price" class="block text-sm font-medium text-gray-700">Price (Per Day)</label>
                     <input type="number" wire:model="price" id="price" placeholder="Enter price"
                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
                 </div>
