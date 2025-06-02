@@ -1,7 +1,4 @@
 <div class="p-12">
-    <!-- Back Button -->
-    <a href="{{ url('/home') }}" class="inline-block mb-4 text-blue-500 hover:underline">← Back to Listings</a>
-
     <div class="grid grid-cols-5 grid-rows-5 gap-4">
         <!-- Section 1: Gallery (Full width) -->
         <div class="col-span-5">
@@ -98,7 +95,7 @@
 
         <!-- Section 2: House Details -->
         <div class="col-span-3 row-start-2 p-6">
-            <div class="bg-white">
+            <div class="bg-white shadow-lg rounded-lg overflow-hidden p-4">
 
                 <!-- House details content -->
                     <h1 class="text-3xl font-bold">{{ $house->houseName }}</h1>

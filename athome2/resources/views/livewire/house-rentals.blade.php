@@ -1,5 +1,5 @@
 <div>
-    <div class="mt-4 p-4 border rounded-lg">
+    <div>
         <!-- Guest Count -->
         <div class="mb-4">
             <label class="block text-gray-700">Number of Guests</label>
@@ -26,6 +26,7 @@
                 wire:model.live="start_date"
                 class="mt-1 block w-full border rounded px-3 py-2"
                 min="{{ now()->format('Y-m-d') }}"
+                id="start-date-picker"
             >
             @error('start_date')
                 <span class="text-red-500 text-sm">{{ $message }}</span>
@@ -40,11 +41,21 @@
                 wire:model.live="end_date"
                 class="mt-1 block w-full border rounded px-3 py-2"
                 min="{{ $start_date ?? now()->format('Y-m-d') }}"
+                id="end-date-picker"
             >
             @error('end_date')
                 <span class="text-red-500 text-sm">{{ $message }}</span>
             @enderror
         </div>
+
+        <!-- Unavailable Dates Notice -->
+        @if(!empty($unavailableDates))
+            <div class="mb-4 p-3 bg-yellow-50 border border-yellow-200 rounded">
+                <p class="text-sm text-yellow-800">
+                    <strong>Note:</strong> Some dates are already booked and unavailable for selection.
+                </p>
+            </div>
+        @endif
 
         @if($total_price !== null && $start_date && $end_date)
             <div class="mb-4">
@@ -56,6 +67,12 @@
                     ({{ Carbon\Carbon::parse($start_date)->diffInDays(Carbon\Carbon::parse($end_date)) + 1}} days)
                 </p>
             </div>
+        @elseif($start_date && $end_date && $total_price === null)
+            <div class="mb-4 p-3 bg-red-50 border border-red-200 rounded">
+                <p class="text-sm text-red-800">
+                    <strong>Selected dates are not available.</strong> Please choose different dates.
+                </p>
+            </div>
         @endif
 
         <button 
@@ -64,7 +81,8 @@
             @else
                 onclick="window.location.href='{{ route('login') }}'"
             @endif
-            class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 w-full"
+            class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 w-full {{ ($total_price === null && $start_date && $end_date) ? 'opacity-50 cursor-not-allowed' : '' }}"
+            @if($total_price === null && $start_date && $end_date) disabled @endif
         >
             {{ auth()->check() ? 'Submit Rental Request' : 'Login to Rent' }}
         </button>
@@ -75,4 +93,39 @@
             {{ session('message') }}
         </div>
     @endif
+
+    <!-- JavaScript to disable unavailable dates -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const unavailableDates = @json($unavailableDates);
+            
+            function disableUnavailableDates() {
+                const startDatePicker = document.getElementById('start-date-picker');
+                const endDatePicker = document.getElementById('end-date-picker');
+                
+                if (startDatePicker) {
+                    startDatePicker.addEventListener('input', function(e) {
+                        if (unavailableDates.includes(e.target.value)) {
+                            e.target.value = '';
+                            alert('This date is not available. Please select another date.');
+                        }
+                    });
+                }
+                
+                if (endDatePicker) {
+                    endDatePicker.addEventListener('input', function(e) {
+                        if (unavailableDates.includes(e.target.value)) {
+                            e.target.value = '';
+                            alert('This date is not available. Please select another date.');
+                        }
+                    });
+                }
+            }
+            
+            disableUnavailableDates();
+            
+            // Re-run after Livewire updates
+            document.addEventListener('livewire:navigated', disableUnavailableDates);
+        });
+    </script>
 </div>
