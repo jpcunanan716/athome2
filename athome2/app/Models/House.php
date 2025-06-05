@@ -19,6 +19,7 @@ class House extends Model
         'houseName',
         'housetype',
         'street',
+        'region',
         'province',
         'city',
         'barangay',
