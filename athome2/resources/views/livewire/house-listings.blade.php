@@ -47,7 +47,7 @@
                                 <h2 class="text-black text-2xl font-semibold">{{ $house->houseName }}</h2>
                                 <p class="text-gray-600 text-lg font-semibold">{{ $house->city }}, {{ $house->province }}</p>
                                 <p class="text-gray-700 mt-3 text-lg">Type: {{ $house->housetype }}</p>
-                                <p class="text-green-600 font-bold text-xl mt-3">₱{{ number_format($house->price, 2) }} / month</p>
+                                <p class="text-green-600 font-bold text-xl mt-3">₱{{ number_format($house->price, 2) }} / Day</p>
                                 <p class="text-sm text-gray-500 mt-1">{{ $house->favorited_by_count }} favorites</p>
 
                                 @if($house->furnished)

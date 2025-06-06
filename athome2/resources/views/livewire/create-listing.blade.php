@@ -45,7 +45,7 @@
                         <label for="housetype" class="block text-sm font-medium text-gray-700">House Type</label>
                         <select wire:model="housetype" id="housetype"
                                 class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-                            <option value="" disabled selected>Select House Type</option>
+                            <option class="text-gray-500" value="">Select House Type</option>
                             <option value="Studio Type">Studio Type</option>
                             <option value="One Bedroom">One Bedroom</option>
                             <option value="Two bedroom">Two Bedroom</option>
@@ -125,7 +125,7 @@
                 </div>
             @endif
 
-           <!-- Step 2: Address Information -->
+          <!-- Step 2: Address Information -->
 @if ($currentStep == 2)
     <div class="space-y-6">
         <h3 class="text-xl font-semibold text-gray-800 mb-6">Address Information</h3>
@@ -143,9 +143,9 @@
         <!-- Region -->
         <div>
             <label for="selectedRegion" class="block text-sm font-medium text-gray-700">Region</label>
-            <select wire:model="selectedRegion" id="selectedRegion" wire:change="updatedSelectedRegion($event.target.value)"
+            <select wire:model="selectedRegion" id="selectedRegion"
                     class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-                <option value="">Select Region</option>
+                <option class="text-gray-500" value="">Select Region</option>
                 @foreach($regions as $region)
                     <option value="{{ $region['code'] }}">{{ $region['name'] }}</option>
                 @endforeach
@@ -161,18 +161,10 @@
         <!-- Province -->
         <div>
             <label for="selectedProvince" class="block text-sm font-medium text-gray-700">Province</label>
-            <select wire:model="selectedProvince" id="selectedProvince" wire:change="updatedSelectedProvince($event.target.value)"
+            <select wire:model="selectedProvince" id="selectedProvince"
                     class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                     {{ empty($provinces) ? 'disabled' : '' }}>
-                <option value="">
-                    @if(empty($selectedRegion))
-                        Select Region First
-                    @elseif(empty($provinces))
-                        Loading provinces...
-                    @else
-                        Select Province
-                    @endif
-                </option>
+                <option value="">Select Province</option>
                 @foreach($provinces as $province)
                     <option value="{{ $province['code'] }}">{{ $province['name'] }}</option>
                 @endforeach
@@ -181,25 +173,17 @@
                 <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
             @enderror
             <div wire:loading wire:target="selectedProvince" class="text-sm text-gray-500 mt-1">
-                Loading cities...
+                Loading cities/municipalities...
             </div>
         </div>
 
-        <!-- City -->
+        <!-- City/Municipality -->
         <div>
             <label for="selectedCity" class="block text-sm font-medium text-gray-700">City/Municipality</label>
-            <select wire:model="selectedCity" id="selectedCity" wire:change="updatedSelectedCity($event.target.value)"
+            <select wire:model="selectedCity" id="selectedCity"
                     class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                     {{ empty($cities) ? 'disabled' : '' }}>
-                <option value="">
-                    @if(empty($selectedProvince))
-                        Select Province First
-                    @elseif(empty($cities))
-                        Loading cities...
-                    @else
-                        Select City/Municipality
-                    @endif
-                </option>
+                <option value="">Select City/Municipality</option>
                 @foreach($cities as $city)
                     <option value="{{ $city['code'] }}">{{ $city['name'] }}</option>
                 @endforeach
@@ -214,21 +198,13 @@
 
         <!-- Barangay -->
         <div>
-            <label for="barangay" class="block text-sm font-medium text-gray-700">Barangay</label>
-            <select wire:model="barangay" id="barangay"
+            <label for="selectedBarangay" class="block text-sm font-medium text-gray-700">Barangay</label>
+            <select wire:model="selectedBarangay" id="selectedBarangay"
                     class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                     {{ empty($barangays) ? 'disabled' : '' }}>
-                <option value="">
-                    @if(empty($selectedCity))
-                        Select City First
-                    @elseif(empty($barangays))
-                        Loading barangays...
-                    @else
-                        Select Barangay
-                    @endif
-                </option>
+                <option value="">Select Barangay</option>
                 @foreach($barangays as $barangay)
-                    <option value="{{ $barangay['name'] }}">{{ $barangay['name'] }}</option>
+                    <option value="{{ $barangay['code'] }}">{{ $barangay['name'] }}</option>
                 @endforeach
             </select>
             @error('barangay')

@@ -36,81 +36,98 @@ class CreateListing extends Component
     public $currentStep = 1;
     public $totalSteps = 3;
 
-    // Address search
-    public $addressQuery = '';
-    public $addressResults = [];
-    public $showAddressResults = false;
+    // Address selection
+    public $selectedRegion;
+    public $selectedProvince;
+    public $selectedCity;
+    public $selectedBarangay;
+    
+    // Address data
+    public $regions = [];
+    public $provinces = [];
+    public $cities = [];
+    public $barangays = [];
 
-    public function searchAddress()
+    public function mount()
     {
-        if (strlen($this->addressQuery) < 3) {
-            $this->addressResults = [];
-            $this->showAddressResults = false;
-            return;
-        }
+        $this->loadRegions();
+    }
 
+    public function loadRegions()
+    {
         try {
-            $response = Http::get('https://ejrayo.github.io/phil-address/autocomplete', [
-                'q' => $this->addressQuery
-            ]);
-            
-            if ($response->successful()) {
-                $this->addressResults = $response->json();
-                $this->showAddressResults = !empty($this->addressResults);
-            } else {
-                $this->addressResults = [];
-                $this->showAddressResults = false;
-                session()->flash('error', 'Failed to search address. Please try again.');
-            }
+            $response = Http::get('https://psgc.gitlab.io/api/regions/');
+            $this->regions = $response->successful() ? $response->json() : [];
         } catch (\Exception $e) {
-            $this->addressResults = [];
-            $this->showAddressResults = false;
-            session()->flash('error', 'Unable to connect to address service. Please try again.');
+            $this->regions = [];
+            session()->flash('error', 'Failed to load regions. Please try again.');
         }
     }
 
-    public function selectAddress($address)
+    public function updatedSelectedRegion($value)
     {
+        $this->reset(['provinces', 'selectedProvince', 'cities', 'selectedCity', 'barangays', 'selectedBarangay']);
+        
+        if (empty($value)) return;
+        
         try {
-            $response = Http::get('https://ejrayo.github.io/phil-address/details', [
-                'address' => $address
-            ]);
-            
+            $response = Http::get("https://psgc.gitlab.io/api/regions/{$value}/provinces");
             if ($response->successful()) {
-                $addressData = $response->json();
-                
-                $this->street = $addressData['street'] ?? '';
-                $this->barangay = $addressData['barangay'] ?? '';
-                $this->city = $addressData['city'] ?? '';
-                $this->province = $addressData['province'] ?? '';
-                $this->region = $addressData['region'] ?? '';
-                
-                $this->addressQuery = implode(', ', array_filter([
-                    $this->street,
-                    $this->barangay,
-                    $this->city,
-                    $this->province
-                ]));
-                
-                $this->showAddressResults = false;
-            } else {
-                session()->flash('error', 'Failed to get address details. Please try again.');
+                $this->provinces = $response->json();
+                // Find and set the region name
+                $region = collect($this->regions)->firstWhere('code', $value);
+                $this->region = $region['name'] ?? '';
             }
         } catch (\Exception $e) {
-            session()->flash('error', 'Unable to get address details. Please try again.');
+            session()->flash('error', 'Failed to load provinces. Please try again.');
         }
     }
 
-    public function clearAddress()
+    public function updatedSelectedProvince($value)
     {
-        $this->addressQuery = '';
-        $this->street = '';
-        $this->barangay = '';
-        $this->city = '';
-        $this->province = '';
-        $this->region = '';
-        $this->addressResults = [];
-        $this->showAddressResults = false;
+        $this->reset(['cities', 'selectedCity', 'barangays', 'selectedBarangay']);
+        
+        if (empty($value)) return;
+        
+        try {
+            $response = Http::get("https://psgc.gitlab.io/api/provinces/{$value}/cities-municipalities");
+            if ($response->successful()) {
+                $this->cities = $response->json();
+                // Find and set the province name
+                $province = collect($this->provinces)->firstWhere('code', $value);
+                $this->province = $province['name'] ?? '';
+            }
+        } catch (\Exception $e) {
+            session()->flash('error', 'Failed to load cities/municipalities. Please try again.');
+        }
+    }
+
+    public function updatedSelectedCity($value)
+    {
+        $this->reset(['barangays', 'selectedBarangay']);
+        
+        if (empty($value)) return;
+        
+        try {
+            $response = Http::get("https://psgc.gitlab.io/api/cities-municipalities/{$value}/barangays");
+            if ($response->successful()) {
+                $this->barangays = $response->json();
+                // Find and set the city name
+                $city = collect($this->cities)->firstWhere('code', $value);
+                $this->city = $city['name'] ?? '';
+            }
+        } catch (\Exception $e) {
+            session()->flash('error', 'Failed to load barangays. Please try again.');
+        }
+    }
+
+    public function updatedSelectedBarangay($value)
+    {
+        if (empty($value)) return;
+        
+        // Find and set the barangay name
+        $barangay = collect($this->barangays)->firstWhere('code', $value);
+        $this->barangay = $barangay['name'] ?? '';
     }
 
     public function nextStep()
@@ -151,8 +168,9 @@ class CreateListing extends Component
             case 2:
                 $this->validate([
                     'street' => 'required|string|max:255',
-                    'province' => 'required|string|max:255',
-                    'city' => 'required|string|max:255',
+                    'selectedRegion' => 'required|string',
+                    'selectedProvince' => 'required|string',
+                    'selectedCity' => 'required|string',
                     'barangay' => 'required|string|max:255',
                 ]);
                 break;
@@ -226,7 +244,7 @@ class CreateListing extends Component
         // Reset the form fields
         $this->reset();
 
-        return redirect()->to('/add-media/' . $house->id);
+        return redirect()->to('/add-images/' . $house->id);
     }
 
     public function render()

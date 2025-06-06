@@ -94,7 +94,7 @@
         </div>
 
         <!-- Section 2: House Details -->
-        <div class="col-span-3 row-start-2 p-6">
+        <div class="col-span-3 row-start-2">
             <div class="bg-white shadow-lg rounded-lg overflow-hidden p-4">
 
                 <!-- House details content -->
