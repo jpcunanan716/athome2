@@ -47,13 +47,17 @@ class CreateListing extends Component
     public $provinces = [];
     public $cities = [];
     public $barangays = [];
+    public $loadingProvinces = false;
+    public $loadingCities = false;
 
     public function mount()
     {
         $this->loadRegions();
     }
 
-    public function loadRegions()
+    
+
+   public function loadRegions()
     {
         try {
             $response = Http::get('https://psgc.gitlab.io/api/regions/');
@@ -64,62 +68,100 @@ class CreateListing extends Component
         }
     }
 
-    public function updatedSelectedRegion($value)
-    {
-        $this->reset(['provinces', 'selectedProvince', 'cities', 'selectedCity', 'barangays', 'selectedBarangay']);
-        
-        if (empty($value)) return;
-        
-        try {
-            $response = Http::get("https://psgc.gitlab.io/api/regions/{$value}/provinces");
-            if ($response->successful()) {
-                $this->provinces = $response->json();
-                // Find and set the region name
-                $region = collect($this->regions)->firstWhere('code', $value);
-                $this->region = $region['name'] ?? '';
-            }
-        } catch (\Exception $e) {
-            session()->flash('error', 'Failed to load provinces. Please try again.');
-        }
+  public function updatedSelectedRegion($regionCode)
+{
+    // Reset dependent fields
+    $this->reset([
+        'provinces', 'selectedProvince',
+        'cities', 'selectedCity',
+        'barangays', 'selectedBarangay'
+    ]);
+    $this->loadingProvinces = true;
+
+    // Set region name
+    $region = collect($this->regions)->firstWhere('code', $regionCode);
+    $this->region = $region['name'] ?? null;
+
+    if (!$regionCode) {
+        $this->provinces = [];
+        $this->cities = [];
+        $this->barangays = [];
+        $this->loadingProvinces = false;
+        return;
     }
 
-    public function updatedSelectedProvince($value)
-    {
-        $this->reset(['cities', 'selectedCity', 'barangays', 'selectedBarangay']);
-        
-        if (empty($value)) return;
-        
-        try {
-            $response = Http::get("https://psgc.gitlab.io/api/provinces/{$value}/cities-municipalities");
-            if ($response->successful()) {
-                $this->cities = $response->json();
-                // Find and set the province name
-                $province = collect($this->provinces)->firstWhere('code', $value);
-                $this->province = $province['name'] ?? '';
-            }
-        } catch (\Exception $e) {
-            session()->flash('error', 'Failed to load cities/municipalities. Please try again.');
-        }
+    if ($regionCode === '130000000') {
+        // NCR: Skip provinces, load cities/municipalities directly
+        $this->provinces = [];
+        $this->loadingProvinces = false;
+        $this->loadCitiesForNCR();
+        return;
     }
 
-    public function updatedSelectedCity($value)
-    {
-        $this->reset(['barangays', 'selectedBarangay']);
-        
-        if (empty($value)) return;
-        
-        try {
-            $response = Http::get("https://psgc.gitlab.io/api/cities-municipalities/{$value}/barangays");
-            if ($response->successful()) {
-                $this->barangays = $response->json();
-                // Find and set the city name
-                $city = collect($this->cities)->firstWhere('code', $value);
-                $this->city = $city['name'] ?? '';
-            }
-        } catch (\Exception $e) {
-            session()->flash('error', 'Failed to load barangays. Please try again.');
-        }
+    // Other regions: Load provinces
+    try {
+        $response = Http::get("https://psgc.gitlab.io/api/regions/{$regionCode}/provinces");
+        $this->provinces = $response->successful() ? $response->json() : [];
+    } catch (\Exception $e) {
+        $this->provinces = [];
+        session()->flash('error', 'Failed to load provinces. Please try again.');
     }
+    $this->loadingProvinces = false;
+}
+
+public function loadCitiesForNCR()
+{
+    $this->loadingCities = true;
+    try {
+        $response = Http::get("https://psgc.gitlab.io/api/regions/130000000/cities-municipalities");
+        $this->cities = $response->successful() ? $response->json() : [];
+    } catch (\Exception $e) {
+        $this->cities = [];
+        session()->flash('error', 'Failed to load NCR cities. Please try again.');
+    }
+    $this->loadingCities = false;
+}
+
+public function updatedSelectedProvince($provinceCode)
+{
+    $this->reset(['cities', 'selectedCity', 'barangays', 'selectedBarangay']);
+    if (!$provinceCode) {
+        $this->cities = [];
+        $this->barangays = [];
+        return;
+    }
+
+    $this->loadingCities = true;
+    try {
+        $response = Http::get("https://psgc.gitlab.io/api/provinces/{$provinceCode}/cities-municipalities");
+        $this->cities = $response->successful() ? $response->json() : [];
+    } catch (\Exception $e) {
+        $this->cities = [];
+        session()->flash('error', 'Failed to load cities. Please try again.');
+    }
+    $this->loadingCities = false;
+}
+
+public function updatedSelectedCity($cityCode)
+{
+    $this->reset(['barangays', 'selectedBarangay']);
+    if (!$cityCode) {
+        $this->barangays = [];
+        return;
+    }
+
+    // Assign city name
+    $city = collect($this->cities)->firstWhere('code', $cityCode);
+    $this->city = $city['name'] ?? null;
+
+    try {
+        $response = Http::get("https://psgc.gitlab.io/api/cities-municipalities/{$cityCode}/barangays");
+        $this->barangays = $response->successful() ? $response->json() : [];
+    } catch (\Exception $e) {
+        $this->barangays = [];
+        session()->flash('error', 'Failed to load barangays. Please try again.');
+    }
+}
 
     public function updatedSelectedBarangay($value)
     {
@@ -169,7 +211,7 @@ class CreateListing extends Component
                 $this->validate([
                     'street' => 'required|string|max:255',
                     'selectedRegion' => 'required|string',
-                    'selectedProvince' => 'required|string',
+                    'selectedProvince' =>$this->selectedRegion === '130000000' ? 'nullable' : 'required|string',
                     'selectedCity' => 'required|string',
                     'barangay' => 'required|string|max:255',
                 ]);
@@ -191,7 +233,7 @@ class CreateListing extends Component
             'housetype' => 'required|string|max:255',
             'street' => 'required|string|max:255',
             'region' => 'required|string|max:255',
-            'province' => 'required|string|max:255',
+            'province' => $this->selectedRegion === '130000000' ? 'nullable' : 'required|string',
             'city' => 'required|string|max:255',
             'barangay' => 'required|string|max:255',
             'total_occupants' => 'required|integer|min:1',

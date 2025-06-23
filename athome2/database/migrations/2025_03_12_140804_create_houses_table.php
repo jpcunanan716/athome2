@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('housetype');
             $table->string('street');
             $table->string('region');
-            $table->string('province');
+            $table->string('province')->nullable();
             $table->string('city');
             $table->string('barangay');
             $table->integer('total_occupants');

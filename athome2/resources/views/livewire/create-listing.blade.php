@@ -126,93 +126,101 @@
             @endif
 
           <!-- Step 2: Address Information -->
-@if ($currentStep == 2)
-    <div class="space-y-6">
-        <h3 class="text-xl font-semibold text-gray-800 mb-6">Address Information</h3>
-        
-        <!-- Street -->
-        <div>
-            <label for="street" class="block text-sm font-medium text-gray-700">House no./Building no., Street/Subdivision</label>
-            <input type="text" wire:model="street" id="street" placeholder="Enter street address"
-                   class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-            @error('street')
-                <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
-            @enderror
-        </div>
+            @if ($currentStep == 2)
+                <div class="space-y-6">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-6">Address Information</h3>
+                    
+                    <!-- Street -->
+                    <div>
+                        <label for="street" class="block text-sm font-medium text-gray-700">House no./Building no., Street/Subdivision</label>
+                        <input type="text" wire:model="street" id="street" placeholder="Enter street address"
+                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        @error('street')
+                            <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
 
-        <!-- Region -->
-        <div>
-            <label for="selectedRegion" class="block text-sm font-medium text-gray-700">Region</label>
-            <select wire:model="selectedRegion" id="selectedRegion"
-                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-                <option class="text-gray-500" value="">Select Region</option>
-                @foreach($regions as $region)
-                    <option value="{{ $region['code'] }}">{{ $region['name'] }}</option>
-                @endforeach
-            </select>
-            @error('region')
-                <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
-            @enderror
-            <div wire:loading wire:target="selectedRegion" class="text-sm text-gray-500 mt-1">
-                Loading provinces...
-            </div>
-        </div>
+                    <!-- Region -->
+                    <div>
+                        <label for="selectedRegion" class="block text-sm font-medium text-gray-700">Region</label>
+                        <select wire:model="selectedRegion" id="selectedRegion"
+                                class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option class="text-gray-500" value="">Select Region</option>
+                            @foreach($regions as $region)
+                                <option value="{{ $region['code'] }}">{{ $region['name'] }}</option>
+                            @endforeach
+                        </select>
+                        @error('region')
+                            <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
+                        @enderror
+                        <div wire:loading wire:target="selectedRegion" class="text-sm text-gray-500 mt-1">
+                            Loading provinces...
+                        </div>
+                    </div>
 
-        <!-- Province -->
-        <div>
-            <label for="selectedProvince" class="block text-sm font-medium text-gray-700">Province</label>
-            <select wire:model="selectedProvince" id="selectedProvince"
-                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    {{ empty($provinces) ? 'disabled' : '' }}>
-                <option value="">Select Province</option>
-                @foreach($provinces as $province)
-                    <option value="{{ $province['code'] }}">{{ $province['name'] }}</option>
-                @endforeach
-            </select>
-            @error('province')
-                <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
-            @enderror
-            <div wire:loading wire:target="selectedProvince" class="text-sm text-gray-500 mt-1">
-                Loading cities/municipalities...
-            </div>
-        </div>
+                    <!-- Province (hide only if NCR is selected) -->
+                    @if($selectedRegion !== '130000000')
+                        <div>
+                            <label for="selectedProvince" class="block text-sm font-medium text-gray-700">Province</label>
+                            <select wire:model="selectedProvince" id="selectedProvince"
+                                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    {{ empty($provinces) ? 'disabled' : '' }}>
+                                    <option value="">Select Province</option>
+                                @foreach($provinces as $province)
+                                    <option value="{{ $province['code'] }}">{{ $province['name'] }}</option>
+                                @endforeach
+                            </select>
+                            @error('selectedProvince')
+                                <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
+                            @enderror
+                            @if($loadingProvinces)
+                                <p class="text-sm text-gray-500 mt-1">Loading provinces...</p>
+                            @endif
+                        </div>
+                    @endif
 
-        <!-- City/Municipality -->
-        <div>
-            <label for="selectedCity" class="block text-sm font-medium text-gray-700">City/Municipality</label>
-            <select wire:model="selectedCity" id="selectedCity"
-                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    {{ empty($cities) ? 'disabled' : '' }}>
-                <option value="">Select City/Municipality</option>
-                @foreach($cities as $city)
-                    <option value="{{ $city['code'] }}">{{ $city['name'] }}</option>
-                @endforeach
-            </select>
-            @error('city')
-                <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
-            @enderror
-            <div wire:loading wire:target="selectedCity" class="text-sm text-gray-500 mt-1">
-                Loading barangays...
-            </div>
-        </div>
+                    <!-- City/Municipality (always show) -->
+                    <div>
+                        <label for="selectedCity" class="block text-sm font-medium text-gray-700">
+                            @if($selectedRegion === '130000000') City/Municipality (NCR)
+                            @else City/Municipality
+                            @endif
+                        </label>
+                            <select wire:model="selectedCity" id="selectedCity"
+                                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    {{ empty($cities) ? 'disabled' : '' }}>
+                                <option value="">Select City/Municipality</option>
+                                @foreach($cities as $city)
+                                    <option value="{{ $city['code'] }}">{{ $city['name'] }}</option>
+                                @endforeach
+                            </select>
+                        @error('selectedCity')
+                            <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
+                        @enderror
+                        @if($loadingCities)
+                            <p class="text-sm text-gray-500 mt-1">Loading cities...</p>
+                        @endif
+                    </div>
 
-        <!-- Barangay -->
-        <div>
-            <label for="selectedBarangay" class="block text-sm font-medium text-gray-700">Barangay</label>
-            <select wire:model="selectedBarangay" id="selectedBarangay"
-                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    {{ empty($barangays) ? 'disabled' : '' }}>
-                <option value="">Select Barangay</option>
-                @foreach($barangays as $barangay)
-                    <option value="{{ $barangay['code'] }}">{{ $barangay['name'] }}</option>
-                @endforeach
-            </select>
-            @error('barangay')
-                <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
-            @enderror
-        </div>
-    </div>
-@endif
+                    <!-- Barangay -->
+                    <div>
+                        <label for="selectedBarangay" class="block text-sm font-medium text-gray-700">Barangay</label>
+                        <select wire:model="selectedBarangay" id="selectedBarangay"
+                                class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                {{ empty($barangays) ? 'disabled' : '' }}>
+                            <option value="">Select Barangay</option>
+                            @foreach($barangays as $barangay)
+                                <option value="{{ $barangay['code'] }}">{{ $barangay['name'] }}</option>
+                            @endforeach
+                        </select>
+                        @error('barangay')
+                            <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+                    
+                </div>
+            @endif
+
             <!-- Step 3: Description and Price -->
             @if ($currentStep == 3)
                 <div class="space-y-6">
@@ -302,16 +310,6 @@
                 </div>
             </div>
         </form>
-
-        <!-- Step Navigation (Optional - allows jumping to completed steps) -->
-        <div class="mt-6 flex justify-center space-x-2">
-            @for ($i = 1; $i <= $totalSteps; $i++)
-                <button type="button" 
-                        wire:click="goToStep({{ $i }})"
-                        class="w-3 h-3 rounded-full {{ $currentStep == $i ? 'bg-blue-600' : ($currentStep > $i ? 'bg-blue-400' : 'bg-gray-300') }}">
-                </button>
-            @endfor
-        </div>
     </div>
 </div>
 
