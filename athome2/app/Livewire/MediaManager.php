@@ -74,7 +74,7 @@ class MediaManager extends Component
 
         // Redirect to /home after successful upload
         session()->flash('message', 'Images uploaded successfully!');
-        return $this->redirect('/home');
+        return $this->redirect('/');
     }
 
     public function delete($id)

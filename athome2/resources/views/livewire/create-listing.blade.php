@@ -1,4 +1,4 @@
-<div class="mb-4 p-4 bg-fuchsia-100 border border-fuchsia-300 rounded">
+<div class="mb-4 p-4 bg-white rounded">
     <div class="max-w-4xl mx-auto p-6 bg-white shadow-xl rounded-lg">
         <h2 class="text-3xl font-bold mb-8 text-gray-800 text-center">Create a New House Listing</h2>
         
@@ -59,30 +59,90 @@
                     </div>
 
                     <!-- Total Occupants -->
-                    <div>
-                        <label for="total_occupants" class="block text-sm font-medium text-gray-700">Maximum Number of Occupants</label>
-                        <input type="number" wire:model="total_occupants" id="total_occupants" placeholder="Enter maximum occupants"
-                               class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <div class="mb-4">
+                        <label for="total_occupants" class="block mb-2 text-sm font-medium text-gray-700">Maximum Number of Occupants</label>
+                        <div class="relative flex items-center max-w-[11rem]">
+                            <button type="button" 
+                                    wire:click="decrement('total_occupants')"
+                                    class="bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-s-lg p-3 h-11 focus:ring-gray-100 focus:ring-2 focus:outline-none">
+                                <svg class="w-3 h-3 text-gray-900" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 2">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h16"/>
+                                </svg>
+                            </button>
+                            <input type="text" wire:model="total_occupants" id="total_occupants" 
+                                class="bg-gray-50 border-x-0 border-gray-300 h-11 font-medium text-center text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full pb-6" 
+                                placeholder="" required />
+                            <div class="absolute bottom-1 start-1/2 -translate-x-1/2 rtl:translate-x-1/2 flex items-center text-xs text-gray-400 space-x-1 rtl:space-x-reverse">
+                                <span>Persons</span>
+                            </div>
+                            <button type="button" 
+                                    wire:click="increment('total_occupants')"
+                                    class="bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-e-lg p-3 h-11 focus:ring-gray-100 focus:ring-2 focus:outline-none">
+                                <svg class="w-3 h-3 text-gray-900" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 1v16M1 9h16"/>
+                                </svg>
+                            </button>
+                        </div>
                         @error('total_occupants')
                             <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
                         @enderror
                     </div>
 
                     <!-- Total Rooms -->
-                    <div>
-                        <label for="total_rooms" class="block text-sm font-medium text-gray-700">Total Room(s)</label>
-                        <input type="number" wire:model="total_rooms" id="total_rooms" placeholder="Enter total rooms"
-                               class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <div class="mb-4">
+                        <label for="total_rooms" class="block mb-2 text-sm font-medium text-gray-700">Total Room(s)</label>
+                        <div class="relative flex items-center max-w-[11rem]">
+                            <button type="button" 
+                                    wire:click="decrement('total_rooms')"
+                                    class="bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-s-lg p-3 h-11 focus:ring-gray-100 focus:ring-2 focus:outline-none">
+                                <svg class="w-3 h-3 text-gray-900" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 2">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h16"/>
+                                </svg>
+                            </button>
+                            <input type="text" wire:model="total_rooms" id="total_rooms" 
+                                class="bg-gray-50 border-x-0 border-gray-300 h-11 font-medium text-center text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full pb-6" 
+                                placeholder="" required />
+                            <div class="absolute bottom-1 start-1/2 -translate-x-1/2 rtl:translate-x-1/2 flex items-center text-xs text-gray-400 space-x-1 rtl:space-x-reverse">
+                                <span>Rooms</span>
+                            </div>
+                            <button type="button" 
+                                    wire:click="increment('total_rooms')"
+                                    class="bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-e-lg p-3 h-11 focus:ring-gray-100 focus:ring-2 focus:outline-none">
+                                <svg class="w-3 h-3 text-gray-900" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 1v16M1 9h16"/>
+                                </svg>
+                            </button>
+                        </div>
                         @error('total_rooms')
                             <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
                         @enderror
                     </div>
 
                     <!-- Total Bathrooms -->
-                    <div>
-                        <label for="total_bathrooms" class="block text-sm font-medium text-gray-700">Total Bathroom(s)</label>
-                        <input type="number" wire:model="total_bathrooms" id="total_bathrooms" placeholder="Enter total bathrooms"
-                               class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <div class="mb-4">
+                        <label for="total_bathrooms" class="block mb-2 text-sm font-medium text-gray-700">Total Bathroom(s)</label>
+                        <div class="relative flex items-center max-w-[11rem]">
+                            <button type="button" 
+                                    wire:click="decrement('total_bathrooms')"
+                                    class="bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-s-lg p-3 h-11 focus:ring-gray-100 focus:ring-2 focus:outline-none">
+                                <svg class="w-3 h-3 text-gray-900" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 2">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h16"/>
+                                </svg>
+                            </button>
+                            <input type="text" wire:model="total_bathrooms" id="total_bathrooms" 
+                                class="bg-gray-50 border-x-0 border-gray-300 h-11 font-medium text-center text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full pb-6" 
+                                placeholder="" required />
+                            <div class="absolute bottom-1 start-1/2 -translate-x-1/2 rtl:translate-x-1/2 flex items-center text-xs text-gray-400 space-x-1 rtl:space-x-reverse">
+                                <span>Bathrooms</span>
+                            </div>
+                            <button type="button" 
+                                    wire:click="increment('total_bathrooms')"
+                                    class="bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-e-lg p-3 h-11 focus:ring-gray-100 focus:ring-2 focus:outline-none">
+                                <svg class="w-3 h-3 text-gray-900" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 1v16M1 9h16"/>
+                                </svg>
+                            </button>
+                        </div>
                         @error('total_bathrooms')
                             <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
                         @enderror
@@ -150,7 +210,7 @@
                                 <option value="{{ $region['code'] }}">{{ $region['name'] }}</option>
                             @endforeach
                         </select>
-                        @error('region')
+                        @error('selectedRegion')
                             <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
                         @enderror
                         <div wire:loading wire:target="selectedRegion" class="text-sm text-gray-500 mt-1">
@@ -167,7 +227,7 @@
                                     {{ empty($provinces) ? 'disabled' : '' }}>
                                     <option value="">Select Province</option>
                                 @foreach($provinces as $province)
-                                    <option value="{{ $province['code'] }}"n>{{ $province['name'] }}</option>
+                                    <option value="{{ $province['code'] }}">{{ $province['name'] }}</option>
                                 @endforeach
                             </select>
                             @error('selectedProvince')
@@ -176,6 +236,14 @@
                             @if($loadingProvinces)
                                 <p class="text-sm text-gray-500 mt-1">Loading provinces...</p>
                             @endif
+                        </div>
+                    @else
+                        <!-- Show province info for NCR -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Province</label>
+                            <div class="mt-1 block w-full px-3 py-2 border border-gray-200 rounded-md shadow-sm bg-gray-50 text-gray-700">
+                                Metro Manila (National Capital Region)
+                            </div>
                         </div>
                     @endif
 
@@ -213,9 +281,12 @@
                                 <option value="{{ $barangay['code'] }}">{{ $barangay['name'] }}</option>
                             @endforeach
                         </select>
-                        @error('barangay')
+                        @error('selectedBarangay')
                             <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
                         @enderror
+                        @if($loadingBarangays)
+                            <p class="text-sm text-gray-500 mt-1">Loading barangays...</p>
+                        @endif
                     </div>
                     
                 </div>

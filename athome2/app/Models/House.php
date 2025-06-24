@@ -36,7 +36,7 @@ class House extends Model
         'water_meter',
         'price',
         'user_id',
-        'status', // Added status field
+        'status',
     ];
 
     // Casts
@@ -48,10 +48,9 @@ class House extends Model
         'has_gym' => 'boolean',
         'electric_meter' => 'boolean',
         'water_meter' => 'boolean',
-        'status' => 'boolean', // Cast status as boolean
+        'status' => 'boolean',
     ];
     
-    // Constants for status (optional but recommended)
     const STATUS_ENABLED = true;
     const STATUS_DISABLED = false;
 

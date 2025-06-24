@@ -19,9 +19,9 @@ class CreateListing extends Component
     public $province;
     public $city;
     public $barangay;
-    public $total_occupants;
-    public $total_rooms;
-    public $total_bathrooms;
+    public $total_occupants = 1;
+    public $total_rooms = 1;
+    public $total_bathrooms = 1;
     public $description;
     public $has_aircon = false;
     public $has_kitchen = false;
@@ -49,13 +49,12 @@ class CreateListing extends Component
     public $barangays = [];
     public $loadingProvinces = false;
     public $loadingCities = false;
+    public $loadingBarangays = false;
 
     public function mount()
     {
         $this->loadRegions();
     }
-
-    
 
     public function loadRegions()
     {
@@ -70,35 +69,41 @@ class CreateListing extends Component
 
     public function updatedSelectedRegion($regionCode)
     {
+        // Reset dependent fields
         $this->reset([
             'provinces', 'selectedProvince', 'province',
             'cities', 'selectedCity', 'city',
             'barangays', 'selectedBarangay', 'barangay'
         ]);
-        $this->loadingProvinces = true;
+
+        if (!$regionCode) {
+            return;
+        }
 
         // Set region name
         $region = collect($this->regions)->firstWhere('code', $regionCode);
         $this->region = $region['name'] ?? null;
 
-        if (!$regionCode) {
-            $this->provinces = [];
-            $this->cities = [];
-            $this->barangays = [];
-            $this->loadingProvinces = false;
-            return;
-        }
-
+        // Handle NCR (National Capital Region) - code 130000000
         if ($regionCode === '130000000') {
-            $this->provinces = [];
-            $this->loadingProvinces = false;
+            $this->province = 'Metro Manila'; // Auto-set province for NCR
+            $this->provinces = []; // NCR doesn't have provinces in the traditional sense
             $this->loadCitiesForNCR();
             return;
         }
 
+        // Load provinces for other regions
+        $this->loadingProvinces = true;
         try {
             $response = Http::get("https://psgc.gitlab.io/api/regions/{$regionCode}/provinces");
             $this->provinces = $response->successful() ? $response->json() : [];
+            
+            // Auto-select province if there's only one
+            if (count($this->provinces) === 1) {
+                $this->selectedProvince = $this->provinces[0]['code'];
+                $this->province = $this->provinces[0]['name'];
+                $this->loadCitiesForProvince($this->selectedProvince);
+            }
         } catch (\Exception $e) {
             $this->provinces = [];
             session()->flash('error', 'Failed to load provinces. Please try again.');
@@ -121,22 +126,33 @@ class CreateListing extends Component
 
     public function updatedSelectedProvince($provinceCode)
     {
+        // Reset dependent fields
         $this->reset(['cities', 'selectedCity', 'city', 'barangays', 'selectedBarangay', 'barangay']);
+
+        if (!$provinceCode) {
+            return;
+        }
 
         // Set province name
         $province = collect($this->provinces)->firstWhere('code', $provinceCode);
         $this->province = $province['name'] ?? null;
 
-        if (!$provinceCode) {
-            $this->cities = [];
-            $this->barangays = [];
-            return;
-        }
+        $this->loadCitiesForProvince($provinceCode);
+    }
 
+    public function loadCitiesForProvince($provinceCode)
+    {
         $this->loadingCities = true;
         try {
             $response = Http::get("https://psgc.gitlab.io/api/provinces/{$provinceCode}/cities-municipalities");
             $this->cities = $response->successful() ? $response->json() : [];
+            
+            // Auto-select city if there's only one
+            if (count($this->cities) === 1) {
+                $this->selectedCity = $this->cities[0]['code'];
+                $this->city = $this->cities[0]['name'];
+                $this->loadBarangaysForCity($this->selectedCity);
+            }
         } catch (\Exception $e) {
             $this->cities = [];
             session()->flash('error', 'Failed to load cities. Please try again.');
@@ -146,17 +162,23 @@ class CreateListing extends Component
 
     public function updatedSelectedCity($cityCode)
     {
+        // Reset dependent fields
         $this->reset(['barangays', 'selectedBarangay', 'barangay']);
+
+        if (!$cityCode) {
+            return;
+        }
 
         // Set city name
         $city = collect($this->cities)->firstWhere('code', $cityCode);
         $this->city = $city['name'] ?? null;
 
-        if (!$cityCode) {
-            $this->barangays = [];
-            return;
-        }
+        $this->loadBarangaysForCity($cityCode);
+    }
 
+    public function loadBarangaysForCity($cityCode)
+    {
+        $this->loadingBarangays = true;
         try {
             $response = Http::get("https://psgc.gitlab.io/api/cities-municipalities/{$cityCode}/barangays");
             $this->barangays = $response->successful() ? $response->json() : [];
@@ -164,6 +186,7 @@ class CreateListing extends Component
             $this->barangays = [];
             session()->flash('error', 'Failed to load barangays. Please try again.');
         }
+        $this->loadingBarangays = false;
     }
 
     public function updatedSelectedBarangay($barangayCode)
@@ -217,9 +240,9 @@ class CreateListing extends Component
                 $this->validate([
                     'street' => 'required|string|max:255',
                     'selectedRegion' => 'required|string',
-                    'selectedProvince' =>$this->selectedRegion === '130000000' ? 'nullable' : 'required|string',
+                    'selectedProvince' => $this->selectedRegion === '130000000' ? 'nullable' : 'required|string',
                     'selectedCity' => 'required|string',
-                    'barangay' => 'required|string|max:255',
+                    'selectedBarangay' => 'required|string',
                 ]);
                 break;
             case 3:
@@ -229,6 +252,16 @@ class CreateListing extends Component
                 ]);
                 break;
         }
+    }
+
+    public function increment($field)
+    {
+        $this->$field = ($this->$field ?? 1) + 1;
+    }
+
+    public function decrement($field)
+    {
+        $this->$field = ($this->$field > 1) ? $this->$field - 1 : 1;
     }
 
     public function save()

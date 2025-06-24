@@ -148,8 +148,8 @@
                         <div class="p-4">
                             <div class="flex justify-between items-start">
                                 <h3 class="text-lg font-semibold text-gray-900">{{ $property->houseName }}</h3>
-                                <span class="px-2 py-1 text-xs font-semibold rounded-full {{ $property->isActive ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
-                                    {{ $property->isActive ? 'Active' : 'Inactive' }}
+                                <span class="px-2 py-1 text-xs font-semibold rounded-full {{ $property->status ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
+                                    {{ $property->status ? 'Active' : 'Inactive' }}
                                 </span>
                             </div>
                             <p class="text-gray-600 mt-1">{{ $property->barangay }}, {{ $property->city }}</p>
