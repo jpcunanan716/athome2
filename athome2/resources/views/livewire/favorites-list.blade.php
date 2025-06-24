@@ -29,20 +29,13 @@
                                             </button>
 
                                             <!-- Carousel -->
-                                            <div wire:ignore class="swiper">
-                                                <div class="swiper-wrapper">
-                                                    @foreach($house->media as $media)
-                                                        <div class="swiper-slide">
-                                                            <div class="w-full h-80 rounded-lg overflow-hidden">
-                                                                <img src="{{ asset('storage/' . $media->image_path) }}" 
-                                                                    alt="House Image" 
-                                                                    class="w-full h-80 object-cover">
-                                                            </div>
-                                                        </div>
-                                                    @endforeach
+                                            @if($house->media->isNotEmpty())
+                                                <div class="w-full h-80 rounded-lg overflow-hidden">
+                                                    <img src="{{ asset('storage/' . $house->media->first()->image_path) }}" 
+                                                        alt="House Image" 
+                                                        class="w-full h-80 object-cover">
                                                 </div>
-                                                <div class="swiper-pagination"></div>
-                                            </div>
+                                            @endif
 
                                             <!-- House Details -->
                                             <div class="p-6">

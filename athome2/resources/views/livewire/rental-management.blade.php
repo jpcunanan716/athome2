@@ -5,35 +5,35 @@
         </div>
     @endif
 
-    <!-- Navigation Tabs -->
-    <div class="border-b border-gray-200 mb-6">
+    <!-- Navigation Tabs + New Listing Button -->
+    <div class="flex justify-between items-center border-b border-gray-200 mb-6">
         <nav class="-mb-px flex space-x-8">
             <button wire:click="switchTab('rentals')" 
                 class="py-4 px-1 border-b-2 font-medium text-sm {{ $activeTab == 'rentals' 
-                    ? 'border-blue-500 text-blue-600' 
+                    ? 'border-fuchsia-500 text-fuchsia-600' 
                     : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }}">
                 Rental Requests
             </button>
             <button wire:click="switchTab('properties')" 
                 class="py-4 px-1 border-b-2 font-medium text-sm {{ $activeTab == 'properties' 
-                    ? 'border-blue-500 text-blue-600' 
+                    ? 'border-fuchsia-500 text-fuchsia-600' 
                     : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }}">
                 My Properties
             </button>
         </nav>
+        <a href="{{ route('new-listing') }}" 
+            class="bg-fuchsia-700 hover:bg-fuchsia-600 text-white px-4 py-2 rounded-lg flex items-center ml-4">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
+            </svg>
+            New Listing
+        </a>
     </div>
 
     <!-- Rental Requests Tab Content -->
     @if ($activeTab == 'rentals')
         <div class="flex justify-between items-center mb-6">
-            <h2 class="text-2xl font-bold">Rental Requests for My Properties</h2>
-            <a href="{{ route('new-listing') }}" 
-            class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
-                </svg>
-                New Listing
-            </a>
+            <h2 class="text-2xl font-bold">Rental Requests</h2>
         </div>
 
         @if($rentals->isEmpty())
@@ -112,13 +112,6 @@
     @elseif ($activeTab == 'properties')
         <div class="flex justify-between items-center mb-6">
             <h2 class="text-2xl font-bold">My Properties</h2>
-            <a href="{{ route('new-listing') }}" 
-                class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
-                </svg>
-                New Listing
-            </a>
         </div>
 
         @if($properties->isEmpty())
@@ -179,34 +172,36 @@
                             <!-- Amenities display -->
                             <div class="mt-3 flex flex-wrap gap-2">
                                 @if($property->has_aircon)
-                                <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">Air Conditioning</span>
+                                <span class="px-2 py-1 bg-fuchsia-100 text-fuchsia-800 text-xs rounded-full">Air Conditioning</span>
                                 @endif
                                 @if($property->has_wifi)
-                                <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">WiFi</span>
+                                <span class="px-2 py-1 bg-fuchsia-100 text-fuchsia-800 text-xs rounded-full">WiFi</span>
                                 @endif
                                 @if($property->has_kitchen)
-                                <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">Kitchen</span>
+                                <span class="px-2 py-1 bg-fuchsia-100 text-fuchsia-800 text-xs rounded-full">Kitchen</span>
                                 @endif
                                 @if($property->has_parking)
-                                <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">Parking</span>
+                                <span class="px-2 py-1 bg-fuchsia-100 text-fuchsia-800 text-xs rounded-full">Parking</span>
                                 @endif
                                 @if($property->has_gym)
-                                <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">Gym</span>
+                                <span class="px-2 py-1 bg-fuchsia-100 text-fuchsia-800 text-xs rounded-full">Gym</span>
                                 @endif
                                 @if($property->electric_meter)
-                                <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">Own Electric Meter</span>
+                                <span class="px-2 py-1 bg-fuchsia-100 text-fuchsia-800 text-xs rounded-full">Own Electric Meter</span>
                                 @endif
                                 @if($property->water_meter)
-                                <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">Own Water Meter</span>
+                                <span class="px-2 py-1 bg-fuchsia-100 text-fuchsia-800 text-xs rounded-full">Own Water Meter</span>
                                 @endif
                             </div>
                             
                             <div class="mt-4 pt-4 border-t border-gray-200 flex space-x-2">
-                                <button wire:click="editProperty({{ $property->id }})" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm flex-1">
+                                <button wire:click="editProperty({{ $property->id }})"
+                                    class="bg-white border-2 border-black text-black px-3 py-1 rounded text-sm flex-1 hover:bg-gray-100 transition">
                                     Edit
                                 </button>
-                                <button wire:click="toggleActive({{ $property->id }})" 
-                                    class="{{ $property->status ? 'bg-red-500 hover:bg-red-600' : 'bg-green-500 hover:bg-green-600' }} text-white px-3 py-1 rounded text-sm flex-1">
+                                <button wire:click="toggleActive({{ $property->id }})"
+                                    class="bg-white px-3 py-1 rounded text-sm flex-1 border-2
+                                        {{ $property->status ? 'border-red-500 text-red-600 hover:bg-red-50' : 'border-green-500 text-green-600 hover:bg-green-50' }} transition">
                                     {{ $property->status ? 'Disable Property' : 'Enable Property' }}
                                 </button>
                             </div>

@@ -56,16 +56,28 @@ new #[Layout('layouts.guest')] class extends Component
             </label>
         </div>
 
-        <div class="flex items-center justify-end mt-4">
-            @if (Route::has('password.request'))
-                <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('password.request') }}" wire:navigate>
-                    {{ __('Forgot your password?') }}
-                </a>
-            @endif
-
-            <x-primary-button class="ms-3">
+        <div class="flex flex-col items-center m-4">
+            <x-primary-button class="w-full bg-fuchsia-600 hover:bg-fuchsia-700 focus:ring-fuchsia-500 max-w-xs mb-6 mt-6 text-center justify-center">
                 {{ __('Log in') }}
             </x-primary-button>
+        </div>
+
+        <div class="flex items-center justify-between mt-4">
+            <a href="{{ route('register') }}"
+                class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                wire:navigate>
+                {{ __("Don't have an account?") }}
+            </a>
+            <div class="flex items-center space-x-2">
+                @if (Route::has('password.request'))
+                    <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                        href="{{ route('password.request') }}" wire:navigate>
+                        {{ __('Forgot your password?') }}
+                    </a>
+                @endif
+
+                
+            </div>
         </div>
     </form>
 </div>

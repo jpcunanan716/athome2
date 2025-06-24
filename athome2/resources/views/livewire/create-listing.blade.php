@@ -1,40 +1,22 @@
 <div class="mb-4 p-4 bg-white rounded">
-    <div class="max-w-4xl mx-auto p-6 bg-white shadow-xl rounded-lg">
-        <h2 class="text-3xl font-bold mb-8 text-gray-800 text-center">Create a New House Listing</h2>
-        
-        <!-- Progress Bar -->
-        <div class="mb-8">
-            <div class="flex items-center justify-between mb-4">
-                @for ($i = 1; $i <= $totalSteps; $i++)
-                    <div class="flex items-center {{ $i < $totalSteps ? 'flex-1' : '' }}">
-                        <div class="flex items-center justify-center w-10 h-10 rounded-full {{ $currentStep >= $i ? 'bg-fuchsia-700 text-white' : 'bg-gray-200 text-gray-600' }} font-semibold">
-                            {{ $i }}
-                        </div>
-                        <div class="ml-3 text-sm font-medium {{ $currentStep >= $i ? 'text-fuchsia-700' : 'text-gray-500' }}">
-                            @if ($i == 1) Basic Info
-                            @elseif ($i == 2) Address
-                            @else Description & Price
-                            @endif
-                        </div>
-                        @if ($i < $totalSteps)
-                            <div class="flex-1 mx-4 h-1 {{ $currentStep > $i ? 'bg-fuchsia-700' : 'bg-gray-200' }} rounded"></div>
-                        @endif
-                    </div>
-                @endfor
-            </div>
-        </div>
-
+    <div class="max-w-4xl mx-auto p-6 pt-16 bg-white rounded-lg">
         <form wire:submit.prevent="save">
-            <!-- Step 1: Basic Information -->
+            <!-- Step 1: House Name & Type -->
             @if ($currentStep == 1)
                 <div class="space-y-6">
-                    <h3 class="text-xl font-semibold text-gray-800 mb-6">Basic Information</h3>
+                    <h3 class="text-2xl font-semibold text-gray-800 mb-2">Tell us what kind of place you want to rent</h3>
                     
                     <!-- House Name -->
-                    <div>
-                        <label for="houseName" class="block text-sm font-medium text-gray-700">House Name</label>
-                        <input type="text" wire:model="houseName" id="houseName" placeholder="Enter house name"
-                               class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                   <div>
+                        <label for="houseName" class="block text-sm font-medium text-gray-700 mb-1 pt-8">Property Name</label>
+                        <input
+                            type="text"
+                            wire:model="houseName"
+                            id="houseName"
+                            placeholder="Enter property name"
+                            class="w-full px-0 py-2 border-0 border-b border-gray-300 focus:border-fuchsia-700 focus:ring-0 text-lg bg-transparent placeholder-gray-400 transition"
+                            autocomplete="off"
+                        >
                         @error('houseName')
                             <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
                         @enderror
@@ -42,151 +24,149 @@
 
                     <!-- House Type -->
                     <div>
-                        <label for="housetype" class="block text-sm font-medium text-gray-700">House Type</label>
-                        <select wire:model="housetype" id="housetype"
-                                class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-                            <option class="text-gray-500" value="">Select House Type</option>
-                            <option value="Studio Type">Studio Type</option>
-                            <option value="One Bedroom">One Bedroom</option>
-                            <option value="Two bedroom">Two Bedroom</option>
-                            <option value="Condo">Condo</option>
-                            <option value="Townhouse">Townhouse</option>
-                            <option value="Penthouse">Penthouse</option>
-                        </select>
-                        @error('housetype')
-                            <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    <!-- Total Occupants -->
-                    <div class="mb-4">
-                        <label for="total_occupants" class="block mb-2 text-sm font-medium text-gray-700">Maximum Number of Occupants</label>
-                        <div class="relative flex items-center max-w-[11rem]">
-                            <button type="button" 
-                                    wire:click="decrement('total_occupants')"
-                                    class="bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-s-lg p-3 h-11 focus:ring-gray-100 focus:ring-2 focus:outline-none">
-                                <svg class="w-3 h-3 text-gray-900" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 2">
-                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h16"/>
-                                </svg>
-                            </button>
-                            <input type="text" wire:model="total_occupants" id="total_occupants" 
-                                class="bg-gray-50 border-x-0 border-gray-300 h-11 font-medium text-center text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full pb-6" 
-                                placeholder="" required />
-                            <div class="absolute bottom-1 start-1/2 -translate-x-1/2 rtl:translate-x-1/2 flex items-center text-xs text-gray-400 space-x-1 rtl:space-x-reverse">
-                                <span>Persons</span>
-                            </div>
-                            <button type="button" 
-                                    wire:click="increment('total_occupants')"
-                                    class="bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-e-lg p-3 h-11 focus:ring-gray-100 focus:ring-2 focus:outline-none">
-                                <svg class="w-3 h-3 text-gray-900" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
-                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 1v16M1 9h16"/>
-                                </svg>
-                            </button>
-                        </div>
-                        @error('total_occupants')
-                            <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    <!-- Total Rooms -->
-                    <div class="mb-4">
-                        <label for="total_rooms" class="block mb-2 text-sm font-medium text-gray-700">Total Room(s)</label>
-                        <div class="relative flex items-center max-w-[11rem]">
-                            <button type="button" 
-                                    wire:click="decrement('total_rooms')"
-                                    class="bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-s-lg p-3 h-11 focus:ring-gray-100 focus:ring-2 focus:outline-none">
-                                <svg class="w-3 h-3 text-gray-900" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 2">
-                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h16"/>
-                                </svg>
-                            </button>
-                            <input type="text" wire:model="total_rooms" id="total_rooms" 
-                                class="bg-gray-50 border-x-0 border-gray-300 h-11 font-medium text-center text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full pb-6" 
-                                placeholder="" required />
-                            <div class="absolute bottom-1 start-1/2 -translate-x-1/2 rtl:translate-x-1/2 flex items-center text-xs text-gray-400 space-x-1 rtl:space-x-reverse">
-                                <span>Rooms</span>
-                            </div>
-                            <button type="button" 
-                                    wire:click="increment('total_rooms')"
-                                    class="bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-e-lg p-3 h-11 focus:ring-gray-100 focus:ring-2 focus:outline-none">
-                                <svg class="w-3 h-3 text-gray-900" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
-                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 1v16M1 9h16"/>
-                                </svg>
-                            </button>
-                        </div>
-                        @error('total_rooms')
-                            <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    <!-- Total Bathrooms -->
-                    <div class="mb-4">
-                        <label for="total_bathrooms" class="block mb-2 text-sm font-medium text-gray-700">Total Bathroom(s)</label>
-                        <div class="relative flex items-center max-w-[11rem]">
-                            <button type="button" 
-                                    wire:click="decrement('total_bathrooms')"
-                                    class="bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-s-lg p-3 h-11 focus:ring-gray-100 focus:ring-2 focus:outline-none">
-                                <svg class="w-3 h-3 text-gray-900" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 2">
-                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h16"/>
-                                </svg>
-                            </button>
-                            <input type="text" wire:model="total_bathrooms" id="total_bathrooms" 
-                                class="bg-gray-50 border-x-0 border-gray-300 h-11 font-medium text-center text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full pb-6" 
-                                placeholder="" required />
-                            <div class="absolute bottom-1 start-1/2 -translate-x-1/2 rtl:translate-x-1/2 flex items-center text-xs text-gray-400 space-x-1 rtl:space-x-reverse">
-                                <span>Bathrooms</span>
-                            </div>
-                            <button type="button" 
-                                    wire:click="increment('total_bathrooms')"
-                                    class="bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-e-lg p-3 h-11 focus:ring-gray-100 focus:ring-2 focus:outline-none">
-                                <svg class="w-3 h-3 text-gray-900" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
-                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 1v16M1 9h16"/>
-                                </svg>
-                            </button>
-                        </div>
-                        @error('total_bathrooms')
-                            <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    <!-- Amenities -->
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-3">Amenities</label>
-                        <div class="grid grid-cols-2 gap-4">
-                            <label class="flex items-center">
-                                <input type="checkbox" wire:model="has_aircon" class="form-checkbox h-5 w-5 text-blue-600 rounded">
-                                <span class="ml-2 text-gray-700">Air Conditioning</span>
-                            </label>
-                            <label class="flex items-center">
-                                <input type="checkbox" wire:model="has_kitchen" class="form-checkbox h-5 w-5 text-blue-600 rounded">
-                                <span class="ml-2 text-gray-700">Kitchen</span>
-                            </label>
-                            <label class="flex items-center">
-                                <input type="checkbox" wire:model="has_wifi" class="form-checkbox h-5 w-5 text-blue-600 rounded">
-                                <span class="ml-2 text-gray-700">Wi-Fi</span>
-                            </label>
-                            <label class="flex items-center">
-                                <input type="checkbox" wire:model="has_parking" class="form-checkbox h-5 w-5 text-blue-600 rounded">
-                                <span class="ml-2 text-gray-700">Parking</span>
-                            </label>
-                            <label class="flex items-center">
-                                <input type="checkbox" wire:model="has_gym" class="form-checkbox h-5 w-5 text-blue-600 rounded">
-                                <span class="ml-2 text-gray-700">Gym</span>
-                            </label>
-                            <label class="flex items-center">
-                                <input type="checkbox" wire:model="electric_meter" class="form-checkbox h-5 w-5 text-blue-600 rounded">
-                                <span class="ml-2 text-gray-700">Own Electric Meter</span>
-                            </label>
-                            <label class="flex items-center">
-                                <input type="checkbox" wire:model="water_meter" class="form-checkbox h-5 w-5 text-blue-600 rounded">
-                                <span class="ml-2 text-gray-700">Own Water Meter</span>
-                            </label>
-                        </div>
-                    </div>
+    <label class="block text-sm font-medium text-gray-700 mb-2 pt-6">Property Type</label>
+    <div class="flex flex-wrap gap-3">
+        <!-- Studio Type -->
+        <button type="button"
+            wire:click="$set('housetype', 'Studio Type')"
+            class="flex items-center px-6 py-4 text-base rounded-xl border transition-all duration-200
+                {{ $housetype === 'Studio Type' ? 'border-fuchsia-700 border-2 bg-white text-fuchsia-700 shadow' : 'bg-white text-gray-700 border-gray-300 hover:border-fuchsia-700 border-2' }}">
+            <svg class="w-7 h-7 mr-3 transition-transform duration-200 {{ $housetype === 'Studio Type' ? 'scale-125 text-fuchsia-700' : '' }}"
+         fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <!-- Head -->
+        <circle cx="12" cy="9" r="3" stroke="{{ $housetype === 'Studio Type' ? '#A21CAF' : 'currentColor' }}" />
+        <!-- Shoulders/body -->
+        <path d="M6 19c0-2.5 3-4 6-4s6 1.5 6 4" stroke="{{ $housetype === 'Studio Type' ? '#A21CAF' : 'currentColor' }}" />
+    </svg>
+            Studio Type
+        </button>
+        <!-- One Bedroom -->
+        <button type="button"
+            wire:click="$set('housetype', 'One Bedroom')"
+            class="flex items-center px-6 py-4 text-base rounded-xl border transition-all duration-200
+                {{ $housetype === 'One Bedroom' ? 'border-fuchsia-700 border-2 bg-white text-fuchsia-700 shadow' : 'bg-white text-gray-700 border-gray-300 hover:border-fuchsia-700 border-2' }}">
+            <svg class="w-7 h-7 mr-3 transition-transform duration-200 {{ $housetype === 'One Bedroom' ? 'scale-125 text-fuchsia-700' : '' }}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <rect x="3" y="10" width="18" height="7" rx="2" stroke="{{ $housetype === 'One Bedroom' ? '#A21CAF' : 'currentColor' }}"/>
+                <path d="M7 10V7a2 2 0 0 1 4 0v3" stroke="{{ $housetype === 'One Bedroom' ? '#A21CAF' : 'currentColor' }}"/>
+            </svg>
+            One Bedroom
+        </button>
+        <!-- Two Bedroom -->
+        <button type="button"
+            wire:click="$set('housetype', 'Two Bedroom')"
+            class="flex items-center px-6 py-4 text-base rounded-xl border transition-all duration-200
+                {{ $housetype === 'Two Bedroom' ? 'border-fuchsia-700 border-2 bg-white text-fuchsia-700 shadow' : 'bg-white text-gray-700 border-gray-300 hover:border-fuchsia-700 border-2' }}">
+            <svg class="w-7 h-7 mr-3 transition-transform duration-200 {{ $housetype === 'Two Bedroom' ? 'scale-125 text-fuchsia-700' : '' }}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <rect x="3" y="10" width="18" height="7" rx="2" stroke="{{ $housetype === 'Two Bedroom' ? '#A21CAF' : 'currentColor' }}"/>
+                <path d="M7 10V7a2 2 0 0 1 4 0v3M13 10V7a2 2 0 0 1 4 0v3" stroke="{{ $housetype === 'Two Bedroom' ? '#A21CAF' : 'currentColor' }}"/>
+            </svg>
+            Two Bedroom
+        </button>
+        <!-- Condo -->
+        <button type="button"
+            wire:click="$set('housetype', 'Condo')"
+            class="flex items-center px-6 py-4 text-base rounded-xl border transition-all duration-200
+                {{ $housetype === 'Condo' ? 'border-fuchsia-700 border-2 bg-white text-fuchsia-700 shadow' : 'bg-white text-gray-700 border-gray-300 hover:border-fuchsia-700 border-2' }}">
+            <svg class="w-7 h-7 mr-3 transition-transform duration-200 {{ $housetype === 'Condo' ? 'scale-125 text-fuchsia-700' : '' }}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <rect x="4" y="4" width="16" height="16" rx="2" stroke="{{ $housetype === 'Condo' ? '#A21CAF' : 'currentColor' }}"/>
+                <path d="M9 8h1M9 12h1M9 16h1M14 8h1M14 12h1M14 16h1" stroke="{{ $housetype === 'Condo' ? '#A21CAF' : 'currentColor' }}"/>
+            </svg>
+            Condo
+        </button>
+        <!-- Townhouse -->
+        <button type="button"
+            wire:click="$set('housetype', 'Townhouse')"
+            class="flex items-center px-6 py-4 text-base rounded-xl border transition-all duration-200
+                {{ $housetype === 'Townhouse' ? 'border-fuchsia-700 border-2 bg-white text-fuchsia-700 shadow' : 'bg-white text-gray-700 border-gray-300 hover:border-fuchsia-700 border-2' }}">
+            <svg class="w-7 h-7 mr-3 transition-transform duration-200 {{ $housetype === 'Townhouse' ? 'scale-125 text-fuchsia-700' : '' }}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <rect x="3" y="10" width="6" height="8" rx="1" stroke="{{ $housetype === 'Townhouse' ? '#A21CAF' : 'currentColor' }}"/>
+                <rect x="9" y="6" width="6" height="12" rx="1" stroke="{{ $housetype === 'Townhouse' ? '#A21CAF' : 'currentColor' }}"/>
+                <rect x="15" y="12" width="6" height="6" rx="1" stroke="{{ $housetype === 'Townhouse' ? '#A21CAF' : 'currentColor' }}"/>
+            </svg>
+            Townhouse
+        </button>
+        <!-- Penthouse -->
+        <button type="button"
+            wire:click="$set('housetype', 'Penthouse')"
+            class="flex items-center px-6 py-4 text-base rounded-xl border transition-all duration-200
+                {{ $housetype === 'Penthouse' ? 'border-fuchsia-700 border-2 bg-white text-fuchsia-700 shadow' : 'bg-white text-gray-700 border-gray-300 hover:border-fuchsia-700 border-2' }}">
+            <svg class="w-7 h-7 mr-3 transition-transform duration-200 {{ $housetype === 'Penthouse' ? 'scale-125 text-fuchsia-700' : '' }}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path d="M3 17l3-9 6 6 6-6 3 9" stroke="{{ $housetype === 'Penthouse' ? '#A21CAF' : 'currentColor' }}"/>
+                <rect x="4" y="17" width="16" height="3" rx="1" stroke="{{ $housetype === 'Penthouse' ? '#A21CAF' : 'currentColor' }}"/>
+            </svg>
+            Penthouse
+        </button>
+    </div>
+    @error('housetype')
+        <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
+    @enderror
+</div>
                 </div>
             @endif
 
-          <!-- Step 2: Address Information -->
+            <!-- Step 2: Number Counters -->
             @if ($currentStep == 2)
+    <div>
+        <h3 class="text-2xl font-semibold text-gray-800 mb-1">Share some details about your place</h3>
+        <p class="text-gray-500 mb-2 pb-6">You can change all these information later.</p>
+        <!-- Counter Row Component -->
+        @php
+            $counters = [
+                [
+                    'label' => 'Guests',
+                    'field' => 'total_occupants',
+                    'value' => $total_occupants ?? 1,
+                ],
+                [
+                    'label' => 'Bedrooms',
+                    'field' => 'total_rooms',
+                    'value' => $total_rooms ?? 1,
+                ],
+
+                [
+                    'label' => 'Bathrooms',
+                    'field' => 'total_bathrooms',
+                    'value' => $total_bathrooms ?? 1,
+                ],
+            ];
+        @endphp
+
+        @foreach($counters as $counter)
+            <div class="flex items-center justify-between py-4 border-b">
+                <div class="text-lg text-gray-900 font-medium">{{ $counter['label'] }}</div>
+                <div class="flex items-center gap-3">
+                    <button type="button"
+                        wire:click="decrement('{{ $counter['field'] }}')"
+                        class="w-10 h-10 flex items-center justify-center rounded-full border border-gray-400 text-2xl text-gray-700 bg-white hover:bg-gray-100 focus:outline-none transition">
+                        &minus;
+                    </button>
+                    <span class="w-8 text-center text-lg text-gray-900 select-none">{{ $counter['value'] }}</span>
+                    <button type="button"
+                        wire:click="increment('{{ $counter['field'] }}')"
+                        class="w-10 h-10 flex items-center justify-center rounded-full border border-gray-400 text-2xl text-gray-700 bg-white hover:bg-gray-100 focus:outline-none transition">
+                        &#43;
+                    </button>
+                </div>
+            </div>
+            @if($counter['field'] === 'total_occupants')
+                @error('total_occupants')
+                    <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
+                @enderror
+            @elseif($counter['field'] === 'total_rooms')
+                @error('total_rooms')
+                    <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
+                @enderror
+            @elseif($counter['field'] === 'total_bathrooms')
+                @error('total_bathrooms')
+                    <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
+                @enderror
+            @endif
+        @endforeach
+    </div>
+@endif
+
+            <!-- Step 3: Address -->
+            @if ($currentStep == 3)
                 <div class="space-y-6">
                     <h3 class="text-xl font-semibold text-gray-800 mb-6">Address Information</h3>
                     
@@ -292,8 +272,111 @@
                 </div>
             @endif
 
-            <!-- Step 3: Description and Price -->
-            @if ($currentStep == 3)
+            <!-- Step 4: Amenities -->
+            @if ($currentStep == 4)
+                <div class="space-y-6">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-6">Amenities</h3>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-3">Amenities</label>
+                        <div class="grid grid-cols-2 gap-4">
+                            <!-- Air Conditioning -->
+                            <button type="button"
+                                wire:click="$set('has_aircon', {{ $has_aircon ? 0 : 1 }})"
+                                class="flex items-center px-6 py-4 text-base rounded-xl border transition-all duration-200
+                                    {{ $has_aircon ? 'border-fuchsia-700 border-2 bg-white text-fuchsia-700 shadow' : 'bg-white text-gray-700 border-gray-300 hover:border-fuchsia-700 border-2' }}">
+                                <!-- Aircon Icon -->
+                                <svg class="w-7 h-7 mr-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path d="M4 12h9a3 3 0 1 0 0-6 3 3 0 0 0-3 3" stroke="currentColor"/>
+                                    <path d="M4 18h13a2 2 0 1 0 0-4 2 2 0 0 0-2 2" stroke="currentColor"/>
+                                    <path d="M4 6h5" stroke="currentColor"/>
+                                </svg>
+                                Air Conditioning
+                            </button>
+                            <!-- Kitchen (Spatula Icon) -->
+                            <button type="button"
+                                wire:click="$set('has_kitchen', {{ $has_kitchen ? 0 : 1 }})"
+                                class="flex items-center px-6 py-4 text-base rounded-xl border transition-all duration-200
+                                    {{ $has_kitchen ? 'border-fuchsia-700 border-2 bg-white text-fuchsia-700 shadow' : 'bg-white text-gray-700 border-gray-300 hover:border-fuchsia-700 border-2' }}">
+                                <!-- Spatula Icon -->
+                                <svg class="w-7 h-7 mr-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <rect x="5" y="10" width="14" height="7" rx="2" stroke="currentColor"/>
+                                <rect x="8" y="7" width="8" height="3" rx="1.5" stroke="currentColor"/>
+                                <path d="M3 13h2M19 13h2" stroke="currentColor"/>
+                                <path d="M10 7V5M14 7V5" stroke="currentColor"/>
+                            </svg>
+                                Kitchen
+                            </button>
+                            <!-- Wi-Fi -->
+                            <button type="button"
+                                wire:click="$set('has_wifi', {{ $has_wifi ? 0 : 1 }})"
+                                class="flex items-center px-6 py-4 text-base rounded-xl border transition-all duration-200
+                                    {{ $has_wifi ? 'border-fuchsia-700 border-2 bg-white text-fuchsia-700 shadow' : 'bg-white text-gray-700 border-gray-300 hover:border-fuchsia-700 border-2' }}">
+                                <!-- WiFi Icon -->
+                                <svg class="w-7 h-7 mr-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path d="M2 8.82a15.91 15.91 0 0 1 20 0M6 13.06a10.94 10.94 0 0 1 12 0M9.91 17.5a4 4 0 0 1 4.18 0" stroke="currentColor"/>
+                                    <circle cx="12" cy="20" r="1" fill="currentColor"/>
+                                </svg>
+                                Wi-Fi
+                            </button>
+                            <!-- Parking -->
+                            <button type="button"
+                                wire:click="$set('has_parking', {{ $has_parking ? 0 : 1 }})"
+                                class="flex items-center px-6 py-4 text-base rounded-xl border transition-all duration-200
+                                    {{ $has_parking ? 'border-fuchsia-700 border-2 bg-white text-fuchsia-700 shadow' : 'bg-white text-gray-700 border-gray-300 hover:border-fuchsia-700 border-2' }}">
+                                <!-- Parking Icon -->
+                                <svg class="w-7 h-7 mr-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <rect x="4" y="11" width="16" height="5" rx="2" stroke="currentColor"/>
+                                    <path d="M7 11V9a3 3 0 0 1 3-3h4a3 3 0 0 1 3 3v2" stroke="currentColor"/>
+                                    <circle cx="7" cy="18" r="2" stroke="currentColor" fill="none"/>
+                                    <circle cx="17" cy="18" r="2" stroke="currentColor" fill="none"/>
+                                </svg>
+                                Parking
+                            </button>
+                            <!-- Gym (Dumbbell Icon) -->
+                            <button type="button"
+                                wire:click="$set('has_gym', {{ $has_gym ? 0 : 1 }})"
+                                class="flex items-center px-6 py-4 text-base rounded-xl border transition-all duration-200
+                                    {{ $has_gym ? 'border-fuchsia-700 border-2 bg-white text-fuchsia-700 shadow' : 'bg-white text-gray-700 border-gray-300 hover:border-fuchsia-700 border-2' }}">
+                                <!-- Dumbbell Icon -->
+                                <svg class="w-7 h-7 mr-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <rect x="2" y="10" width="2" height="4" rx="1" stroke="currentColor"/>
+                                    <rect x="4" y="8" width="2" height="8" rx="1" stroke="currentColor"/>
+                                    <rect x="6" y="11" width="12" height="2" rx="1" stroke="currentColor"/>
+                                    <rect x="18" y="8" width="2" height="8" rx="1" stroke="currentColor"/>
+                                    <rect x="20" y="10" width="2" height="4" rx="1" stroke="currentColor"/>
+                                </svg>
+                                Gym
+                            </button>
+                            <!-- Own Electric Meter (Electricity Icon) -->
+                            <button type="button"
+                                wire:click="$set('electric_meter', {{ $electric_meter ? 0 : 1 }})"
+                                class="flex items-center px-6 py-4 text-base rounded-xl border transition-all duration-200
+                                    {{ $electric_meter ? 'border-fuchsia-700 border-2 bg-white text-fuchsia-700 shadow' : 'bg-white text-gray-700 border-gray-300 hover:border-fuchsia-700 border-2' }}">
+                                <!-- Electricity Icon -->
+                                <svg class="w-7 h-7 mr-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <polygon points="13 2 3 14 12 14 11 22 21 10 13 10 13 2" stroke="currentColor" fill="none"/>
+                                </svg>
+                                Own Electric Meter
+                            </button>
+                            <!-- Own Water Meter (Water Drop Icon) -->
+                            <button type="button"
+                                wire:click="$set('water_meter', {{ $water_meter ? 0 : 1 }})"
+                                class="flex items-center px-6 py-4 text-base rounded-xl border transition-all duration-200
+                                    {{ $water_meter ? 'border-fuchsia-700 border-2 bg-white text-fuchsia-700 shadow' : 'bg-white text-gray-700 border-gray-300 hover:border-fuchsia-700 border-2' }}">
+                                <!-- Water Drop Icon -->
+                                <svg class="w-7 h-7 mr-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path d="M12 2C12 2 5 10.5 5 15a7 7 0 0 0 14 0C19 10.5 12 2 12 2Z" stroke="currentColor"/>
+                                    <ellipse cx="12" cy="17" rx="3" ry="2" fill="currentColor" fill-opacity="0.2"/>
+                                </svg>
+                                Own Water Meter
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            @endif
+
+            <!-- Step 5: Description and Price -->
+            @if ($currentStep == 5)
                 <div class="space-y-6">
                     <h3 class="text-xl font-semibold text-gray-800 mb-6">Description & Pricing</h3>
                     
@@ -352,7 +435,7 @@
             @endif
 
             <!-- Navigation Buttons -->
-            <div class="flex justify-between mt-8 pt-6 border-t border-gray-200">
+            <div class="flex justify-between mt-8 pt-6">
                 <div>
                     @if ($currentStep > 1)
                         <button type="button" wire:click="previousStep"
@@ -363,22 +446,22 @@
                 </div>
 
                 <div>
-                    @if ($currentStep < $totalSteps)
-                        <button type="button" wire:click="nextStep"
-                                wire:loading.attr="disabled"
-                                class="px-6 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50">
-                            <span wire:loading.remove wire:target="nextStep">Next</span>
-                            <span wire:loading wire:target="nextStep">Loading...</span>
-                        </button>
-                    @else
-                        <button type="submit"
-                                wire:loading.attr="disabled"
-                                class="px-8 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 disabled:opacity-50">
-                            <span wire:loading.remove wire:target="save">Create Listing</span>
-                            <span wire:loading wire:target="save">Creating...</span>
-                        </button>
-                    @endif
-                </div>
+    @if ($currentStep < 5)
+        <button type="button" wire:click="nextStep"
+                wire:loading.attr="disabled"
+                class="px-6 py-2 bg-fuchsia-700 text-white rounded-md hover:bg-fuchsia-800 focus:outline-none focus:ring-2 focus:ring-fuchsia-500 disabled:opacity-50 transition">
+            <span wire:loading.remove wire:target="nextStep">Next</span>
+            <span wire:loading wire:target="nextStep">Loading...</span>
+        </button>
+    @else
+        <button type="submit"
+                wire:loading.attr="disabled"
+                class="px-8 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 disabled:opacity-50">
+            <span wire:loading.remove wire:target="save">Create Listing</span>
+            <span wire:loading wire:target="save">Creating...</span>
+        </button>
+    @endif
+</div>
             </div>
         </form>
     </div>

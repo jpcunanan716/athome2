@@ -2,7 +2,7 @@
     <div class="grid grid-cols-5 grid-rows-5 gap-4">
         <!-- Section 1: Gallery (Full width) -->
         <div class="col-span-5">
-            <div class="bg-white shadow-lg rounded-lg overflow-hidden p-4">
+            <div class="bg-white rounded-lg overflow-hidden p-4">
                 <!-- Gallery content from previous code -->
                 <div x-data="{ isModalOpen: false, current: 0, images: {{ json_encode($house->media->pluck('image_path')) }} }">
                     <!-- Main Gallery Layout -->
@@ -45,7 +45,7 @@
                         class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4"
                         @click.self="isModalOpen = false"
                     >
-                        <div class="bg-white rounded-lg max-w-4xl w-full p-6">
+                        <div class="bg-white rounded-lg max-w-6xl w-full p-6">
                             <div class="flex justify-end mb-4">
                                 <button 
                                     @click="isModalOpen = false"
@@ -58,21 +58,27 @@
                             <div class="relative">
                                 <img 
                                     :src="'{{ asset('storage') }}/' + images[current]" 
-                                    class="w-full h-96 object-contain rounded-lg"
+                                    class="w-full h-[70vh] object-contain rounded-lg"
                                     loading="lazy"
                                 >
                                 
                                 <button 
                                     @click.stop="current = (current === 0) ? images.length - 1 : current - 1"
-                                    class="absolute left-4 top-1/2 -translate-y-1/2 bg-white/80 text-gray-800 p-3 rounded-full shadow hover:bg-white transition-colors"
+                                    class="absolute left-4 top-1/2 -translate-y-1/2 flex items-center justify-center w-12 h-12 rounded-full bg-white/90 text-gray-800 shadow-lg hover:bg-fuchsia-100 hover:text-fuchsia-700 transition-all text-3xl focus:outline-none focus:ring-2 focus:ring-fuchsia-500"
+                                    aria-label="Previous image"
                                 >
-                                    ←
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
+                                    </svg>
                                 </button>
                                 <button 
                                     @click.stop="current = (current === images.length - 1) ? 0 : current + 1"
-                                    class="absolute right-4 top-1/2 -translate-y-1/2 bg-white/80 text-gray-800 p-3 rounded-full shadow hover:bg-white transition-colors"
+                                    class="absolute right-4 top-1/2 -translate-y-1/2 flex items-center justify-center w-12 h-12 rounded-full bg-white/90 text-gray-800 shadow-lg hover:bg-fuchsia-100 hover:text-fuchsia-700 transition-all text-3xl focus:outline-none focus:ring-2 focus:ring-fuchsia-500"
+                                    aria-label="Next image"
                                 >
-                                    →
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
+                                    </svg>
                                 </button>
                             </div>
 
@@ -95,7 +101,7 @@
 
         <!-- Section 2: House Details -->
         <div class="col-span-3 row-start-2">
-            <div class="bg-white shadow-lg rounded-lg overflow-hidden p-4">
+            <div class="bg-white rounded-lg overflow-hidden p-4">
 
                 <!-- House details content -->
                     <h1 class="text-3xl font-bold">{{ $house->houseName }}</h1>

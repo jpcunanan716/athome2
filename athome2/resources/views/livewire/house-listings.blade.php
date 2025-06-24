@@ -5,10 +5,11 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
                 @foreach ($houses as $house)
                     @if($house->user_id != auth()->id())
-                        <div class="block bg-white rounded-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 relative">
-                            
+                        <a href="{{ route('house.show', ['houseId' => $house->id]) }}" target="_blank"
+                            class="block bg-white rounded-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 relative group focus:outline-none focus:ring-2 focus:ring-fuchsia-700 border-2 border-transparent hover:border-fuchsia-700"
+                            style="text-decoration: none;">
                             <!-- Favorite Button -->
-                            <button wire:click="toggleFavorite({{ $house->id }})" 
+                            <button wire:click.stop="toggleFavorite({{ $house->id }})" 
                                     class="absolute top-4 right-4 z-10 p-2 bg-white/20 rounded-full hover:bg-white/60 transition-all"
                                     title="{{ $this->isFavorite($house->id) ? 'Remove from favorites' : 'Add to favorites' }}">
                                 @if($this->isFavorite($house->id))
@@ -22,44 +23,29 @@
                                 @endif
                             </button>
                             
-                            <!-- Swiper Carousel -->
+                            <!-- Images -->
                             <div wire:ignore>
-                            <div class="swiper">
-                                <div class="swiper-wrapper">
-                                    @foreach ($house->media as $media)
-                                        <div class="swiper-slide">
-                                            <div class="w-full h-80 rounded-lg overflow-hidden"> 
-                                                <img src="{{ asset('storage/' . $media->image_path) }}" 
-                                                     alt="House Image" 
-                                                     class="w-full h-80 object-cover">
-                                            </div>
-                                        </div>
-                                    @endforeach
-                                </div>
-                                <div class="swiper-pagination"></div>
-                                <div class="swiper-button-next"></div>
-                                <div class="swiper-button-prev"></div>
-                            </div>
+                                @if($house->media->isNotEmpty())
+                                    <div class="w-full h-80 rounded-lg overflow-hidden">
+                                        <img src="{{ asset('storage/' . $house->media->first()->image_path) }}"
+                                            alt="House Image"
+                                            class="w-full h-80 object-cover group-hover:scale-105 transition-transform duration-300">
+                                    </div>
+                                @endif
                             </div>
 
                             <!-- House Details -->
-                            <div class="px-8 py-6">
+                            <div class="px-2 py-6">
                                 <h2 class="text-black text-2xl font-semibold">{{ $house->houseName }}</h2>
-                                <p class="text-gray-600 text-lg font-semibold">{{ $house->city }}, {{ $house->province }}</p>
-                                <p class="text-gray-700 mt-3 text-lg">Type: {{ $house->housetype }}</p>
-                                <p class="text-green-600 font-bold text-xl mt-3">₱{{ number_format($house->price, 2) }} / Day</p>
+                                <p class="text-gray-600 font-semibold">{{ $house->housetype }} in {{ $house->city }}</p>
+                                <p class="text-green-600 font-bold mt-3">₱{{ number_format($house->price, 2) }} / Day</p>
                                 <p class="text-sm text-gray-500 mt-1">{{ $house->favorited_by_count }} favorites</p>
 
                                 @if($house->furnished)
                                     <span class="inline-block bg-green-500 text-white px-3 py-1 text-sm rounded mt-3">Furnished</span>
                                 @endif
-
-                                <a href="{{ route('house.show', ['houseId' => $house->id]) }}" target="_blank"
-                                   class="block text-center bg-violet-800 text-white px-6 py-3 mt-4 rounded hover:bg-violet-500 transition-colors duration-300">
-                                    View Details
-                                </a>
                             </div>
-                        </div>
+                        </a>
                     @endif
                 @endforeach
             </div>

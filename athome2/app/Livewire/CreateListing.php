@@ -34,7 +34,7 @@ class CreateListing extends Component
 
     // Step management
     public $currentStep = 1;
-    public $totalSteps = 3;
+    public $totalSteps = 5;
 
     // Address selection
     public $selectedRegion;
@@ -227,16 +227,20 @@ class CreateListing extends Component
     private function validateCurrentStep()
     {
         switch ($this->currentStep) {
-            case 1:
+            case 1: // Step 1: House Name & Type
                 $this->validate([
                     'houseName' => 'required|string|max:255',
                     'housetype' => 'required|string|max:255',
+                ]);
+                break;
+            case 2: // Step 2: Capacity
+                $this->validate([
                     'total_occupants' => 'required|integer|min:1',
                     'total_rooms' => 'required|integer|min:1',
                     'total_bathrooms' => 'required|integer|min:1',
                 ]);
                 break;
-            case 2:
+            case 3: // Step 3: Address
                 $this->validate([
                     'street' => 'required|string|max:255',
                     'selectedRegion' => 'required|string',
@@ -245,7 +249,18 @@ class CreateListing extends Component
                     'selectedBarangay' => 'required|string',
                 ]);
                 break;
-            case 3:
+            case 4: // Step 4: Amenities
+                $this->validate([
+                    'has_aircon' => 'boolean',
+                    'has_kitchen' => 'boolean',
+                    'has_wifi' => 'boolean',
+                    'has_parking' => 'boolean',
+                    'has_gym' => 'boolean',
+                    'electric_meter' => 'boolean',
+                    'water_meter' => 'boolean',
+                ]);
+                break;
+            case 5: // Step 5: Description & Price
                 $this->validate([
                     'description' => 'required|string|max:65535',
                     'price' => 'required|numeric|min:0',

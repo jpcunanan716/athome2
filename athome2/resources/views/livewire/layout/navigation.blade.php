@@ -1,25 +1,22 @@
-<nav x-data="{ open: false }" class="bg-white border-b border-gray-100">
+<nav x-data="{ open: false }" class="bg-white border-2 border-gray-100">
     <!-- Primary Navigation Menu -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto px-0 sm:px-2 lg:px-4">
         <div class="flex justify-between h-16">
             <div class="flex">
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
-                    <a href="{{ route('home') }}" wire:navigate>
-                        <img src="{{ asset('storage/media/logo.png') }}" alt="Application Logo" class="block h-16 w-auto">
+                   <a href="{{ route('home') }}" wire:navigate class="flex items-center gap-1 ml-0">
+                        <!-- Bigger minimal single-stroke fuchsia house icon -->
+                        <svg width="56" height="56" viewBox="0 0 56 56" fill="none" aria-label="athome logo" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 32 L28 16 L44 32 M16 32 V46 H40 V32" stroke="#A21CAF" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                            <line x1="28" y1="46" x2="28" y2="38" stroke="#A21CAF" stroke-width="4" stroke-linecap="round"/>
+                        </svg>
+                        <span class="text-3xl font-bold text-fuchsia-700 tracking-tight pt-4">athome</span>
                     </a>
                 </div>
-
-                <!-- Navigation Links
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" wire:navigate>
-                        {{ __('Dashboard') }}
-                    </x-nav-link>
-                </div> -->
-                
             </div>
 
-            <div class="flex items-center">
+            <div class="flex items-center ml-auto">
                 <!-- Switch to Owner Link -->
                 <div class="hidden sm:flex mr-4">
                     <a href="{{ route('rentals') }}" class="text-gray-600 hover:text-gray-900 text-sm font-medium transition duration-150 ease-in-out" wire:navigate>
