@@ -15,7 +15,6 @@ use App\Livewire\ConversationMessages;
 use App\Livewire\CreateConversation;
 use Livewire\Livewire;
 
-Route::view('/', 'welcome');
 
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
@@ -41,7 +40,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     });
 });
 
-Route::get('/home', HouseListings::class)->name('home');
+Route::get('/', HouseListings::class)->name('home');
 Route::get('/new-listing', CreateListing::class)->name('new-listing')->middleware(['auth']);
 Route::get('/add-images/{houseId}', MediaManager::class)->name('add-images')->middleware(['auth']);
 Route::get('/house/{houseId}', HouseDetails::class)->name('house.show');

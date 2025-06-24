@@ -167,7 +167,7 @@
                                     {{ empty($provinces) ? 'disabled' : '' }}>
                                     <option value="">Select Province</option>
                                 @foreach($provinces as $province)
-                                    <option value="{{ $province['code'] }}">{{ $province['name'] }}</option>
+                                    <option value="{{ $province['code'] }}"n>{{ $province['name'] }}</option>
                                 @endforeach
                             </select>
                             @error('selectedProvince')

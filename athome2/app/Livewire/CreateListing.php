@@ -57,7 +57,7 @@ class CreateListing extends Component
 
     
 
-   public function loadRegions()
+    public function loadRegions()
     {
         try {
             $response = Http::get('https://psgc.gitlab.io/api/regions/');
@@ -68,108 +68,114 @@ class CreateListing extends Component
         }
     }
 
-  public function updatedSelectedRegion($regionCode)
-{
-    // Reset dependent fields
-    $this->reset([
-        'provinces', 'selectedProvince',
-        'cities', 'selectedCity',
-        'barangays', 'selectedBarangay'
-    ]);
-    $this->loadingProvinces = true;
-
-    // Set region name
-    $region = collect($this->regions)->firstWhere('code', $regionCode);
-    $this->region = $region['name'] ?? null;
-
-    if (!$regionCode) {
-        $this->provinces = [];
-        $this->cities = [];
-        $this->barangays = [];
-        $this->loadingProvinces = false;
-        return;
-    }
-
-    if ($regionCode === '130000000') {
-        // NCR: Skip provinces, load cities/municipalities directly
-        $this->provinces = [];
-        $this->loadingProvinces = false;
-        $this->loadCitiesForNCR();
-        return;
-    }
-
-    // Other regions: Load provinces
-    try {
-        $response = Http::get("https://psgc.gitlab.io/api/regions/{$regionCode}/provinces");
-        $this->provinces = $response->successful() ? $response->json() : [];
-    } catch (\Exception $e) {
-        $this->provinces = [];
-        session()->flash('error', 'Failed to load provinces. Please try again.');
-    }
-    $this->loadingProvinces = false;
-}
-
-public function loadCitiesForNCR()
-{
-    $this->loadingCities = true;
-    try {
-        $response = Http::get("https://psgc.gitlab.io/api/regions/130000000/cities-municipalities");
-        $this->cities = $response->successful() ? $response->json() : [];
-    } catch (\Exception $e) {
-        $this->cities = [];
-        session()->flash('error', 'Failed to load NCR cities. Please try again.');
-    }
-    $this->loadingCities = false;
-}
-
-public function updatedSelectedProvince($provinceCode)
-{
-    $this->reset(['cities', 'selectedCity', 'barangays', 'selectedBarangay']);
-    if (!$provinceCode) {
-        $this->cities = [];
-        $this->barangays = [];
-        return;
-    }
-
-    $this->loadingCities = true;
-    try {
-        $response = Http::get("https://psgc.gitlab.io/api/provinces/{$provinceCode}/cities-municipalities");
-        $this->cities = $response->successful() ? $response->json() : [];
-    } catch (\Exception $e) {
-        $this->cities = [];
-        session()->flash('error', 'Failed to load cities. Please try again.');
-    }
-    $this->loadingCities = false;
-}
-
-public function updatedSelectedCity($cityCode)
-{
-    $this->reset(['barangays', 'selectedBarangay']);
-    if (!$cityCode) {
-        $this->barangays = [];
-        return;
-    }
-
-    // Assign city name
-    $city = collect($this->cities)->firstWhere('code', $cityCode);
-    $this->city = $city['name'] ?? null;
-
-    try {
-        $response = Http::get("https://psgc.gitlab.io/api/cities-municipalities/{$cityCode}/barangays");
-        $this->barangays = $response->successful() ? $response->json() : [];
-    } catch (\Exception $e) {
-        $this->barangays = [];
-        session()->flash('error', 'Failed to load barangays. Please try again.');
-    }
-}
-
-    public function updatedSelectedBarangay($value)
+    public function updatedSelectedRegion($regionCode)
     {
-        if (empty($value)) return;
-        
-        // Find and set the barangay name
-        $barangay = collect($this->barangays)->firstWhere('code', $value);
-        $this->barangay = $barangay['name'] ?? '';
+        $this->reset([
+            'provinces', 'selectedProvince', 'province',
+            'cities', 'selectedCity', 'city',
+            'barangays', 'selectedBarangay', 'barangay'
+        ]);
+        $this->loadingProvinces = true;
+
+        // Set region name
+        $region = collect($this->regions)->firstWhere('code', $regionCode);
+        $this->region = $region['name'] ?? null;
+
+        if (!$regionCode) {
+            $this->provinces = [];
+            $this->cities = [];
+            $this->barangays = [];
+            $this->loadingProvinces = false;
+            return;
+        }
+
+        if ($regionCode === '130000000') {
+            $this->provinces = [];
+            $this->loadingProvinces = false;
+            $this->loadCitiesForNCR();
+            return;
+        }
+
+        try {
+            $response = Http::get("https://psgc.gitlab.io/api/regions/{$regionCode}/provinces");
+            $this->provinces = $response->successful() ? $response->json() : [];
+        } catch (\Exception $e) {
+            $this->provinces = [];
+            session()->flash('error', 'Failed to load provinces. Please try again.');
+        }
+        $this->loadingProvinces = false;
+    }
+
+    public function loadCitiesForNCR()
+    {
+        $this->loadingCities = true;
+        try {
+            $response = Http::get("https://psgc.gitlab.io/api/regions/130000000/cities-municipalities");
+            $this->cities = $response->successful() ? $response->json() : [];
+        } catch (\Exception $e) {
+            $this->cities = [];
+            session()->flash('error', 'Failed to load NCR cities. Please try again.');
+        }
+        $this->loadingCities = false;
+    }
+
+    public function updatedSelectedProvince($provinceCode)
+    {
+        $this->reset(['cities', 'selectedCity', 'city', 'barangays', 'selectedBarangay', 'barangay']);
+
+        // Set province name
+        $province = collect($this->provinces)->firstWhere('code', $provinceCode);
+        $this->province = $province['name'] ?? null;
+
+        if (!$provinceCode) {
+            $this->cities = [];
+            $this->barangays = [];
+            return;
+        }
+
+        $this->loadingCities = true;
+        try {
+            $response = Http::get("https://psgc.gitlab.io/api/provinces/{$provinceCode}/cities-municipalities");
+            $this->cities = $response->successful() ? $response->json() : [];
+        } catch (\Exception $e) {
+            $this->cities = [];
+            session()->flash('error', 'Failed to load cities. Please try again.');
+        }
+        $this->loadingCities = false;
+    }
+
+    public function updatedSelectedCity($cityCode)
+    {
+        $this->reset(['barangays', 'selectedBarangay', 'barangay']);
+
+        // Set city name
+        $city = collect($this->cities)->firstWhere('code', $cityCode);
+        $this->city = $city['name'] ?? null;
+
+        if (!$cityCode) {
+            $this->barangays = [];
+            return;
+        }
+
+        try {
+            $response = Http::get("https://psgc.gitlab.io/api/cities-municipalities/{$cityCode}/barangays");
+            $this->barangays = $response->successful() ? $response->json() : [];
+        } catch (\Exception $e) {
+            $this->barangays = [];
+            session()->flash('error', 'Failed to load barangays. Please try again.');
+        }
+    }
+
+    public function updatedSelectedBarangay($barangayCode)
+    {
+        if (empty($barangayCode)) {
+            $this->barangay = null;
+            return;
+        }
+
+        // Set barangay name
+        $barangay = collect($this->barangays)->firstWhere('code', $barangayCode);
+        $this->barangay = $barangay['name'] ?? null;
     }
 
     public function nextStep()
