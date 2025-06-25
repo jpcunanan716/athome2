@@ -349,6 +349,55 @@
                                 </svg>
                                 Gym
                             </button>
+                            <!-- Patio / Balcony -->
+                            <button type="button"
+                                wire:click="$set('has_patio', {{ $has_patio ? 0 : 1 }})"
+                                class="flex items-center px-6 py-4 text-base rounded-xl border transition-all duration-200
+                                    {{ $has_patio ? 'border-fuchsia-700 border-2 bg-white text-fuchsia-700 shadow' : 'bg-white text-gray-700 border-gray-300 hover:border-fuchsia-700 border-2' }}">
+                                <!-- Patio Icon (Table with umbrella) -->
+                                <svg class="w-7 h-7 mr-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <!-- Umbrella -->
+                                    <path d="M12 3C7 3 3 7 3 12h18c0-5-4-9-9-9z" stroke="currentColor"/>
+                                    <line x1="12" y1="12" x2="12" y2="21" stroke="currentColor"/>
+                                    <!-- Table -->
+                                    <rect x="8" y="19" width="8" height="2" rx="1" stroke="currentColor"/>
+                                </svg>
+                                Patio / Balcony
+                            </button>
+                            <!-- Pool Icon -->
+                            <button type="button"
+                                wire:click="$set('has_pool', {{ $has_pool ? 0 : 1 }})"
+                                class="flex items-center px-6 py-4 text-base rounded-xl border transition-all duration-200
+                                    {{ $has_pool ? 'border-fuchsia-700 border-2 bg-white text-fuchsia-700 shadow' : 'bg-white text-gray-700 border-gray-300 hover:border-fuchsia-700 border-2' }}">
+                                <!-- Pool Icon (Waves and ladder) -->
+                                <svg class="w-7 h-7 mr-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <!-- Water waves -->
+                                    <path d="M3 17c1.5 1 3.5 1 5 0s3.5-1 5 0 3.5 1 5 0" stroke="currentColor"/>
+                                    <path d="M3 13c1.5 1 3.5 1 5 0s3.5-1 5 0 3.5 1 5 0" stroke="currentColor"/>
+                                    <!-- Pool ladder -->
+                                    <path d="M7 7v6M17 7v6" stroke="currentColor"/>
+                                    <path d="M7 7c0-1.5 2-1.5 2 0v6" stroke="currentColor"/>
+                                    <path d="M17 7c0-1.5-2-1.5-2 0v6" stroke="currentColor"/>
+                                </svg>
+                                Pool
+                            </button>
+                            <!-- Pet Friendly Icon -->
+                            <button type="button"
+                                wire:click="$set('is_petfriendly', {{ $is_petfriendly ? 0 : 1 }})"
+                                class="flex items-center px-6 py-4 text-base rounded-xl border transition-all duration-200
+                                    {{ $is_petfriendly ? 'border-fuchsia-700 border-2 bg-white text-fuchsia-700 shadow' : 'bg-white text-gray-700 border-gray-300 hover:border-fuchsia-700 border-2' }}">
+                                <!-- Pet Friendly Icon (Paw) -->
+                                <svg class="w-7 h-7 mr-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <!-- Paw pad -->
+                                    <ellipse cx="12" cy="17" rx="3" ry="2.5" stroke="currentColor"/>
+                                    <!-- Toes -->
+                                    <circle cx="7.5" cy="13" r="1.5" stroke="currentColor"/>
+                                    <circle cx="16.5" cy="13" r="1.5" stroke="currentColor"/>
+                                    <circle cx="9" cy="10" r="1.2" stroke="currentColor"/>
+                                    <circle cx="15" cy="10" r="1.2" stroke="currentColor"/>
+                                </svg>
+                                Pet Friendly
+                            </button>
                             <!-- Own Electric Meter (Electricity Icon) -->
                             <button type="button"
                                 wire:click="$set('electric_meter', {{ $electric_meter ? 0 : 1 }})"

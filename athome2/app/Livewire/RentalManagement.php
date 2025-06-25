@@ -34,6 +34,9 @@ class RentalManagement extends Component
     public $has_wifi = false;
     public $has_parking = false;
     public $has_gym = false;
+    public $has_patio = false;
+    public $has_pool = false;
+    public $is_petfriendly = false;
     public $electric_meter = false;
     public $water_meter = false;
     public $price;
@@ -54,6 +57,9 @@ class RentalManagement extends Component
         'has_wifi' => 'boolean',
         'has_parking' => 'boolean',
         'has_gym' => 'boolean',
+        'has_patio' => 'boolean',
+        'has_pool' => 'boolean',
+        'is_petfriendly' => 'boolean',
         'electric_meter' => 'boolean',
         'water_meter' => 'boolean',
         'price' => 'required|numeric|min:0'
@@ -124,6 +130,9 @@ class RentalManagement extends Component
         $this->has_wifi = $this->editingProperty->has_wifi;
         $this->has_parking = $this->editingProperty->has_parking;
         $this->has_gym = $this->editingProperty->has_gym;
+        $this->has_patio = $this->editingProperty->has_patio;
+        $this->has_pool = $this->editingProperty->has_pool;
+        $this->is_petfriendly = $this->editingProperty->is_petfriendly;
         $this->electric_meter = $this->editingProperty->electric_meter;
         $this->water_meter = $this->editingProperty->water_meter;
         $this->price = $this->editingProperty->price;
@@ -152,6 +161,9 @@ class RentalManagement extends Component
             'has_wifi' => $this->has_wifi,
             'has_parking' => $this->has_parking,
             'has_gym' => $this->has_gym,
+            'has_patio' => $this->has_patio,
+            'has_pool' => $this->has_pool,
+            'is_petfriendly' => $this->is_petfriendly,
             'electric_meter' => $this->electric_meter,
             'water_meter' => $this->water_meter,
 
@@ -190,7 +202,7 @@ class RentalManagement extends Component
             'houseName', 'housetype', 'street', 'province', 'city', 'barangay', 
             'total_occupants', 'total_rooms', 'total_bathrooms', 'description',
             'has_aircon', 'has_kitchen', 'has_wifi', 'has_parking', 'has_gym',
-            'electric_meter', 'water_meter', 'price'
+            'has_patio', 'has_pool', 'is_petfriendly', 'electric_meter', 'water_meter', 'price'
         ]);
         $this->resetValidation();
     }

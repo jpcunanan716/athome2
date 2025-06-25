@@ -186,6 +186,15 @@
                                 @if($property->has_gym)
                                 <span class="px-2 py-1 bg-fuchsia-100 text-fuchsia-800 text-xs rounded-full">Gym</span>
                                 @endif
+                                @if($property->has_patio)
+                                <span class="px-2 py-1 bg-fuchsia-100 text-fuchsia-800 text-xs rounded-full">Gym</span>
+                                @endif
+                                @if($property->has_pool)
+                                <span class="px-2 py-1 bg-fuchsia-100 text-fuchsia-800 text-xs rounded-full">Gym</span>
+                                @endif
+                                @if($property->is_petfriendly)
+                                <span class="px-2 py-1 bg-fuchsia-100 text-fuchsia-800 text-xs rounded-full">Gym</span>
+                                @endif
                                 @if($property->electric_meter)
                                 <span class="px-2 py-1 bg-fuchsia-100 text-fuchsia-800 text-xs rounded-full">Own Electric Meter</span>
                                 @endif
