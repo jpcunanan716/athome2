@@ -1,9 +1,9 @@
 <div class="mb-4 p-4 bg-white rounded">
-    <div class="max-w-4xl mx-auto p-6 pt-16 bg-white rounded-lg">
+    <div class="max-w-4xl mx-auto p-6 bg-white rounded-lg">
         <form wire:submit.prevent="save">
             <!-- Step 1: House Name & Type -->
             @if ($currentStep == 1)
-                <div class="space-y-6">
+                <div class="space-y-6 pt-16">
                     <h3 class="text-2xl font-semibold text-gray-800 mb-2">Tell us what kind of place you want to rent</h3>
                     
                     <!-- House Name -->
@@ -24,179 +24,181 @@
 
                     <!-- House Type -->
                     <div>
-    <label class="block text-sm font-medium text-gray-700 mb-2 pt-6">Property Type</label>
-    <div class="flex flex-wrap gap-3">
-        <!-- Studio Type -->
-        <button type="button"
-            wire:click="$set('housetype', 'Studio Type')"
-            class="flex items-center px-6 py-4 text-base rounded-xl border transition-all duration-200
-                {{ $housetype === 'Studio Type' ? 'border-fuchsia-700 border-2 bg-white text-fuchsia-700 shadow' : 'bg-white text-gray-700 border-gray-300 hover:border-fuchsia-700 border-2' }}">
-            <svg class="w-7 h-7 mr-3 transition-transform duration-200 {{ $housetype === 'Studio Type' ? 'scale-125 text-fuchsia-700' : '' }}"
-         fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-        <!-- Head -->
-        <circle cx="12" cy="9" r="3" stroke="{{ $housetype === 'Studio Type' ? '#A21CAF' : 'currentColor' }}" />
-        <!-- Shoulders/body -->
-        <path d="M6 19c0-2.5 3-4 6-4s6 1.5 6 4" stroke="{{ $housetype === 'Studio Type' ? '#A21CAF' : 'currentColor' }}" />
-    </svg>
-            Studio Type
-        </button>
-        <!-- One Bedroom -->
-        <button type="button"
-            wire:click="$set('housetype', 'One Bedroom')"
-            class="flex items-center px-6 py-4 text-base rounded-xl border transition-all duration-200
-                {{ $housetype === 'One Bedroom' ? 'border-fuchsia-700 border-2 bg-white text-fuchsia-700 shadow' : 'bg-white text-gray-700 border-gray-300 hover:border-fuchsia-700 border-2' }}">
-            <svg class="w-7 h-7 mr-3 transition-transform duration-200 {{ $housetype === 'One Bedroom' ? 'scale-125 text-fuchsia-700' : '' }}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <rect x="3" y="10" width="18" height="7" rx="2" stroke="{{ $housetype === 'One Bedroom' ? '#A21CAF' : 'currentColor' }}"/>
-                <path d="M7 10V7a2 2 0 0 1 4 0v3" stroke="{{ $housetype === 'One Bedroom' ? '#A21CAF' : 'currentColor' }}"/>
-            </svg>
-            One Bedroom
-        </button>
-        <!-- Two Bedroom -->
-        <button type="button"
-            wire:click="$set('housetype', 'Two Bedroom')"
-            class="flex items-center px-6 py-4 text-base rounded-xl border transition-all duration-200
-                {{ $housetype === 'Two Bedroom' ? 'border-fuchsia-700 border-2 bg-white text-fuchsia-700 shadow' : 'bg-white text-gray-700 border-gray-300 hover:border-fuchsia-700 border-2' }}">
-            <svg class="w-7 h-7 mr-3 transition-transform duration-200 {{ $housetype === 'Two Bedroom' ? 'scale-125 text-fuchsia-700' : '' }}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <rect x="3" y="10" width="18" height="7" rx="2" stroke="{{ $housetype === 'Two Bedroom' ? '#A21CAF' : 'currentColor' }}"/>
-                <path d="M7 10V7a2 2 0 0 1 4 0v3M13 10V7a2 2 0 0 1 4 0v3" stroke="{{ $housetype === 'Two Bedroom' ? '#A21CAF' : 'currentColor' }}"/>
-            </svg>
-            Two Bedroom
-        </button>
-        <!-- Condo -->
-        <button type="button"
-            wire:click="$set('housetype', 'Condo')"
-            class="flex items-center px-6 py-4 text-base rounded-xl border transition-all duration-200
-                {{ $housetype === 'Condo' ? 'border-fuchsia-700 border-2 bg-white text-fuchsia-700 shadow' : 'bg-white text-gray-700 border-gray-300 hover:border-fuchsia-700 border-2' }}">
-            <svg class="w-7 h-7 mr-3 transition-transform duration-200 {{ $housetype === 'Condo' ? 'scale-125 text-fuchsia-700' : '' }}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <rect x="4" y="4" width="16" height="16" rx="2" stroke="{{ $housetype === 'Condo' ? '#A21CAF' : 'currentColor' }}"/>
-                <path d="M9 8h1M9 12h1M9 16h1M14 8h1M14 12h1M14 16h1" stroke="{{ $housetype === 'Condo' ? '#A21CAF' : 'currentColor' }}"/>
-            </svg>
-            Condo
-        </button>
-        <!-- Townhouse -->
-        <button type="button"
-            wire:click="$set('housetype', 'Townhouse')"
-            class="flex items-center px-6 py-4 text-base rounded-xl border transition-all duration-200
-                {{ $housetype === 'Townhouse' ? 'border-fuchsia-700 border-2 bg-white text-fuchsia-700 shadow' : 'bg-white text-gray-700 border-gray-300 hover:border-fuchsia-700 border-2' }}">
-            <svg class="w-7 h-7 mr-3 transition-transform duration-200 {{ $housetype === 'Townhouse' ? 'scale-125 text-fuchsia-700' : '' }}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <rect x="3" y="10" width="6" height="8" rx="1" stroke="{{ $housetype === 'Townhouse' ? '#A21CAF' : 'currentColor' }}"/>
-                <rect x="9" y="6" width="6" height="12" rx="1" stroke="{{ $housetype === 'Townhouse' ? '#A21CAF' : 'currentColor' }}"/>
-                <rect x="15" y="12" width="6" height="6" rx="1" stroke="{{ $housetype === 'Townhouse' ? '#A21CAF' : 'currentColor' }}"/>
-            </svg>
-            Townhouse
-        </button>
-        <!-- Penthouse -->
-        <button type="button"
-            wire:click="$set('housetype', 'Penthouse')"
-            class="flex items-center px-6 py-4 text-base rounded-xl border transition-all duration-200
-                {{ $housetype === 'Penthouse' ? 'border-fuchsia-700 border-2 bg-white text-fuchsia-700 shadow' : 'bg-white text-gray-700 border-gray-300 hover:border-fuchsia-700 border-2' }}">
-            <svg class="w-7 h-7 mr-3 transition-transform duration-200 {{ $housetype === 'Penthouse' ? 'scale-125 text-fuchsia-700' : '' }}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <path d="M3 17l3-9 6 6 6-6 3 9" stroke="{{ $housetype === 'Penthouse' ? '#A21CAF' : 'currentColor' }}"/>
-                <rect x="4" y="17" width="16" height="3" rx="1" stroke="{{ $housetype === 'Penthouse' ? '#A21CAF' : 'currentColor' }}"/>
-            </svg>
-            Penthouse
-        </button>
-    </div>
-    @error('housetype')
-        <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
-    @enderror
-</div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2 pt-6">Property Type</label>
+                        <div class="flex flex-wrap gap-3">
+                            <!-- Studio Type -->
+                            <button type="button"
+                                wire:click="$set('housetype', 'Studio Type')"
+                                class="flex items-center px-6 py-4 text-base rounded-xl border transition-all duration-200
+                                    {{ $housetype === 'Studio Type' ? 'border-fuchsia-700 border-2 bg-white text-fuchsia-700 shadow' : 'bg-white text-gray-700 border-gray-300 hover:border-fuchsia-700 border-2' }}">
+                                <svg class="w-7 h-7 mr-3 transition-transform duration-200 {{ $housetype === 'Studio Type' ? 'scale-125 text-fuchsia-700' : '' }}"
+                            fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <!-- Head -->
+                            <circle cx="12" cy="9" r="3" stroke="{{ $housetype === 'Studio Type' ? '#A21CAF' : 'currentColor' }}" />
+                            <!-- Shoulders/body -->
+                            <path d="M6 19c0-2.5 3-4 6-4s6 1.5 6 4" stroke="{{ $housetype === 'Studio Type' ? '#A21CAF' : 'currentColor' }}" />
+                        </svg>
+                                Studio Type
+                            </button>
+                            <!-- One Bedroom -->
+                            <button type="button"
+                                wire:click="$set('housetype', 'One Bedroom')"
+                                class="flex items-center px-6 py-4 text-base rounded-xl border transition-all duration-200
+                                    {{ $housetype === 'One Bedroom' ? 'border-fuchsia-700 border-2 bg-white text-fuchsia-700 shadow' : 'bg-white text-gray-700 border-gray-300 hover:border-fuchsia-700 border-2' }}">
+                                <svg class="w-7 h-7 mr-3 transition-transform duration-200 {{ $housetype === 'One Bedroom' ? 'scale-125 text-fuchsia-700' : '' }}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <rect x="3" y="10" width="18" height="7" rx="2" stroke="{{ $housetype === 'One Bedroom' ? '#A21CAF' : 'currentColor' }}"/>
+                                    <path d="M7 10V7a2 2 0 0 1 4 0v3" stroke="{{ $housetype === 'One Bedroom' ? '#A21CAF' : 'currentColor' }}"/>
+                                </svg>
+                                One Bedroom
+                            </button>
+                            <!-- Two Bedroom -->
+                            <button type="button"
+                                wire:click="$set('housetype', 'Two Bedroom')"
+                                class="flex items-center px-6 py-4 text-base rounded-xl border transition-all duration-200
+                                    {{ $housetype === 'Two Bedroom' ? 'border-fuchsia-700 border-2 bg-white text-fuchsia-700 shadow' : 'bg-white text-gray-700 border-gray-300 hover:border-fuchsia-700 border-2' }}">
+                                <svg class="w-7 h-7 mr-3 transition-transform duration-200 {{ $housetype === 'Two Bedroom' ? 'scale-125 text-fuchsia-700' : '' }}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <rect x="3" y="10" width="18" height="7" rx="2" stroke="{{ $housetype === 'Two Bedroom' ? '#A21CAF' : 'currentColor' }}"/>
+                                    <path d="M7 10V7a2 2 0 0 1 4 0v3M13 10V7a2 2 0 0 1 4 0v3" stroke="{{ $housetype === 'Two Bedroom' ? '#A21CAF' : 'currentColor' }}"/>
+                                </svg>
+                                Two Bedroom
+                            </button>
+                            <!-- Condo -->
+                            <button type="button"
+                                wire:click="$set('housetype', 'Condo')"
+                                class="flex items-center px-6 py-4 text-base rounded-xl border transition-all duration-200
+                                    {{ $housetype === 'Condo' ? 'border-fuchsia-700 border-2 bg-white text-fuchsia-700 shadow' : 'bg-white text-gray-700 border-gray-300 hover:border-fuchsia-700 border-2' }}">
+                                <svg class="w-7 h-7 mr-3 transition-transform duration-200 {{ $housetype === 'Condo' ? 'scale-125 text-fuchsia-700' : '' }}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <rect x="4" y="4" width="16" height="16" rx="2" stroke="{{ $housetype === 'Condo' ? '#A21CAF' : 'currentColor' }}"/>
+                                    <path d="M9 8h1M9 12h1M9 16h1M14 8h1M14 12h1M14 16h1" stroke="{{ $housetype === 'Condo' ? '#A21CAF' : 'currentColor' }}"/>
+                                </svg>
+                                Condo
+                            </button>
+                            <!-- Townhouse -->
+                            <button type="button"
+                                wire:click="$set('housetype', 'Townhouse')"
+                                class="flex items-center px-6 py-4 text-base rounded-xl border transition-all duration-200
+                                    {{ $housetype === 'Townhouse' ? 'border-fuchsia-700 border-2 bg-white text-fuchsia-700 shadow' : 'bg-white text-gray-700 border-gray-300 hover:border-fuchsia-700 border-2' }}">
+                                <svg class="w-7 h-7 mr-3 transition-transform duration-200 {{ $housetype === 'Townhouse' ? 'scale-125 text-fuchsia-700' : '' }}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <rect x="3" y="10" width="6" height="8" rx="1" stroke="{{ $housetype === 'Townhouse' ? '#A21CAF' : 'currentColor' }}"/>
+                                    <rect x="9" y="6" width="6" height="12" rx="1" stroke="{{ $housetype === 'Townhouse' ? '#A21CAF' : 'currentColor' }}"/>
+                                    <rect x="15" y="12" width="6" height="6" rx="1" stroke="{{ $housetype === 'Townhouse' ? '#A21CAF' : 'currentColor' }}"/>
+                                </svg>
+                                Townhouse
+                            </button>
+                            <!-- Penthouse -->
+                            <button type="button"
+                                wire:click="$set('housetype', 'Penthouse')"
+                                class="flex items-center px-6 py-4 text-base rounded-xl border transition-all duration-200
+                                    {{ $housetype === 'Penthouse' ? 'border-fuchsia-700 border-2 bg-white text-fuchsia-700 shadow' : 'bg-white text-gray-700 border-gray-300 hover:border-fuchsia-700 border-2' }}">
+                                <svg class="w-7 h-7 mr-3 transition-transform duration-200 {{ $housetype === 'Penthouse' ? 'scale-125 text-fuchsia-700' : '' }}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path d="M3 17l3-9 6 6 6-6 3 9" stroke="{{ $housetype === 'Penthouse' ? '#A21CAF' : 'currentColor' }}"/>
+                                    <rect x="4" y="17" width="16" height="3" rx="1" stroke="{{ $housetype === 'Penthouse' ? '#A21CAF' : 'currentColor' }}"/>
+                                </svg>
+                                Penthouse
+                            </button>
+                        </div>
+                        @error('housetype')
+                            <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
                 </div>
             @endif
 
             <!-- Step 2: Number Counters -->
             @if ($currentStep == 2)
-    <div>
-        <h3 class="text-2xl font-semibold text-gray-800 mb-1">Share some details about your place</h3>
-        <p class="text-gray-500 mb-2 pb-6">You can change all these information later.</p>
-        <!-- Counter Row Component -->
-        @php
-            $counters = [
-                [
-                    'label' => 'Guests',
-                    'field' => 'total_occupants',
-                    'value' => $total_occupants ?? 1,
-                ],
-                [
-                    'label' => 'Bedrooms',
-                    'field' => 'total_rooms',
-                    'value' => $total_rooms ?? 1,
-                ],
+                <div>
+                    <h3 class="text-2xl font-semibold text-gray-800 mb-1 pt-16">Share some details about your place</h3>
+                    <p class="text-gray-500 mb-2 pb-8">You can change all these information later.</p>
+                    <!-- Counter Row Component -->
+                    @php
+                        $counters = [
+                            [
+                                'label' => 'Guests',
+                                'field' => 'total_occupants',
+                                'value' => $total_occupants ?? 1,
+                            ],
+                            [
+                                'label' => 'Bedrooms',
+                                'field' => 'total_rooms',
+                                'value' => $total_rooms ?? 1,
+                            ],
 
-                [
-                    'label' => 'Bathrooms',
-                    'field' => 'total_bathrooms',
-                    'value' => $total_bathrooms ?? 1,
-                ],
-            ];
-        @endphp
+                            [
+                                'label' => 'Bathrooms',
+                                'field' => 'total_bathrooms',
+                                'value' => $total_bathrooms ?? 1,
+                            ],
+                        ];
+                    @endphp
 
-        @foreach($counters as $counter)
-            <div class="flex items-center justify-between py-4 border-b">
-                <div class="text-lg text-gray-900 font-medium">{{ $counter['label'] }}</div>
-                <div class="flex items-center gap-3">
-                    <button type="button"
-                        wire:click="decrement('{{ $counter['field'] }}')"
-                        class="w-10 h-10 flex items-center justify-center rounded-full border border-gray-400 text-2xl text-gray-700 bg-white hover:bg-gray-100 focus:outline-none transition">
-                        &minus;
-                    </button>
-                    <span class="w-8 text-center text-lg text-gray-900 select-none">{{ $counter['value'] }}</span>
-                    <button type="button"
-                        wire:click="increment('{{ $counter['field'] }}')"
-                        class="w-10 h-10 flex items-center justify-center rounded-full border border-gray-400 text-2xl text-gray-700 bg-white hover:bg-gray-100 focus:outline-none transition">
-                        &#43;
-                    </button>
+                    @foreach($counters as $counter)
+                        <div class="flex items-center justify-between py-4 border-b">
+                            <div class="text-lg text-gray-900 font-medium">{{ $counter['label'] }}</div>
+                            <div class="flex items-center gap-3">
+                                <button type="button"
+                                    wire:click="decrement('{{ $counter['field'] }}')"
+                                    class="w-10 h-10 flex items-center justify-center rounded-full border border-gray-400 text-2xl text-gray-700 bg-white hover:bg-gray-100 focus:outline-none transition">
+                                    &minus;
+                                </button>
+                                <span class="w-8 text-center text-lg text-gray-900 select-none">{{ $counter['value'] }}</span>
+                                <button type="button"
+                                    wire:click="increment('{{ $counter['field'] }}')"
+                                    class="w-10 h-10 flex items-center justify-center rounded-full border border-gray-400 text-2xl text-gray-700 bg-white hover:bg-gray-100 focus:outline-none transition">
+                                    &#43;
+                                </button>
+                            </div>
+                        </div>
+                        @if($counter['field'] === 'total_occupants')
+                            @error('total_occupants')
+                                <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
+                            @enderror
+                        @elseif($counter['field'] === 'total_rooms')
+                            @error('total_rooms')
+                                <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
+                            @enderror
+                        @elseif($counter['field'] === 'total_bathrooms')
+                            @error('total_bathrooms')
+                                <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
+                            @enderror
+                        @endif
+                    @endforeach
                 </div>
-            </div>
-            @if($counter['field'] === 'total_occupants')
-                @error('total_occupants')
-                    <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
-                @enderror
-            @elseif($counter['field'] === 'total_rooms')
-                @error('total_rooms')
-                    <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
-                @enderror
-            @elseif($counter['field'] === 'total_bathrooms')
-                @error('total_bathrooms')
-                    <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
-                @enderror
             @endif
-        @endforeach
-    </div>
-@endif
 
             <!-- Step 3: Address -->
             @if ($currentStep == 3)
-                <div class="space-y-6">
-                    <h3 class="text-xl font-semibold text-gray-800 mb-6">Address Information</h3>
-                    
-                    <!-- Street -->
-                    <div>
-                        <label for="street" class="block text-sm font-medium text-gray-700">House no./Building no., Street/Subdivision</label>
-                        <input type="text" wire:model="street" id="street" placeholder="Enter street address"
-                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        @error('street')
-                            <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
-                        @enderror
-                    </div>
+                
+                <h3 class="text-2xl font-semibold text-gray-800 mb-1">Address Information</h3>
+                <p class="text-gray-500 mb-2 pb-8">Tell us where your place is located.</p>
 
-                    <!-- Region -->
-                    <div>
-                        <label for="selectedRegion" class="block text-sm font-medium text-gray-700">Region</label>
-                        <select wire:model="selectedRegion" id="selectedRegion"
+                    <!-- Street -->
+                <div class="space-y-6">
+                        <div>
+                            <label for="street" class="block text-sm font-medium text-gray-700">House no./Building no., Street/Subdivision</label>
+                            <input type="text" wire:model="street" id="street" placeholder="Enter street address"
                                 class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-                            <option class="text-gray-500" value="">Select Region</option>
-                            @foreach($regions as $region)
-                                <option value="{{ $region['code'] }}">{{ $region['name'] }}</option>
-                            @endforeach
-                        </select>
-                        @error('selectedRegion')
-                            <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
-                        @enderror
-                        <div wire:loading wire:target="selectedRegion" class="text-sm text-gray-500 mt-1">
-                            Loading provinces...
+                            @error('street')
+                                <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
+                            @enderror
                         </div>
-                    </div>
+
+                        <!-- Region -->
+                        <div>
+                            <label for="selectedRegion" class="block text-sm font-medium text-gray-700">Region</label>
+                            <select wire:model="selectedRegion" id="selectedRegion"
+                                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <option class="text-gray-500" value="">Select Region</option>
+                                @foreach($regions as $region)
+                                    <option value="{{ $region['code'] }}">{{ $region['name'] }}</option>
+                                @endforeach
+                            </select>
+                            @error('selectedRegion')
+                                <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
+                            @enderror
+                            <div wire:loading wire:target="selectedRegion" class="text-sm text-gray-500 mt-1">
+                                Loading provinces...
+                            </div>
+                        </div>
 
                     <!-- Province (hide only if NCR is selected) -->
                     @if($selectedRegion !== '130000000')

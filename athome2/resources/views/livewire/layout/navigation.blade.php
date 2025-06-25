@@ -11,7 +11,7 @@
                             <path d="M12 32 L28 16 L44 32 M16 32 V46 H40 V32" stroke="#A21CAF" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
                             <line x1="28" y1="46" x2="28" y2="38" stroke="#A21CAF" stroke-width="4" stroke-linecap="round"/>
                         </svg>
-                        <span class="text-3xl font-bold text-fuchsia-700 tracking-tight pt-4">athome</span>
+                        <span class="text-3xl font-bold text-fuchsia-700 tracking-tight pt-3">athome</span>
                     </a>
                 </div>
             </div>

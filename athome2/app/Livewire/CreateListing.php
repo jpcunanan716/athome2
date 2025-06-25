@@ -51,6 +51,21 @@ class CreateListing extends Component
     public $loadingCities = false;
     public $loadingBarangays = false;
 
+    protected $messages = [
+        'houseName.required' => 'The property name is required.',
+        'housetype.required' => 'Please select a property type.',
+        'street.required' => 'Street address is required.',
+        'region.required' => 'Please select a region.',
+        'province.required' => 'Please select a province.',
+        'city.required' => 'Please select a city.',
+        'barangay.required' => 'Please select a barangay.',
+        'total_occupants.required' => 'Enter the number of occupants.',
+        'total_rooms.required' => 'Enter the number of rooms.',
+        'total_bathrooms.required' => 'Enter the number of bathrooms.',
+        'description.required' => 'Please provide a description.',
+        'price.required' => 'Please enter a price.',
+    ];
+
     public function mount()
     {
         $this->loadRegions();
