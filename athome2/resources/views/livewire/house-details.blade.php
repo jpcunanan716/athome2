@@ -1,5 +1,5 @@
-<div class="p-12">
-    <div class="grid grid-cols-5 grid-rows-5 gap-4">
+<div class="px-4 sm:px-8 md:px-16 lg:px-24 xl:px-32 py-12 min-h-screen">
+    <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-5 gap-4">
         <!-- Section 1: Gallery (Full width) -->
         <div class="col-span-5">
             <div class="bg-white rounded-lg overflow-hidden p-4">
@@ -100,125 +100,200 @@
         </div>
 
         <!-- Section 2: House Details -->
-        <div class="col-span-3 row-start-2">
-            <div class="bg-white rounded-lg overflow-hidden p-4">
-
-                <!-- House details content -->
-                    <h1 class="text-3xl font-bold">{{ $house->houseName }}</h1>
-                        <p class="text-black-600 font-semibold">{{ $house->city }}, {{ $house->province }}</p>
-                        <p class="text-gray-700">Rooms: {{ $house->total_rooms }} | Bathrooms: {{ $house->total_bathrooms }} Max Occupants: {{ $house->total_occupants}}</p>
-                        <p class="text-green-600 font-bold mt-2 text-xl">₱{{ number_format($house->price, 2) }}</p>
-
-                        <!-- Host Information -->
-                            <div class="flex items-center mt-1">
-                                @if($house->user->profile_photo_path)
-                                    <img 
-                                        src="{{ asset('storage/'.$house->user->profile_photo_path) }}" 
-                                        alt="{{ $house->user->name }}"
-                                        class="w-12 h-12 rounded-full object-cover border-2 border-white shadow-sm"
-                                    >
-                                @else
-                                    <div class="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center border-2 border-white shadow-sm">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                                        </svg>
-                                    </div>
-                                @endif
-                                    <p class="p-2 ext-sm font-medium text-gray-900">
-                                        Hosted by {{ $house->user->name }}
-                                    </p>
-                            </div>
-
-                            <!-- Contact Button -->
-                            
-                            <button onclick="$dispatch('open-new-conversation-modal', { houseId: {{ $house->id }} })"">
-                                <a 
-                                    href="{{ route('conversations.create', ['house_id' => $house->id]) }}"
-                                    class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                                    <svg class="-ml-1 mr-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
-                                    </svg>
-                                    Contact about this property
-                                </a>
-
-                            </button>
-                            
-                        
-            </div>
-        </div>
-
-        <!-- Section 3: Additional Content -->
-        <div class="col-span-3 col-start-1 row-start-3 p-4">
-            <!-- Truncated description with Read More button -->
-            <div x-data="{ showModal: false }">
-                <p class="text-gray-600 mt-4 text-lg">
-                    {{ Str::limit($house->description, 400) }}
-                    @if(strlen($house->description) > 400)
-                        <button 
-                            @click="showModal = true"
-                            class="text-black hover:text-black-700 text-sm font-medium ml-1 focus:outline-none"
+        <div class="lg:col-span-3 flex flex-col gap-6">
+            <div class="bg-white rounded-xl shadow p-6">
+                <h1 class="text-3xl font-bold text-fuchsia-800">{{ $house->houseName }}</h1>
+                <div class="flex flex-wrap items-center gap-2 mt-2">
+                    <span class="inline-flex items-center px-3 py-1 rounded-full bg-fuchsia-50 text-fuchsia-700 text-sm font-semibold">
+                        {{ $house->city }}, {{ $house->province }}
+                    </span>
+                    <span class="inline-flex items-center px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-sm font-semibold">
+                        {{ $house->housetype }}
+                    </span>
+                </div>
+                <div class="flex flex-wrap gap-4 mt-4 text-gray-700 text-base">
+                    <span><strong>Rooms:</strong> {{ $house->total_rooms }}</span>
+                    <span><strong>Bathrooms:</strong> {{ $house->total_bathrooms }}</span>
+                    <span><strong>Max Occupants:</strong> {{ $house->total_occupants }}</span>
+                </div>
+                <div class="mt-4 flex items-center gap-2">
+                    <span class="text-green-600 font-bold text-2xl">₱{{ number_format($house->price, 2) }}</span>
+                    <span class="text-gray-500 text-sm">per day</span>
+                </div>
+                <!-- Host Information -->
+                <div class="flex items-center mt-6 gap-3">
+                    @if($house->user->profile_photo_path)
+                        <img 
+                            src="{{ asset('storage/'.$house->user->profile_photo_path) }}" 
+                            alt="{{ $house->user->name }}"
+                            class="w-14 h-14 rounded-full object-cover border-2 border-fuchsia-200 shadow"
                         >
-                            Read More
-                        </button>
+                    @else
+                        <div class="w-14 h-14 rounded-full bg-gray-200 flex items-center justify-center border-2 border-fuchsia-200 shadow">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                            </svg>
+                        </div>
                     @endif
-                </p>
-
-                <!-- Modal -->
-                <template x-teleport="body">
-                    <div 
-                        x-show="showModal"
-                        x-transition.opacity
-                        class="fixed inset-0 z-50 flex items-center justify-center p-4"
-                        @keydown.escape.window="showModal = false"
-                    >
-                        <!-- Overlay -->
-                        <div 
-                            class="absolute inset-0 bg-black/50"
-                            @click="showModal = false"
-                        ></div>
-                        
-                        <!-- Modal content -->
-                        <div 
-                            class="relative w-full max-w-2xl max-h-[80vh] overflow-y-auto bg-white rounded-lg shadow-xl"
-                            @click.outside="showModal = false"
+                    <div>
+                        <p class="text-base font-semibold text-gray-900">Hosted by {{ $house->user->name }}</p>
+                        <a 
+                            href="{{ route('conversations.create', ['house_id' => $house->id]) }}"
+                            class="inline-flex items-center mt-1 px-4 py-2 border border-fuchsia-700 rounded-md shadow-sm text-sm font-medium text-fuchsia-700 bg-white hover:bg-fuchsia-50 focus:outline-none focus:ring-2 focus:ring-fuchsia-500 transition"
                         >
-                            <div class="p-6">
-                                <!-- Header -->
-                                <div class="flex items-center justify-between mb-4">
-                                    <h1 class="text-xl font-semibold">About this property</h1>
-                                    <button 
-                                        @click="showModal = false"
-                                        class="text-gray-500 hover:text-gray-700"
-                                    >
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                                        </svg>
-                                    </button>
-                                </div>
-                                
-                                <!-- Content -->
-                                <div class="prose max-w-none">
-                                    {!! nl2br(e($house->description)) !!}
+                            <svg class="-ml-1 mr-2 h-5 w-5 text-fuchsia-700" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+                            </svg>
+                            Contact about this property
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 3: Description with Read More -->
+            <div class="bg-white rounded-xl shadow p-6">
+                <div x-data="{ showModal: false }">
+                    <h2 class="text-xl font-semibold text-black mb-2">About this property</h2>
+                    <p class="text-gray-700 text-base">
+                        {{ Str::limit($house->description, 400) }}
+                        @if(strlen($house->description) > 400)
+                            <button 
+                                @click="showModal = true"
+                                class="text-fuchsia-700 hover:underline text-sm font-medium ml-1 focus:outline-none"
+                            >
+                                Read More
+                            </button>
+                        @endif
+                    </p>
+                    <!-- Modal -->
+                    <template x-teleport="body">
+                        <div 
+                            x-show="showModal"
+                            x-transition.opacity
+                            class="fixed inset-0 z-50 flex items-center justify-center p-4"
+                            @keydown.escape.window="showModal = false"
+                        >
+                            <!-- Overlay -->
+                            <div 
+                                class="absolute inset-0 bg-black/50"
+                                @click="showModal = false"
+                            ></div>
+                            <!-- Modal content -->
+                            <div 
+                                class="relative w-full max-w-2xl max-h-[80vh] overflow-y-auto bg-white rounded-lg shadow-xl"
+                                @click.outside="showModal = false"
+                            >
+                                <div class="p-6">
+                                    <div class="flex items-center justify-between mb-4">
+                                        <h1 class="text-xl font-semibold text-fuchsia-800">About this property</h1>
+                                        <button 
+                                            @click="showModal = false"
+                                            class="text-gray-500 hover:text-gray-700"
+                                        >
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                            </svg>
+                                        </button>
+                                    </div>
+                                    <div class="prose max-w-none text-gray-700">
+                                        {!! nl2br(e($house->description)) !!}
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </template>
+                    </template>
+                </div>
             </div>
-        </div>
-        <!-- Section 4: Additional Content -->
-        <div class="col-span-3 col-start-1 row-start-4">
-            @livewire('house-rentals', ['house' => $house])
-        </div>
 
-        <!-- Section 5: Additional Content -->
-        <div class="col-span-3 col-start-1 row-start-5">
-            
+            <!-- Section 4: Amenities (if you want to show them here) -->
+            <div class="bg-white rounded-xl shadow p-6">
+    <h2 class="text-xl font-semibold text-gray-900 mb-6">Amenities</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4">
+        @if($house->has_kitchen)
+            <div class="flex items-center gap-3">
+                <!-- Kitchen Icon -->
+                <svg class="w-7 h-7 text-black" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <rect x="5" y="10" width="14" height="7" rx="2" stroke="currentColor"/>
+                    <rect x="8" y="7" width="8" height="3" rx="1.5" stroke="currentColor"/>
+                    <path d="M3 13h2M19 13h2" stroke="currentColor"/>
+                    <path d="M10 7V5M14 7V5" stroke="currentColor"/>
+                </svg>
+                <span class="text-base text-black">Kitchen</span>
+            </div>
+        @endif
+        @if($house->has_wifi)
+            <div class="flex items-center gap-3">
+                <!-- WiFi Icon -->
+                <svg class="w-7 h-7 text-black" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path d="M2 8.82a15.91 15.91 0 0 1 20 0M6 13.06a10.94 10.94 0 0 1 12 0M9.91 17.5a4 4 0 0 1 4.18 0" stroke="currentColor"/>
+                    <circle cx="12" cy="20" r="1" fill="currentColor"/>
+                </svg>
+                <span class="text-base text-black">Wifi</span>
+            </div>
+        @endif
+        @if($house->has_parking)
+            <div class="flex items-center gap-3">
+                <!-- Parking Icon -->
+                <svg class="w-7 h-7 text-black" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <rect x="4" y="11" width="16" height="5" rx="2" stroke="currentColor"/>
+                    <path d="M7 11V9a3 3 0 0 1 3-3h4a3 3 0 0 1 3 3v2" stroke="currentColor"/>
+                    <circle cx="7" cy="18" r="2" stroke="currentColor" fill="none"/>
+                    <circle cx="17" cy="18" r="2" stroke="currentColor" fill="none"/>
+                </svg>
+                <span class="text-base text-black">Free parking</span>
+            </div>
+        @endif
+        @if($house->has_aircon)
+            <div class="flex items-center gap-3">
+                <!-- Aircon Icon -->
+                <svg class="w-7 h-7 text-black" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path d="M4 12h9a3 3 0 1 0 0-6 3 3 0 0 0-3 3" stroke="currentColor"/>
+                    <path d="M4 18h13a2 2 0 1 0 0-4 2 2 0 0 0-2 2" stroke="currentColor"/>
+                    <path d="M4 6h5" stroke="currentColor"/>
+                </svg>
+                <span class="text-base text-black">Air Conditioning unit</span>
+            </div>
+        @endif
+        @if($house->has_gym)
+            <div class="flex items-center gap-3">
+                <!-- Gym Icon -->
+                <svg class="w-7 h-7 text-black" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <rect x="2" y="10" width="2" height="4" rx="1" stroke="currentColor"/>
+                    <rect x="4" y="8" width="2" height="8" rx="1" stroke="currentColor"/>
+                    <rect x="6" y="11" width="12" height="2" rx="1" stroke="currentColor"/>
+                    <rect x="18" y="8" width="2" height="8" rx="1" stroke="currentColor"/>
+                    <rect x="20" y="10" width="2" height="4" rx="1" stroke="currentColor"/>
+                </svg>
+                <span class="text-base text-black">Gym</span>
+            </div>
+        @endif
+        @if($house->electric_meter)
+            <div class="flex items-center gap-3">
+                <!-- Electric Meter Icon -->
+                <svg class="w-7 h-7 text-black" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <polygon points="13 2 3 14 12 14 11 22 21 10 13 10 13 2" stroke="currentColor" fill="none"/>
+                </svg>
+                <span class="text-base text-black">Own Electric Meter</span>
+            </div>
+        @endif
+        @if($house->water_meter)
+            <div class="flex items-center gap-3">
+                <!-- Water Meter Icon -->
+                <svg class="w-7 h-7 text-black" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path d="M12 2C12 2 5 10.5 5 15a7 7 0 0 0 14 0C19 10.5 12 2 12 2Z" stroke="currentColor"/>
+                    <ellipse cx="12" cy="17" rx="3" ry="2" fill="currentColor" fill-opacity="0.2"/>
+                </svg>
+                <span class="text-base text-black">Own Water Meter</span>
+            </div>
+        @endif
+    </div>
+</div>
         </div>
 
         <!-- Section 6: Rental Component (Right Sidebar) -->
-        <div class="col-span-2 row-span-4 col-start-4 row-start-2">
-            <div class="bg-white rounded-lg p-4">
+        <div class="lg:col-span-2 flex flex-col gap-6">
+            <div class="bg-white rounded-xl shadow p-6 sticky top-8">
+                <h2 class="text-lg font-semibold text-fuchsia-800 mb-3">Book this property</h2>
                 @livewire('house-rentals', ['house' => $house])
             </div>
         </div>
