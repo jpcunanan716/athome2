@@ -117,7 +117,7 @@
         @if($properties->isEmpty())
             <div class="bg-white p-6 rounded-lg shadow text-center">
                 <p class="text-gray-500">You haven't listed any properties yet.</p>
-                <a href="{{ route('new-listing') }}" class="inline-block mt-4 text-blue-600 hover:text-blue-800">
+                <a href="{{ route('new-listing') }}" class="inline-block mt-4 text-fuchsia-600 hover:text-fuchsia-800">
                     Create your first listing
                 </a>
             </div>

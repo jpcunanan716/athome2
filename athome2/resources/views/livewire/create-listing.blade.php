@@ -518,6 +518,8 @@
     </div>
 </div>
 
+
+
 @push('scripts')
 <script>
     // Optional: Add some smooth transitions or additional JavaScript functionality

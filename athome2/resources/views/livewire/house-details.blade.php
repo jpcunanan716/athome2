@@ -332,7 +332,7 @@
         <!-- Section 6: Rental Component (Right Sidebar) -->
         <div class="lg:col-span-2 flex flex-col gap-6">
             <div class="bg-white rounded-xl shadow p-6 sticky top-8">
-                <h2 class="text-lg font-semibold text-black mb-3">Book this property</h2>
+                <h2 class="text-lg font-semibold text-black mb-3">Rent this property</h2>
                 @livewire('house-rentals', ['house' => $house])
             </div>
         </div>
