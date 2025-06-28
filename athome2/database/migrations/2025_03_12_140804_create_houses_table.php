@@ -30,8 +30,12 @@ return new class extends Migration
             $table->boolean('has_wifi');
             $table->boolean('has_parking');
             $table->boolean('has_gym');
+            $table->boolean('has_patio');
+            $table->boolean('has_pool');
+            $table->boolean('is_petfriendly');
             $table->boolean('electric_meter');
             $table->boolean('water_meter');
+            
             $table->float('price');
             $table->boolean('status')->default('1');
 

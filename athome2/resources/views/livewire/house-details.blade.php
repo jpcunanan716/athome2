@@ -102,12 +102,12 @@
         <!-- Section 2: House Details -->
         <div class="lg:col-span-3 flex flex-col gap-6">
             <div class="bg-white rounded-xl shadow p-6">
-                <h1 class="text-3xl font-bold text-fuchsia-800">{{ $house->houseName }}</h1>
+                <h1 class="text-3xl font-bold text-black">{{ $house->houseName }}</h1>
                 <div class="flex flex-wrap items-center gap-2 mt-2">
                     <span class="inline-flex items-center px-3 py-1 rounded-full bg-fuchsia-50 text-fuchsia-700 text-sm font-semibold">
                         {{ $house->city }}, {{ $house->province }}
                     </span>
-                    <span class="inline-flex items-center px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-sm font-semibold">
+                    <span class="inline-flex items-center px-3 py-1 rounded-full bg-fuchsia-50 text-fuchsia-700 text-sm font-semibold">
                         {{ $house->housetype }}
                     </span>
                 </div>
@@ -154,8 +154,10 @@
             <div class="bg-white rounded-xl shadow p-6">
                 <div x-data="{ showModal: false }">
                     <h2 class="text-xl font-semibold text-black mb-2">About this property</h2>
-                    <p class="text-gray-700 text-base">
-                        {{ Str::limit($house->description, 400) }}
+                    <div class="text-gray-700 text-base whitespace-pre-line">
+                        {{ strlen($house->description) > 400 
+                            ? Str::limit($house->description, 400) 
+                            : $house->description }}
                         @if(strlen($house->description) > 400)
                             <button 
                                 @click="showModal = true"
@@ -164,7 +166,7 @@
                                 Read More
                             </button>
                         @endif
-                    </p>
+                    </div>
                     <!-- Modal -->
                     <template x-teleport="body">
                         <div 
@@ -195,7 +197,7 @@
                                             </svg>
                                         </button>
                                     </div>
-                                    <div class="prose max-w-none text-gray-700">
+                                    <div class="prose max-w-none text-gray-700 whitespace-pre-line">
                                         {!! nl2br(e($house->description)) !!}
                                     </div>
                                 </div>
@@ -207,93 +209,130 @@
 
             <!-- Section 4: Amenities (if you want to show them here) -->
             <div class="bg-white rounded-xl shadow p-6">
-    <h2 class="text-xl font-semibold text-gray-900 mb-6">Amenities</h2>
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4">
-        @if($house->has_kitchen)
-            <div class="flex items-center gap-3">
-                <!-- Kitchen Icon -->
-                <svg class="w-7 h-7 text-black" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                    <rect x="5" y="10" width="14" height="7" rx="2" stroke="currentColor"/>
-                    <rect x="8" y="7" width="8" height="3" rx="1.5" stroke="currentColor"/>
-                    <path d="M3 13h2M19 13h2" stroke="currentColor"/>
-                    <path d="M10 7V5M14 7V5" stroke="currentColor"/>
-                </svg>
-                <span class="text-base text-black">Kitchen</span>
+                <h2 class="text-xl font-semibold text-gray-900 mb-6">Amenities</h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4">
+                    @if($house->has_kitchen)
+                        <div class="flex items-center gap-3">
+                            <!-- Kitchen Icon -->
+                            <svg class="w-7 h-7 text-black" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <rect x="5" y="10" width="14" height="7" rx="2" stroke="currentColor"/>
+                                <rect x="8" y="7" width="8" height="3" rx="1.5" stroke="currentColor"/>
+                                <path d="M3 13h2M19 13h2" stroke="currentColor"/>
+                                <path d="M10 7V5M14 7V5" stroke="currentColor"/>
+                            </svg>
+                            <span class="text-base text-black">Kitchen</span>
+                        </div>
+                    @endif
+                    @if($house->has_wifi)
+                        <div class="flex items-center gap-3">
+                            <!-- WiFi Icon -->
+                            <svg class="w-7 h-7 text-black" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path d="M2 8.82a15.91 15.91 0 0 1 20 0M6 13.06a10.94 10.94 0 0 1 12 0M9.91 17.5a4 4 0 0 1 4.18 0" stroke="currentColor"/>
+                                <circle cx="12" cy="20" r="1" fill="currentColor"/>
+                            </svg>
+                            <span class="text-base text-black">Wifi</span>
+                        </div>
+                    @endif
+                    @if($house->has_parking)
+                        <div class="flex items-center gap-3">
+                            <!-- Parking Icon -->
+                            <svg class="w-7 h-7 text-black" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <rect x="4" y="11" width="16" height="5" rx="2" stroke="currentColor"/>
+                                <path d="M7 11V9a3 3 0 0 1 3-3h4a3 3 0 0 1 3 3v2" stroke="currentColor"/>
+                                <circle cx="7" cy="18" r="2" stroke="currentColor" fill="none"/>
+                                <circle cx="17" cy="18" r="2" stroke="currentColor" fill="none"/>
+                            </svg>
+                            <span class="text-base text-black">Free parking</span>
+                        </div>
+                    @endif
+                    @if($house->has_aircon)
+                        <div class="flex items-center gap-3">
+                            <!-- Aircon Icon -->
+                            <svg class="w-7 h-7 text-black" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path d="M4 12h9a3 3 0 1 0 0-6 3 3 0 0 0-3 3" stroke="currentColor"/>
+                                <path d="M4 18h13a2 2 0 1 0 0-4 2 2 0 0 0-2 2" stroke="currentColor"/>
+                                <path d="M4 6h5" stroke="currentColor"/>
+                            </svg>
+                            <span class="text-base text-black">Air Conditioning unit</span>
+                        </div>
+                    @endif
+                    @if($house->has_gym)
+                        <div class="flex items-center gap-3">
+                            <!-- Gym Icon -->
+                            <svg class="w-7 h-7 text-black" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <rect x="2" y="10" width="2" height="4" rx="1" stroke="currentColor"/>
+                                <rect x="4" y="8" width="2" height="8" rx="1" stroke="currentColor"/>
+                                <rect x="6" y="11" width="12" height="2" rx="1" stroke="currentColor"/>
+                                <rect x="18" y="8" width="2" height="8" rx="1" stroke="currentColor"/>
+                                <rect x="20" y="10" width="2" height="4" rx="1" stroke="currentColor"/>
+                            </svg>
+                            <span class="text-base text-black">Gym</span>
+                        </div>
+                    @endif
+                    @if($house->has_patio)
+                        <div class="flex items-center gap-3">
+                            <!-- Patio Icon -->
+                            <svg class="w-7 h-7 mr-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path d="M12 3C7 3 3 7 3 12h18c0-5-4-9-9-9z" stroke="currentColor"/>
+                                <line x1="12" y1="12" x2="12" y2="21" stroke="currentColor"/>
+                                <rect x="8" y="19" width="8" height="2" rx="1" stroke="currentColor"/>
+                            </svg>
+                            <span class="text-base text-black">Patio / Balcony</span>
+                        </div>
+                    @endif
+                    @if($house->has_pool)
+                        <div class="flex items-center gap-3">
+                            <!-- Pool Icon -->
+                            <svg class="w-7 h-7 mr-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path d="M3 17c1.5 1 3.5 1 5 0s3.5-1 5 0 3.5 1 5 0" stroke="currentColor"/>
+                                <path d="M3 13c1.5 1 3.5 1 5 0s3.5-1 5 0 3.5 1 5 0" stroke="currentColor"/>
+                                <path d="M7 7v6M17 7v6" stroke="currentColor"/>
+                                <path d="M7 7c0-1.5 2-1.5 2 0v6" stroke="currentColor"/>
+                                <path d="M17 7c0-1.5-2-1.5-2 0v6" stroke="currentColor"/>
+                            </svg>
+                            <span class="text-base text-black">Pool</span>
+                        </div>
+                    @endif
+                    @if($house->is_petfriendly)
+                        <div class="flex items-center gap-3">
+                            <!-- Pet Friendly Icon -->
+                            <svg class="w-7 h-7 mr-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <ellipse cx="12" cy="17" rx="3" ry="2.5" stroke="currentColor"/>
+                                <circle cx="7.5" cy="13" r="1.5" stroke="currentColor"/>
+                                <circle cx="16.5" cy="13" r="1.5" stroke="currentColor"/>
+                                <circle cx="9" cy="10" r="1.2" stroke="currentColor"/>
+                                <circle cx="15" cy="10" r="1.2" stroke="currentColor"/>
+                            </svg>
+                            <span class="text-base text-black">Pet Friendly</span>
+                        </div>
+                    @endif
+                    @if($house->electric_meter)
+                        <div class="flex items-center gap-3">
+                            <!-- Electric Meter Icon -->
+                            <svg class="w-7 h-7 text-black" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <polygon points="13 2 3 14 12 14 11 22 21 10 13 10 13 2" stroke="currentColor" fill="none"/>
+                            </svg>
+                            <span class="text-base text-black">Own Electric Meter</span>
+                        </div>
+                    @endif
+                    @if($house->water_meter)
+                        <div class="flex items-center gap-3">
+                            <!-- Water Meter Icon -->
+                            <svg class="w-7 h-7 text-black" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path d="M12 2C12 2 5 10.5 5 15a7 7 0 0 0 14 0C19 10.5 12 2 12 2Z" stroke="currentColor"/>
+                                <ellipse cx="12" cy="17" rx="3" ry="2" fill="currentColor" fill-opacity="0.2"/>
+                            </svg>
+                            <span class="text-base text-black">Own Water Meter</span>
+                        </div>
+                    @endif
+                </div>
             </div>
-        @endif
-        @if($house->has_wifi)
-            <div class="flex items-center gap-3">
-                <!-- WiFi Icon -->
-                <svg class="w-7 h-7 text-black" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                    <path d="M2 8.82a15.91 15.91 0 0 1 20 0M6 13.06a10.94 10.94 0 0 1 12 0M9.91 17.5a4 4 0 0 1 4.18 0" stroke="currentColor"/>
-                    <circle cx="12" cy="20" r="1" fill="currentColor"/>
-                </svg>
-                <span class="text-base text-black">Wifi</span>
-            </div>
-        @endif
-        @if($house->has_parking)
-            <div class="flex items-center gap-3">
-                <!-- Parking Icon -->
-                <svg class="w-7 h-7 text-black" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                    <rect x="4" y="11" width="16" height="5" rx="2" stroke="currentColor"/>
-                    <path d="M7 11V9a3 3 0 0 1 3-3h4a3 3 0 0 1 3 3v2" stroke="currentColor"/>
-                    <circle cx="7" cy="18" r="2" stroke="currentColor" fill="none"/>
-                    <circle cx="17" cy="18" r="2" stroke="currentColor" fill="none"/>
-                </svg>
-                <span class="text-base text-black">Free parking</span>
-            </div>
-        @endif
-        @if($house->has_aircon)
-            <div class="flex items-center gap-3">
-                <!-- Aircon Icon -->
-                <svg class="w-7 h-7 text-black" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                    <path d="M4 12h9a3 3 0 1 0 0-6 3 3 0 0 0-3 3" stroke="currentColor"/>
-                    <path d="M4 18h13a2 2 0 1 0 0-4 2 2 0 0 0-2 2" stroke="currentColor"/>
-                    <path d="M4 6h5" stroke="currentColor"/>
-                </svg>
-                <span class="text-base text-black">Air Conditioning unit</span>
-            </div>
-        @endif
-        @if($house->has_gym)
-            <div class="flex items-center gap-3">
-                <!-- Gym Icon -->
-                <svg class="w-7 h-7 text-black" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                    <rect x="2" y="10" width="2" height="4" rx="1" stroke="currentColor"/>
-                    <rect x="4" y="8" width="2" height="8" rx="1" stroke="currentColor"/>
-                    <rect x="6" y="11" width="12" height="2" rx="1" stroke="currentColor"/>
-                    <rect x="18" y="8" width="2" height="8" rx="1" stroke="currentColor"/>
-                    <rect x="20" y="10" width="2" height="4" rx="1" stroke="currentColor"/>
-                </svg>
-                <span class="text-base text-black">Gym</span>
-            </div>
-        @endif
-        @if($house->electric_meter)
-            <div class="flex items-center gap-3">
-                <!-- Electric Meter Icon -->
-                <svg class="w-7 h-7 text-black" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                    <polygon points="13 2 3 14 12 14 11 22 21 10 13 10 13 2" stroke="currentColor" fill="none"/>
-                </svg>
-                <span class="text-base text-black">Own Electric Meter</span>
-            </div>
-        @endif
-        @if($house->water_meter)
-            <div class="flex items-center gap-3">
-                <!-- Water Meter Icon -->
-                <svg class="w-7 h-7 text-black" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                    <path d="M12 2C12 2 5 10.5 5 15a7 7 0 0 0 14 0C19 10.5 12 2 12 2Z" stroke="currentColor"/>
-                    <ellipse cx="12" cy="17" rx="3" ry="2" fill="currentColor" fill-opacity="0.2"/>
-                </svg>
-                <span class="text-base text-black">Own Water Meter</span>
-            </div>
-        @endif
-    </div>
-</div>
         </div>
 
         <!-- Section 6: Rental Component (Right Sidebar) -->
         <div class="lg:col-span-2 flex flex-col gap-6">
             <div class="bg-white rounded-xl shadow p-6 sticky top-8">
-                <h2 class="text-lg font-semibold text-fuchsia-800 mb-3">Book this property</h2>
+                <h2 class="text-lg font-semibold text-black mb-3">Rent this property</h2>
                 @livewire('house-rentals', ['house' => $house])
             </div>
         </div>

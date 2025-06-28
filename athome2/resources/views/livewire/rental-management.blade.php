@@ -117,7 +117,7 @@
         @if($properties->isEmpty())
             <div class="bg-white p-6 rounded-lg shadow text-center">
                 <p class="text-gray-500">You haven't listed any properties yet.</p>
-                <a href="{{ route('new-listing') }}" class="inline-block mt-4 text-blue-600 hover:text-blue-800">
+                <a href="{{ route('new-listing') }}" class="inline-block mt-4 text-fuchsia-600 hover:text-fuchsia-800">
                     Create your first listing
                 </a>
             </div>
@@ -184,6 +184,15 @@
                                 <span class="px-2 py-1 bg-fuchsia-100 text-fuchsia-800 text-xs rounded-full">Parking</span>
                                 @endif
                                 @if($property->has_gym)
+                                <span class="px-2 py-1 bg-fuchsia-100 text-fuchsia-800 text-xs rounded-full">Gym</span>
+                                @endif
+                                @if($property->has_patio)
+                                <span class="px-2 py-1 bg-fuchsia-100 text-fuchsia-800 text-xs rounded-full">Gym</span>
+                                @endif
+                                @if($property->has_pool)
+                                <span class="px-2 py-1 bg-fuchsia-100 text-fuchsia-800 text-xs rounded-full">Gym</span>
+                                @endif
+                                @if($property->is_petfriendly)
                                 <span class="px-2 py-1 bg-fuchsia-100 text-fuchsia-800 text-xs rounded-full">Gym</span>
                                 @endif
                                 @if($property->electric_meter)

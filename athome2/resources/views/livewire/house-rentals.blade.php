@@ -81,7 +81,7 @@
             @else
                 onclick="window.location.href='{{ route('login') }}'"
             @endif
-            class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 w-full {{ ($total_price === null && $start_date && $end_date) ? 'opacity-50 cursor-not-allowed' : '' }}"
+            class="bg-fuchsia-600 text-white px-4 py-2 rounded hover:bg-fuchsia-700 w-full {{ ($total_price === null && $start_date && $end_date) ? 'opacity-50 cursor-not-allowed' : '' }}"
             @if($total_price === null && $start_date && $end_date) disabled @endif
         >
             {{ auth()->check() ? 'Submit Rental Request' : 'Login to Rent' }}

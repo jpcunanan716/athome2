@@ -28,6 +28,9 @@ class CreateListing extends Component
     public $has_wifi = false;
     public $has_parking = false;
     public $has_gym = false;
+    public $has_patio = false;
+    public $has_pool = false;
+    public $is_petfriendly = false;
     public $electric_meter = false;
     public $water_meter = false;
     public $price;
@@ -59,7 +62,7 @@ class CreateListing extends Component
         'province.required' => 'Please select a province.',
         'city.required' => 'Please select a city.',
         'barangay.required' => 'Please select a barangay.',
-        'total_occupants.required' => 'Enter the number of occupants.',
+        'total_occupants.required' => 'Enter the maximum number of occupants.',
         'total_rooms.required' => 'Enter the number of rooms.',
         'total_bathrooms.required' => 'Enter the number of bathrooms.',
         'description.required' => 'Please provide a description.',
@@ -271,6 +274,9 @@ class CreateListing extends Component
                     'has_wifi' => 'boolean',
                     'has_parking' => 'boolean',
                     'has_gym' => 'boolean',
+                    'has_patio' => 'boolean',
+                    'has_pool' => 'boolean',
+                    'is_petfriendly' => 'boolean',
                     'electric_meter' => 'boolean',
                     'water_meter' => 'boolean',
                 ]);
@@ -314,6 +320,9 @@ class CreateListing extends Component
             'has_wifi' => 'boolean',
             'has_parking' => 'boolean',
             'has_gym' => 'boolean',
+            'has_patio' => 'boolean',
+            'has_pool' => 'boolean',
+            'is_petfriendly' => 'boolean',
             'electric_meter' => 'boolean',
             'water_meter' => 'boolean',
             'price' => 'required|numeric|min:0',
@@ -340,6 +349,9 @@ class CreateListing extends Component
             'has_wifi' => $this->has_wifi,
             'has_parking' => $this->has_parking,
             'has_gym' => $this->has_gym,
+            'has_patio' => $this->has_patio,
+            'has_pool' => $this->has_pool,
+            'is_petfriendly' => $this->is_petfriendly,
             'electric_meter' => $this->electric_meter,
             'water_meter' => $this->water_meter,
             'price' => $this->price,

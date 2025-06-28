@@ -56,4 +56,8 @@ Route::middleware(['auth'])->group(function () {
     })->name('conversations.show');
 });
 
+// Footer Content Routes
+Route::view('/privacy-policy', 'privacy-policy')->name('privacy.policy');
+Route::view('/terms-of-service', 'terms-service')->name('terms.service');
+
 require __DIR__.'/auth.php';
