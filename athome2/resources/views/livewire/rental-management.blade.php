@@ -6,7 +6,7 @@
     @endif
 
     <!-- Navigation Tabs + New Listing Button -->
-    <div class="flex justify-between items-center border-b border-gray-200 mb-6">
+    <div class="flex justify-between items-center text-center border-b border-gray-200 mb-6">
         <nav class="-mb-px flex space-x-8">
             <button wire:click="switchTab('rentals')" 
                 class="py-4 px-1 border-b-2 font-medium text-sm {{ $activeTab == 'rentals' 
@@ -340,6 +340,8 @@
                                 </label>
                             </div>
                         </div>
+
+                        
                     </div>
                     
                     <div class="mt-6 flex justify-end space-x-3">
