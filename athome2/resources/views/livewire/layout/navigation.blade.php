@@ -96,10 +96,7 @@
     <!-- Responsive Navigation Menu -->
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" wire:navigate>
-                {{ __('Dashboard') }}
-            </x-responsive-nav-link>
-            
+                        
             <!-- Mobile Switch to Owner Link -->
             <x-responsive-nav-link :href="route('rentals')" wire:navigate>
                 {{ __('Switch to Owner') }}
@@ -110,7 +107,7 @@
         <div class="pt-4 pb-1 border-t border-gray-200">
             <div class="px-4">
                 <div class="font-medium text-base text-gray-800" x-data="{{ json_encode(['name' => auth()->user()?->name ?? 'Guest']) }}" x-text="name" x-on:profile-updated.window="name = $event.detail.name"></div>
-                <div class="font-medium text-sm text-gray-500">{{ auth()->user()?->email ?? 'guest@example.com' }}</div>
+                <div class="font-medium text-sm text-gray-500">{{ auth()->user()?->email ?? 'Log in or Sign up' }}</div>
             </div>
 
             <div class="mt-3 space-y-1">

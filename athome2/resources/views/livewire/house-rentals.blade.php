@@ -64,7 +64,7 @@
                     For {{ $number_of_guests }} guest(s)<br>
                     {{ Carbon\Carbon::parse($start_date)->format('M j, Y') }} to 
                     {{ Carbon\Carbon::parse($end_date)->format('M j, Y') }}<br>
-                    ({{ Carbon\Carbon::parse($start_date)->diffInDays(Carbon\Carbon::parse($end_date)) + 1}} days)
+                    {{ Carbon\Carbon::parse($start_date)->diffInDays(Carbon\Carbon::parse($end_date)) + 1}} day(s)
                 </p>
             </div>
         @elseif($start_date && $end_date && $total_price === null)
