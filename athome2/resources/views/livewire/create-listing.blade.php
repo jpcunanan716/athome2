@@ -176,7 +176,7 @@
                         <div>
                             <label for="street" class="block text-sm font-medium text-gray-700">House no./Building no., Street/Subdivision</label>
                             <input type="text" wire:model="street" id="street" placeholder="Enter street address"
-                                class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-fuchsia-500">
                             @error('street')
                                 <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
                             @enderror
@@ -186,7 +186,7 @@
                         <div>
                             <label for="selectedRegion" class="block text-sm font-medium text-gray-700">Region</label>
                             <select wire:model="selectedRegion" id="selectedRegion"
-                                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-fuchsia-500">
                                 <option class="text-gray-500" value="">Select Region</option>
                                 @foreach($regions as $region)
                                     <option value="{{ $region['code'] }}">{{ $region['name'] }}</option>
@@ -205,7 +205,7 @@
                         <div>
                             <label for="selectedProvince" class="block text-sm font-medium text-gray-700">Province</label>
                             <select wire:model="selectedProvince" id="selectedProvince"
-                                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-fuchsia-500"
                                     {{ empty($provinces) ? 'disabled' : '' }}>
                                     <option value="">Select Province</option>
                                 @foreach($provinces as $province)
@@ -237,7 +237,7 @@
                             @endif
                         </label>
                             <select wire:model="selectedCity" id="selectedCity"
-                                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-fuchsia-500"
                                     {{ empty($cities) ? 'disabled' : '' }}>
                                 <option value="">Select City/Municipality</option>
                                 @foreach($cities as $city)
@@ -256,7 +256,7 @@
                     <div>
                         <label for="selectedBarangay" class="block text-sm font-medium text-gray-700">Barangay</label>
                         <select wire:model="selectedBarangay" id="selectedBarangay"
-                                class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-fuchsia-500"
                                 {{ empty($barangays) ? 'disabled' : '' }}>
                             <option value="">Select Barangay</option>
                             @foreach($barangays as $barangay)
@@ -435,7 +435,7 @@
                     <div>
                         <label for="description" class="block text-sm font-medium text-gray-700">Description</label>
                         <textarea wire:model="description" id="description" rows="6" placeholder="Describe your property..."
-                                  class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+                                  class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-fuchsia-500"></textarea>
                         @error('description')
                             <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
                         @enderror
@@ -449,7 +449,7 @@
                                 <span class="text-gray-500 sm:text-sm">₱</span>
                             </div>
                             <input type="number" wire:model="price" id="price" placeholder="0.00"
-                                   class="block w-full pl-8 pr-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                   class="block w-full pl-8 pr-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-fuchsia-500">
                         </div>
                         @error('price')
                             <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
@@ -471,13 +471,13 @@
                             <div class="mt-4">
                                 <strong>Amenities:</strong>
                                 <div class="flex flex-wrap gap-2 mt-2">
-                                    @if($has_aircon) <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs">Air Conditioning</span> @endif
-                                    @if($has_kitchen) <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs">Kitchen</span> @endif
-                                    @if($has_wifi) <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs">Wi-Fi</span> @endif
-                                    @if($has_parking) <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs">Parking</span> @endif
-                                    @if($has_gym) <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs">Gym</span> @endif
-                                    @if($electric_meter) <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs">Own Electric Meter</span> @endif
-                                    @if($water_meter) <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs">Own Water Meter</span> @endif
+                                    @if($has_aircon) <span class="bg-fuchsia-100 text-fuchsia-800 px-2 py-1 rounded-full text-xs">Air Conditioning</span> @endif
+                                    @if($has_kitchen) <span class="bg-fuchsia-100 text-fuchsia-800 px-2 py-1 rounded-full text-xs">Kitchen</span> @endif
+                                    @if($has_wifi) <span class="bg-fuchsia-100 text-fuchsia-800 px-2 py-1 rounded-full text-xs">Wi-Fi</span> @endif
+                                    @if($has_parking) <span class="bg-fuchsia-100 text-fuchsia-800 px-2 py-1 rounded-full text-xs">Parking</span> @endif
+                                    @if($has_gym) <span class="bg-fuchsia-100 text-fuchsia-800 px-2 py-1 rounded-full text-xs">Gym</span> @endif
+                                    @if($electric_meter) <span class="bg-fuchsia-100 text-fuchsia-800 px-2 py-1 rounded-full text-xs">Own Electric Meter</span> @endif
+                                    @if($water_meter) <span class="bg-fuchsia-100 text-fuchsia-800 px-2 py-1 rounded-full text-xs">Own Water Meter</span> @endif
                                 </div>
                             </div>
                         @endif

@@ -307,48 +307,75 @@
                             <h4 class="text-sm font-medium text-gray-700 mb-2">Amenities</h4>
                             <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
                                 <label class="flex items-center">
-                                    <input type="checkbox" wire:model="has_aircon" class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                                    <input type="checkbox" wire:model="has_aircon" class="rounded border-gray-300 text-fuchsia-600 shadow-sm focus:border-fuchsia-300 focus:ring focus:ring-fuchsia-200 focus:ring-opacity-50">
                                     <span class="ml-2 text-sm text-gray-700">Air Conditioning</span>
                                 </label>
                                 
                                 <label class="flex items-center">
-                                    <input type="checkbox" wire:model="has_kitchen" class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                                    <input type="checkbox" wire:model="has_kitchen" class="rounded border-gray-300 text-fuchsia-600 shadow-sm focus:border-fuchsia-300 focus:ring focus:ring-fuchsia-200 focus:ring-opacity-50">
                                     <span class="ml-2 text-sm text-gray-700">Kitchen</span>
                                 </label>
                                 
                                 <label class="flex items-center">
-                                    <input type="checkbox" wire:model="has_wifi" class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                                    <input type="checkbox" wire:model="has_wifi" class="rounded border-gray-300 text-fuchsia-600 shadow-sm focus:border-fuchsia-300 focus:ring focus:ring-fuchsia-200 focus:ring-opacity-50">
                                     <span class="ml-2 text-sm text-gray-700">WiFi</span>
                                 </label>
                                 
                                 <label class="flex items-center">
-                                    <input type="checkbox" wire:model="has_parking" class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                                    <input type="checkbox" wire:model="has_parking" class="rounded border-gray-300 text-fuchsia-600 shadow-sm focus:border-fuchsia-300 focus:ring focus:ring-fuchsia-200 focus:ring-opacity-50">
                                     <span class="ml-2 text-sm text-gray-700">Parking</span>
                                 </label>
                                 
                                 <label class="flex items-center">
-                                    <input type="checkbox" wire:model="has_gym" class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                                    <input type="checkbox" wire:model="has_gym" class="rounded border-gray-300 text-fuchsia-600 shadow-sm focus:border-fuchsia-300 focus:ring focus:ring-fuchsia-200 focus:ring-opacity-50">
                                     <span class="ml-2 text-sm text-gray-700">Gym</span>
                                 </label>
                                 <label class="flex items-center">
-                                    <input type="checkbox" wire:model="electric_meter" class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                                    <input type="checkbox" wire:model="electric_meter" class="rounded border-gray-300 text-fuchsia-600 shadow-sm focus:border-fuchsia-300 focus:ring focus:ring-fuchsia-200 focus:ring-opacity-50">
                                     <span class="ml-2 text-sm text-gray-700">Own Electric Meter</span>
                                 </label>
                                 <label class="flex items-center">
-                                    <input type="checkbox" wire:model="water_meter" class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                                    <input type="checkbox" wire:model="water_meter" class="rounded border-gray-300 text-fuchsia-600 shadow-sm focus:border-fuchsia-300 focus:ring focus:ring-fuchsia-200 focus:ring-opacity-50">
                                     <span class="ml-2 text-sm text-gray-700">Own Water Meter</span>
                                 </label>
                             </div>
                         </div>
 
-                        
+                        <div class="col-span-2">
+                            <h4 class="text-sm font-medium text-gray-700 mb-2">Property Images</h4>
+                            <div class="flex flex-wrap gap-6 mb-6">
+                                @if($editingProperty && $editingProperty->media)
+                                    @foreach($editingProperty->media as $media)
+                                    <div class="relative group flex flex-col items-center">
+                                        <img src="{{ asset('storage/' . $media->image_path) }}" class="w-32 h-32 object-cover rounded border shadow" />
+                                        <button type="button"
+                                            wire:click="deleteImage({{ $media->id }})"
+                                            class="absolute top-2 right-2 w-8 h-8 flex items-center justify-center bg-red-600 text-white rounded-full opacity-80 hover:opacity-100 shadow"
+                                            title="Delete">
+                                            <span class="text-xl font-bold leading-none">&times;</span>
+                                        </button>
+                                    </div>
+                                    @endforeach
+                                @endif
+                            </div>
+                            <input type="file" wire:model="newImages" multiple class="block w-full text-sm text-gray-700" accept="image/*">
+                            @error('newImages.*') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+
+                            @if ($newImages)
+                                <div class="flex gap-4 mt-4">
+                                    @foreach ($newImages as $image)
+                                        <img src="{{ $image->temporaryUrl() }}" class="w-20 h-20 object-cover rounded border shadow" />
+                                    @endforeach
+                                </div>
+                            @endif
+                        </div>
                     </div>
                     
                     <div class="mt-6 flex justify-end space-x-3">
                         <button type="button" wire:click="closeModal" class="bg-gray-300 hover:bg-gray-400 text-gray-800 px-4 py-2 rounded-lg">
                             Cancel
                         </button>
-                        <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg">
+                        <button type="submit" class="bg-fuchsia-700 hover:bg-fuchsia-900 text-white px-4 py-2 rounded-lg">
                             Update Property
                         </button>
                     </div>

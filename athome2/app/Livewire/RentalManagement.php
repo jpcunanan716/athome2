@@ -3,12 +3,17 @@
 namespace App\Livewire;
 
 use Livewire\Component;
+use Livewire\WithFileUploads;
 use App\Models\Rental;
 use App\Models\House;
+use App\Models\Media;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 
 class RentalManagement extends Component
 {
+    use WithFileUploads;
+
     public $activeTab = 'rentals';
     public $rentals;
     public $properties;
@@ -40,6 +45,7 @@ class RentalManagement extends Component
     public $electric_meter = false;
     public $water_meter = false;
     public $price;
+    public $newImages;
 
     protected $rules = [
         'houseName' => 'required|string|max:255',
@@ -62,7 +68,8 @@ class RentalManagement extends Component
         'is_petfriendly' => 'boolean',
         'electric_meter' => 'boolean',
         'water_meter' => 'boolean',
-        'price' => 'required|numeric|min:0'
+        'price' => 'required|numeric|min:0',
+        'newImages.*' => 'image', // 2MB max per image
     ];
 
     public function mount()
@@ -112,7 +119,7 @@ class RentalManagement extends Component
     public function editProperty($id)
     {
         $this->isEditing = true;
-        $this->editingProperty = House::findOrFail($id);
+        $this->editingProperty = House::with('media')->findOrFail($id);
         
         // Fill the form fields
         $this->houseName = $this->editingProperty->houseName;
@@ -170,6 +177,19 @@ class RentalManagement extends Component
             'price' => $this->price
         ]);
 
+        // Handle new images
+        if ($this->newImages) {
+            foreach ($this->newImages as $image) {
+                $path = $image->store('property-images', 'public');
+                $this->editingProperty->media()->create([
+                    'image_path' => $path,
+                ]);
+            }
+        }
+
+        // Clear selected images after update
+        $this->newImages = [];
+
         $this->resetEdit();
         $this->loadProperties();
         session()->flash('message', 'Property updated successfully.');
@@ -205,6 +225,18 @@ class RentalManagement extends Component
             'has_patio', 'has_pool', 'is_petfriendly', 'electric_meter', 'water_meter', 'price'
         ]);
         $this->resetValidation();
+    }
+
+    public function deleteImage($mediaId)
+    {
+        $media = Media::findOrFail($mediaId);
+        Storage::disk('public')->delete($media->image_path);
+        $media->delete();
+
+        // Refresh property images in modal
+        if ($this->editingProperty) {
+            $this->editingProperty = $this->editingProperty->fresh('media');
+        }
     }
 
     public function render()

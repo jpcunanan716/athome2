@@ -70,7 +70,7 @@
                                 Cancel
                             </button>
                             <button type="submit" 
-                                    class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">
+                                    class="px-4 py-2 bg-fuchsia-500 text-white rounded-md hover:bg-fuchsia-600">
                                 Start Conversation
                             </button>
                         </div>

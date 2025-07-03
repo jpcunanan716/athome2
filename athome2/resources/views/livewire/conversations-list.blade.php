@@ -14,7 +14,7 @@
                             {{ $conversation->subject }}
                             
                             @if ($conversation->unreadMessagesForUser(auth()->id()) > 0)
-                                <span class="bg-blue-500 text-white text-xs rounded-full px-2 py-1 ml-2">
+                                <span class="bg-fuchsia-500 text-white text-xs rounded-full px-2 py-1 ml-2">
                                     {{ $conversation->unreadMessagesForUser(auth()->id()) }}
                                 </span>
                             @endif
