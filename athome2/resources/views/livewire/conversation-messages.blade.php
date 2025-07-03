@@ -11,8 +11,8 @@
         <div class="p-4 h-96 overflow-y-auto" id="messages-container">
             @foreach($messages as $message)
                 <div class="mb-4 {{ $message->user_id === auth()->id() ? 'text-right' : '' }}">
-                    <div class="inline-block rounded-lg px-4 py-2 {{ $message->user_id === auth()->id() ? 'bg-blue-100' : 'bg-gray-100' }}">
-                        <div class="font-medium text-sm {{ $message->user_id === auth()->id() ? 'text-blue-800' : 'text-gray-800' }}">
+                    <div class="inline-block rounded-lg px-4 py-2 {{ $message->user_id === auth()->id() ? 'bg-fuchsia-100' : 'bg-gray-100' }}">
+                        <div class="font-medium text-sm {{ $message->user_id === auth()->id() ? 'text-fuchsia-800' : 'text-gray-800' }}">
                             {{ $message->user->name }}
                         </div>
                         <div class="text-sm">{{ $message->content }}</div>
@@ -31,11 +31,11 @@
                 <div class="flex">
                     <input type="text" 
                            wire:model.defer="messageText" 
-                           class="flex-1 rounded-l border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                           class="flex-1 rounded-l border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-fuchsia-500" 
                            placeholder="Type your message..."
                            autocomplete="off">
                     <button type="submit" 
-                            class="bg-blue-500 text-white px-4 py-2 rounded-r hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            class="bg-fuchsia-500 text-white px-4 py-2 rounded-r hover:bg-fuchsia-600 focus:outline-none focus:ring-2 focus:ring-fuchsia-500">
                         Send
                     </button>
                 </div>

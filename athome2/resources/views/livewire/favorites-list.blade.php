@@ -6,7 +6,7 @@
         @if($favorites->isEmpty())
             <div class="text-center py-12">
                 <p class="text-gray-500 text-lg">You haven't favorited any properties yet.</p>
-                <a href="{{ route('home') }}" class="mt-4 inline-block bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600">
+                <a href="{{ route('home') }}" class="mt-4 inline-block bg-fuchsia-500 text-white px-6 py-2 rounded hover:bg-fuchsia-600">
                     Browse Properties
                 </a>
             </div>
@@ -43,7 +43,7 @@
                                                 <p class="text-gray-600">{{ $house->city }}, {{ $house->province }}</p>
                                                 <p class="text-gray-700 mt-2">₱{{ number_format($house->price, 2) }}/month</p>
                                                 <a href="{{ route('house.show', $house->id) }}" 
-                                                class="block mt-4 text-center bg-blue-500 text-white py-2 rounded hover:bg-blue-600">
+                                                class="block mt-4 text-center bg-fuchsia-500 text-white py-2 rounded hover:bg-fuchsia-600">
                                                     View Details
                                                 </a>
                                             </div>
