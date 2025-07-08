@@ -10,8 +10,28 @@ use Livewire\WithPagination;
 
 class HouseListings extends Component
 {
-    use WithPagination;
     
+    use WithPagination;
+
+    public $search = '';
+    public $type = '';
+    public $guests = null; // Add this line
+
+    public function updatingSearch()
+    {
+        $this->resetPage();
+    }
+
+    public function updatingType()
+    {
+        $this->resetPage();
+    }
+    
+    public function updatingGuests()
+    {
+        $this->resetPage();
+    }
+
     public function toggleFavorite($houseId)
     {
         if (!Auth::check()) {
@@ -35,13 +55,38 @@ class HouseListings extends Component
             ->exists();
     }
 
+    public function searchHouses()
+    {
+        // This method is intentionally left blank.
+        // It just triggers Livewire to re-render with the current filter values.
+    }
+
     public function render()
     {
-        $houses = House::with(['media', 'favoritedBy'])
-                    ->where('status', 1) // Only show enabled houses (status = 1)
-                    ->withCount('favoritedBy')
-                    ->paginate(12);
-                    
-        return view('livewire.house-listings', compact('houses'))->layout('layouts.app');
+        $query = \App\Models\House::with('media')
+            ->where('user_id', '!=', auth()->id());
+
+        if ($this->search) {
+            $query->where(function($q) {
+                $q->where('city', 'like', '%'.$this->search.'%')
+                  ->orWhere('barangay', 'like', '%'.$this->search.'%')
+                  ->orWhere('province', 'like', '%'.$this->search.'%')
+                  ->orWhere('houseName', 'like', '%'.$this->search.'%');
+            });
+        }
+
+        if ($this->type) {
+            $query->where('housetype', 'like', '%'.$this->type.'%');
+        }
+
+        if ($this->guests) { // Add this block
+            $query->where('total_occupants', '>=', $this->guests);
+        }
+
+        $houses = $query->paginate(12);
+
+        return view('livewire.house-listings', [
+            'houses' => $houses,
+        ])->layout('layouts.app');
     }
 }

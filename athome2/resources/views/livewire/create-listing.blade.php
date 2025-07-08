@@ -96,6 +96,19 @@
                                 </svg>
                                 Penthouse
                             </button>
+                            <!-- Entire House -->
+                            <button type="button"
+                                wire:click="$set('housetype', 'Entire House')"
+                                class="flex items-center px-6 py-4 text-base rounded-xl border transition-all duration-200
+                                    {{ $housetype === 'Entire House' ? 'border-fuchsia-700 border-2 bg-white text-fuchsia-700 shadow' : 'bg-white text-gray-700 border-gray-300 hover:border-fuchsia-700 border-2' }}">
+                                <svg class="w-7 h-7 mr-3 transition-transform duration-200 {{ $housetype === 'Entire House' ? 'scale-125 text-fuchsia-700' : '' }}"
+        fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <!-- Minimal house: roof and base only -->
+        <polyline points="4 12 12 6 20 12" stroke="{{ $housetype === 'Entire House' ? '#A21CAF' : 'currentColor' }}" />
+        <rect x="6" y="12" width="12" height="6" rx="1.5" stroke="{{ $housetype === 'Entire House' ? '#A21CAF' : 'currentColor' }}" />
+    </svg>
+                                Entire House
+                            </button>
                         </div>
                         @error('housetype')
                             <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
