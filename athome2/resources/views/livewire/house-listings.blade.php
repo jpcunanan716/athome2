@@ -1,6 +1,44 @@
 <div class="py-12">
     <div class="max-w-8xl mx-auto sm:px-6 lg:px-8">
         <div class="p-6 text-gray-900 dark:text-gray-100">
+            <!-- Search and Filter -->
+            <div class="mb-8 flex flex-col sm:flex-row gap-4 pb-6 items-center justify-center text-black">
+                <input
+                    type="text"
+                    wire:model.defer="search"
+                    placeholder="Search Properties"
+                    class="border border-gray-300 rounded-md px-4 py-2 w-full sm:w-72 shadow focus:ring-2 focus:ring-fuchsia-400 focus:border-fuchsia-400 transition">
+                
+                <select wire:model.defer="type" class="border border-gray-300 rounded-md px-4 py-2 w-full sm:w-60 shadow focus:ring-2 focus:ring-fuchsia-400 focus:border-fuchsia-400 transition text-gray-500">
+                    <option value="">All Types</option>
+                    <option value="Studio Type">Studio Type</option>
+                    <option value="One Bedroom">One Bedroom</option>
+                    <option value="Two Bedroom">Two Bedroom</option>
+                    <option value="Condo">Condo</option>
+                    <option value="Townhouse">Townhouse</option>
+                    <option value="Penthouse">Penthouse</option>
+                    <option value="Entire House">Entire House</option>
+                </select>
+
+                <input
+                    type="number"
+                    min="1"
+                    wire:model.defer="guests"
+                    placeholder="Guests"
+                    class="border border-gray-300 rounded-md px-4 py-2 w-full sm:w-32 shadow focus:ring-2 focus:ring-fuchsia-400 focus:border-fuchsia-400 transition text-black"
+                />
+
+                <button
+                    wire:click="searchHouses"
+                    class="bg-fuchsia-700 hover:bg-fuchsia-800 text-white font-semibold px-6 py-2 rounded-lg shadow transition-all duration-200 flex items-center gap-2"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M17 11A6 6 0 105 11a6 6 0 0012 0z" />
+                    </svg>
+                    Search
+                </button>
+            </div>
+
             <!-- Grid container for cards -->
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
                 @foreach ($houses as $house)
@@ -45,6 +83,23 @@
                                     <span class="inline-block bg-green-500 text-white px-3 py-1 text-sm rounded mt-3">Furnished</span>
                                 @endif
                             </div>
+
+                            @if($house->latitude && $house->longitude)
+                                <div class="w-full h-48 rounded mb-2" id="map-{{ $house->id }}"></div>
+                                @push('scripts')
+                                <script>
+                                    document.addEventListener('DOMContentLoaded', function () {
+                                        if (document.getElementById('map-{{ $house->id }}')) {
+                                            let map = L.map('map-{{ $house->id }}').setView([{{ $house->latitude }}, {{ $house->longitude }}], 15);
+                                            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                                                attribution: '© OpenStreetMap contributors'
+                                            }).addTo(map);
+                                            L.marker([{{ $house->latitude }}, {{ $house->longitude }}]).addTo(map);
+                                        }
+                                    });
+                                </script>
+                                @endpush
+                            @endif
                         </a>
                     @endif
                 @endforeach

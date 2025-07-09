@@ -40,6 +40,8 @@ class House extends Model
         'price',
         'user_id',
         'status',
+        'latitude',
+        'longitude',
     ];
 
     // Casts

@@ -42,6 +42,9 @@ return new class extends Migration
             // Foreign key constraint
             $table->integer('user_id')->unsigned();
             $table->foreign('user_id')->references('id')->on('users')->ondelete('cascade');
+
+            $table->decimal('latitude', 10, 7)->nullable();
+            $table->decimal('longitude', 10, 7)->nullable();
            });
     }
 

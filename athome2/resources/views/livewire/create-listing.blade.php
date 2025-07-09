@@ -96,6 +96,19 @@
                                 </svg>
                                 Penthouse
                             </button>
+                            <!-- Entire House -->
+                            <button type="button"
+                                wire:click="$set('housetype', 'Entire House')"
+                                class="flex items-center px-6 py-4 text-base rounded-xl border transition-all duration-200
+                                    {{ $housetype === 'Entire House' ? 'border-fuchsia-700 border-2 bg-white text-fuchsia-700 shadow' : 'bg-white text-gray-700 border-gray-300 hover:border-fuchsia-700 border-2' }}">
+                                <svg class="w-7 h-7 mr-3 transition-transform duration-200 {{ $housetype === 'Entire House' ? 'scale-125 text-fuchsia-700' : '' }}"
+        fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <!-- Minimal house: roof and base only -->
+        <polyline points="4 12 12 6 20 12" stroke="{{ $housetype === 'Entire House' ? '#A21CAF' : 'currentColor' }}" />
+        <rect x="6" y="12" width="12" height="6" rx="1.5" stroke="{{ $housetype === 'Entire House' ? '#A21CAF' : 'currentColor' }}" />
+    </svg>
+                                Entire House
+                            </button>
                         </div>
                         @error('housetype')
                             <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
@@ -274,8 +287,20 @@
                 </div>
             @endif
 
-            <!-- Step 4: Amenities -->
             @if ($currentStep == 4)
+                <div>
+                    <h3 class="text-2xl font-semibold text-gray-800 mb-1 pt-16">Pin Your Location</h3>
+                    <p class="text-gray-500 mb-2 pb-8">Drag the pin to your exact location. The map is centered based on your address.</p>
+                    <div id="map" class="w-full h-96 rounded shadow"></div>
+                    <input type="hidden" wire:model="latitude">
+                    <input type="hidden" wire:model="longitude">
+                    @error('latitude') <p class="text-sm text-red-600 mt-1">{{ $message }}</p> @enderror
+                    @error('longitude') <p class="text-sm text-red-600 mt-1">{{ $message }}</p> @enderror
+                </div>
+            @endif
+
+            <!-- Step 4: Amenities -->
+            @if ($currentStep == 5)
                 <div class="space-y-6">
                     <h3 class="text-xl font-semibold text-gray-800 mb-6">Amenities</h3>
                     <div>
@@ -427,7 +452,7 @@
             @endif
 
             <!-- Step 5: Description and Price -->
-            @if ($currentStep == 5)
+            @if ($currentStep == 6)
                 <div class="space-y-6">
                     <h3 class="text-xl font-semibold text-gray-800 mb-6">Description & Pricing</h3>
                     
@@ -497,7 +522,7 @@
                 </div>
 
                 <div>
-    @if ($currentStep < 5)
+    @if ($currentStep < 6)
         <button type="button" wire:click="nextStep"
                 wire:loading.attr="disabled"
                 class="px-6 py-2 bg-fuchsia-700 text-white rounded-md hover:bg-fuchsia-800 focus:outline-none focus:ring-2 focus:ring-fuchsia-500 disabled:opacity-50 transition">
@@ -522,9 +547,91 @@
 
 @push('scripts')
 <script>
-    // Optional: Add some smooth transitions or additional JavaScript functionality
-    document.addEventListener('livewire:initialized', () => {
-        // You can add custom JavaScript here if needed
+document.addEventListener('DOMContentLoaded', function() {
+    let map = null;
+    let marker = null;
+    
+    function initializeMap() {
+        const mapDiv = document.getElementById('map');
+        
+        // Only initialize if map div exists and is visible
+        if (!mapDiv || mapDiv.style.display === 'none') {
+            return;
+        }
+        
+        // Clean up existing map
+        if (map) {
+            map.remove();
+            map = null;
+            marker = null;
+        }
+        
+        // Get coordinates from Livewire component or use Manila defaults
+        const lat = @this.latitude || 14.5995;
+        const lng = @this.longitude || 120.9842;
+        
+        // Initialize map
+        map = L.map('map').setView([lat, lng], 15);
+        
+        // Add tile layer
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+        
+        // Add draggable marker
+        marker = L.marker([lat, lng], {draggable: true}).addTo(map);
+        
+        // Update Livewire properties when marker is moved
+        marker.on('dragend', function(e) {
+            const pos = marker.getLatLng();
+            @this.set('latitude', pos.lat);
+            @this.set('longitude', pos.lng);
+        });
+        
+        // Force map to resize after initialization
+        setTimeout(() => {
+            if (map) {
+                map.invalidateSize();
+            }
+        }, 100);
+    }
+    
+    // Initialize map when step changes to 4
+    Livewire.hook('morph.updated', () => {
+        // Small delay to ensure DOM is updated
+        setTimeout(() => {
+            if (document.getElementById('map')) {
+                initializeMap();
+            }
+        }, 50);
     });
+    
+    // Also listen for message processing (Livewire v3)
+    Livewire.hook('commit', ({ succeed }) => {
+        succeed(() => {
+            setTimeout(() => {
+                if (document.getElementById('map')) {
+                    initializeMap();
+                }
+            }, 50);
+        });
+    });
+    
+    // Fallback: Try to initialize map periodically if it's not loaded
+    const checkMapInterval = setInterval(() => {
+        const mapDiv = document.getElementById('map');
+        if (mapDiv && !mapDiv.classList.contains('leaflet-container')) {
+            initializeMap();
+        }
+        
+        // Stop checking after map is initialized or after 10 seconds
+        if ((mapDiv && mapDiv.classList.contains('leaflet-container')) || 
+            Date.now() - startTime > 10000) {
+            clearInterval(checkMapInterval);
+        }
+    }, 200);
+    
+    const startTime = Date.now();
+});
 </script>
 @endpush

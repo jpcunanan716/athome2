@@ -34,10 +34,12 @@ class CreateListing extends Component
     public $electric_meter = false;
     public $water_meter = false;
     public $price;
+    public $latitude;
+    public $longitude;
 
     // Step management
     public $currentStep = 1;
-    public $totalSteps = 5;
+    public $totalSteps = 6;
 
     // Address selection
     public $selectedRegion;
@@ -219,12 +221,47 @@ class CreateListing extends Component
         $this->barangay = $barangay['name'] ?? null;
     }
 
+    private function geocodeAddress()
+    {
+        if (empty($this->street) || empty($this->city) || empty($this->province)) {
+            return;
+        }
+        
+        $address = $this->street . ', ' . $this->city . ', ' . $this->province . ', Philippines';
+        
+        try {
+            // Using a simple geocoding service (you can replace with your preferred service)
+            $response = Http::get('https://nominatim.openstreetmap.org/search', [
+                'q' => $address,
+                'format' => 'json',
+                'limit' => 1
+            ]);
+            
+            if ($response->successful()) {
+                $data = $response->json();
+                if (!empty($data)) {
+                    $this->latitude = (float) $data[0]['lat'];
+                    $this->longitude = (float) $data[0]['lon'];
+                }
+            }
+        } catch (\Exception $e) {
+            // Fallback to Manila coordinates
+            $this->latitude = 14.5995;
+            $this->longitude = 120.9842;
+        }
+    }
+
     public function nextStep()
     {
         $this->validateCurrentStep();
         
         if ($this->currentStep < $this->totalSteps) {
             $this->currentStep++;
+            
+            // Geocode address when moving to map step
+            if ($this->currentStep == 4 && empty($this->latitude)) {
+                $this->geocodeAddress();
+            }
         }
     }
 
@@ -267,7 +304,13 @@ class CreateListing extends Component
                     'selectedBarangay' => 'required|string',
                 ]);
                 break;
-            case 4: // Step 4: Amenities
+            case 4: // Step 4: Pin Location
+                $this->validate([
+                    'latitude' => 'required|numeric|between:-90,90',
+                    'longitude' => 'required|numeric|between:-180,180',
+                ]);
+                break;
+            case 5: // Step 4: Amenities
                 $this->validate([
                     'has_aircon' => 'boolean',
                     'has_kitchen' => 'boolean',
@@ -281,7 +324,7 @@ class CreateListing extends Component
                     'water_meter' => 'boolean',
                 ]);
                 break;
-            case 5: // Step 5: Description & Price
+            case 6: // Step 5: Description & Price
                 $this->validate([
                     'description' => 'required|string|max:65535',
                     'price' => 'required|numeric|min:0',
@@ -326,6 +369,8 @@ class CreateListing extends Component
             'electric_meter' => 'boolean',
             'water_meter' => 'boolean',
             'price' => 'required|numeric|min:0',
+            'latitude' => 'required|numeric|between:-90,90',
+            'longitude' => 'required|numeric|between:-180,180',
         ]);
 
         // Get the authenticated user's ID
@@ -356,6 +401,8 @@ class CreateListing extends Component
             'water_meter' => $this->water_meter,
             'price' => $this->price,
             'user_id' => $user_id,
+            'latitude' => $this->latitude,
+            'longitude' => $this->longitude,
         ]);
 
         // Store the house ID in session
@@ -363,9 +410,6 @@ class CreateListing extends Component
 
         // Dispatch an event with the newly created house's ID
         $this->dispatch('houseCreated', houseId: $house->id);
-
-        // Reset the form fields
-        $this->reset();
 
         return redirect()->to('/add-images/' . $house->id);
     }
