@@ -2,7 +2,7 @@
     <div class="max-w-8xl mx-auto sm:px-6 lg:px-8">
         <div class="p-6 text-gray-900 dark:text-gray-100">
             <!-- Search and Filter -->
-            <div class="mb-8 flex flex-col sm:flex-row gap-4 pb-6 items-center justify-center">
+            <div class="mb-8 flex flex-col sm:flex-row gap-4 pb-6 items-center justify-center text-black">
                 <input
                     type="text"
                     wire:model.defer="search"
@@ -83,6 +83,23 @@
                                     <span class="inline-block bg-green-500 text-white px-3 py-1 text-sm rounded mt-3">Furnished</span>
                                 @endif
                             </div>
+
+                            @if($house->latitude && $house->longitude)
+                                <div class="w-full h-48 rounded mb-2" id="map-{{ $house->id }}"></div>
+                                @push('scripts')
+                                <script>
+                                    document.addEventListener('DOMContentLoaded', function () {
+                                        if (document.getElementById('map-{{ $house->id }}')) {
+                                            let map = L.map('map-{{ $house->id }}').setView([{{ $house->latitude }}, {{ $house->longitude }}], 15);
+                                            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                                                attribution: '© OpenStreetMap contributors'
+                                            }).addTo(map);
+                                            L.marker([{{ $house->latitude }}, {{ $house->longitude }}]).addTo(map);
+                                        }
+                                    });
+                                </script>
+                                @endpush
+                            @endif
                         </a>
                     @endif
                 @endforeach
