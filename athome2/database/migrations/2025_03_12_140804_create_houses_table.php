@@ -25,6 +25,7 @@ return new class extends Migration
             $table->integer('total_rooms');
             $table->integer('total_bathrooms');
             $table->text('description');
+            $table->text('rules')->nullable();
             $table->boolean('has_aircon');
             $table->boolean('has_kitchen');
             $table->boolean('has_wifi');

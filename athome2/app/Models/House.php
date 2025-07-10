@@ -27,6 +27,7 @@ class House extends Model
         'total_rooms',
         'total_bathrooms',
         'description',
+        'rules',
         'has_aircon',
         'has_kitchen',
         'has_wifi',
