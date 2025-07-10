@@ -83,23 +83,6 @@
                                     <span class="inline-block bg-green-500 text-white px-3 py-1 text-sm rounded mt-3">Furnished</span>
                                 @endif
                             </div>
-
-                            @if($house->latitude && $house->longitude)
-                                <div class="w-full h-48 rounded mb-2" id="map-{{ $house->id }}"></div>
-                                @push('scripts')
-                                <script>
-                                    document.addEventListener('DOMContentLoaded', function () {
-                                        if (document.getElementById('map-{{ $house->id }}')) {
-                                            let map = L.map('map-{{ $house->id }}').setView([{{ $house->latitude }}, {{ $house->longitude }}], 15);
-                                            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                                                attribution: '© OpenStreetMap contributors'
-                                            }).addTo(map);
-                                            L.marker([{{ $house->latitude }}, {{ $house->longitude }}]).addTo(map);
-                                        }
-                                    });
-                                </script>
-                                @endpush
-                            @endif
                         </a>
                     @endif
                 @endforeach

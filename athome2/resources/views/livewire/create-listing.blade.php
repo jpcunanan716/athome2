@@ -287,10 +287,29 @@
                 </div>
             @endif
 
+            <!-- Step 4: Pin Location -->           
             @if ($currentStep == 4)
                 <div>
                     <h3 class="text-2xl font-semibold text-gray-800 mb-1 pt-16">Pin Your Location</h3>
-                    <p class="text-gray-500 mb-2 pb-8">Drag the pin to your exact location. The map is centered based on your address.</p>
+                    <p class="text-gray-500 mb-2 pb-8">Search your address or drag the pin to your exact location. The map is centered based on your search.</p>
+                    
+                    <!-- Address Search Box -->
+                    <div class="mb-4 flex gap-2">
+                        <input
+                            type="text"
+                            id="address-search"
+                            placeholder="Search address..."
+                            class="flex-1 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-fuchsia-500"
+                        >
+                        <button
+                            type="button"
+                            id="search-btn"
+                            class="px-4 py-2 bg-fuchsia-700 text-white rounded-md hover:bg-fuchsia-800 focus:outline-none focus:ring-2 focus:ring-fuchsia-500"
+                        >
+                            Search
+                        </button>
+                    </div>
+
                     <div id="map" class="w-full h-96 rounded shadow"></div>
                     <input type="hidden" wire:model="latitude">
                     <input type="hidden" wire:model="longitude">
@@ -299,7 +318,7 @@
                 </div>
             @endif
 
-            <!-- Step 4: Amenities -->
+            <!-- Step 5: Amenities -->
             @if ($currentStep == 5)
                 <div class="space-y-6">
                     <h3 class="text-xl font-semibold text-gray-800 mb-6">Amenities</h3>
@@ -451,7 +470,7 @@
                 </div>
             @endif
 
-            <!-- Step 5: Description and Price -->
+            <!-- Step 6: Description and Price -->
             @if ($currentStep == 6)
                 <div class="space-y-6">
                     <h3 class="text-xl font-semibold text-gray-800 mb-6">Description & Pricing</h3>
@@ -464,6 +483,36 @@
                         @error('description')
                             <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
                         @enderror
+                    </div>
+
+                    <!-- House Rules -->
+                    <div>
+                        <label for="newRule" class="block text-sm font-medium text-gray-700">House Rules</label>
+                        <div class="flex gap-2 mt-1">
+                            <input
+                                type="text"
+                                id="newRule"
+                                wire:model.defer="newRule"
+                                placeholder="Type a rule and click Add"
+                                class="flex-1 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-fuchsia-500"
+                            >
+                            <button type="button"
+                                    wire:click="addRule"
+                                    class="px-4 py-2 bg-fuchsia-700 text-white rounded-md hover:bg-fuchsia-800 focus:outline-none focus:ring-2 focus:ring-fuchsia-500">
+                                Add
+                            </button>
+                        </div>
+                        @error('newRule')
+                            <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
+                        @enderror
+
+                        @if(!empty($houseRules))
+                            <ul class="list-disc pl-6 mt-3 space-y-1 text-gray-700">
+                                @foreach($houseRules as $rule)
+                                    <li>{{ $rule }}</li>
+                                @endforeach
+                            </ul>
+                        @endif
                     </div>
 
                     <!-- Price -->
@@ -492,6 +541,16 @@
                             <div><strong>Bathrooms:</strong> {{ $total_bathrooms ?? 'Not specified' }}</div>
                             <div><strong>Address:</strong> {{ $street ?? 'Not specified' }}, {{ $barangay ?? '' }}, {{ $city ?? '' }}, {{ $province ?? '' }}</div>
                         </div>
+                        @if(!empty($houseRules))
+                            <div class="mt-4">
+                                <strong>House Rules:</strong>
+                                <ul class="list-disc pl-6 mt-2 text-gray-700">
+                                    @foreach($houseRules as $rule)
+                                        <li>{{ $rule }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
                         @if($has_aircon || $has_kitchen || $has_wifi || $has_parking || $has_gym || $electric_meter || $water_meter)
                             <div class="mt-4">
                                 <strong>Amenities:</strong>
@@ -501,6 +560,9 @@
                                     @if($has_wifi) <span class="bg-fuchsia-100 text-fuchsia-800 px-2 py-1 rounded-full text-xs">Wi-Fi</span> @endif
                                     @if($has_parking) <span class="bg-fuchsia-100 text-fuchsia-800 px-2 py-1 rounded-full text-xs">Parking</span> @endif
                                     @if($has_gym) <span class="bg-fuchsia-100 text-fuchsia-800 px-2 py-1 rounded-full text-xs">Gym</span> @endif
+                                    @if($has_patio) <span class="bg-fuchsia-100 text-fuchsia-800 px-2 py-1 rounded-full text-xs">Patio/Balcony</span> @endif
+                                    @if($has_pool) <span class="bg-fuchsia-100 text-fuchsia-800 px-2 py-1 rounded-full text-xs">Pool</span> @endif
+                                    @if($is_petfriendly) <span class="bg-fuchsia-100 text-fuchsia-800 px-2 py-1 rounded-full text-xs">Pet Friendly</span> @endif
                                     @if($electric_meter) <span class="bg-fuchsia-100 text-fuchsia-800 px-2 py-1 rounded-full text-xs">Own Electric Meter</span> @endif
                                     @if($water_meter) <span class="bg-fuchsia-100 text-fuchsia-800 px-2 py-1 rounded-full text-xs">Own Water Meter</span> @endif
                                 </div>
@@ -532,7 +594,7 @@
     @else
         <button type="submit"
                 wire:loading.attr="disabled"
-                class="px-8 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 disabled:opacity-50">
+                class="px-8 py-2 bg-fuchsia-500 text-white rounded-md hover:bg-fuchsia-600 focus:outline-none focus:ring-2 focus:ring-fuchsia-500 disabled:opacity-50">
             <span wire:loading.remove wire:target="save">Create Listing</span>
             <span wire:loading wire:target="save">Creating...</span>
         </button>
@@ -550,63 +612,84 @@
 document.addEventListener('DOMContentLoaded', function() {
     let map = null;
     let marker = null;
-    
+
     function initializeMap() {
         const mapDiv = document.getElementById('map');
-        
-        // Only initialize if map div exists and is visible
-        if (!mapDiv || mapDiv.style.display === 'none') {
-            return;
-        }
-        
+        if (!mapDiv || mapDiv.style.display === 'none') return;
+
         // Clean up existing map
         if (map) {
             map.remove();
             map = null;
             marker = null;
         }
-        
-        // Get coordinates from Livewire component or use Manila defaults
+
+        // Get coordinates from Livewire or default to Manila
         const lat = @this.latitude || 14.5995;
         const lng = @this.longitude || 120.9842;
-        
-        // Initialize map
+
         map = L.map('map').setView([lat, lng], 15);
-        
-        // Add tile layer
+
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '© OpenStreetMap contributors'
         }).addTo(map);
-        
-        // Add draggable marker
+
         marker = L.marker([lat, lng], {draggable: true}).addTo(map);
-        
-        // Update Livewire properties when marker is moved
+
         marker.on('dragend', function(e) {
             const pos = marker.getLatLng();
             @this.set('latitude', pos.lat);
             @this.set('longitude', pos.lng);
         });
-        
-        // Force map to resize after initialization
+
         setTimeout(() => {
-            if (map) {
-                map.invalidateSize();
-            }
+            if (map) map.invalidateSize();
         }, 100);
     }
-    
-    // Initialize map when step changes to 4
+
+    // Address search using Nominatim
+    function searchAddress() {
+        const query = document.getElementById('address-search').value;
+        if (!query) return;
+        fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=1`)
+            .then(response => response.json())
+            .then(data => {
+                if (data && data.length > 0) {
+                    const lat = parseFloat(data[0].lat);
+                    const lon = parseFloat(data[0].lon);
+                    if (map && marker) {
+                        map.setView([lat, lon], 17);
+                        marker.setLatLng([lat, lon]);
+                        @this.set('latitude', lat);
+                        @this.set('longitude', lon);
+                    }
+                } else {
+                    alert('Address not found. Please try a different search.');
+                }
+            });
+    }
+
+    // Event listeners for search
+    document.addEventListener('click', function(e) {
+        if (e.target && e.target.id === 'search-btn') {
+            searchAddress();
+        }
+    });
+    document.addEventListener('keydown', function(e) {
+        if (e.target && e.target.id === 'address-search' && e.key === 'Enter') {
+            e.preventDefault();
+            searchAddress();
+        }
+    });
+
+    // Livewire hooks for map step
     Livewire.hook('morph.updated', () => {
-        // Small delay to ensure DOM is updated
         setTimeout(() => {
             if (document.getElementById('map')) {
                 initializeMap();
             }
         }, 50);
     });
-    
-    // Also listen for message processing (Livewire v3)
     Livewire.hook('commit', ({ succeed }) => {
         succeed(() => {
             setTimeout(() => {
@@ -616,22 +699,18 @@ document.addEventListener('DOMContentLoaded', function() {
             }, 50);
         });
     });
-    
+
     // Fallback: Try to initialize map periodically if it's not loaded
+    const startTime = Date.now();
     const checkMapInterval = setInterval(() => {
         const mapDiv = document.getElementById('map');
         if (mapDiv && !mapDiv.classList.contains('leaflet-container')) {
             initializeMap();
         }
-        
-        // Stop checking after map is initialized or after 10 seconds
-        if ((mapDiv && mapDiv.classList.contains('leaflet-container')) || 
-            Date.now() - startTime > 10000) {
+        if ((mapDiv && mapDiv.classList.contains('leaflet-container')) || Date.now() - startTime > 10000) {
             clearInterval(checkMapInterval);
         }
     }, 200);
-    
-    const startTime = Date.now();
 });
 </script>
 @endpush

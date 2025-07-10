@@ -23,6 +23,7 @@ class CreateListing extends Component
     public $total_rooms = 1;
     public $total_bathrooms = 1;
     public $description;
+    public $rules;
     public $has_aircon = false;
     public $has_kitchen = false;
     public $has_wifi = false;
@@ -55,6 +56,9 @@ class CreateListing extends Component
     public $loadingProvinces = false;
     public $loadingCities = false;
     public $loadingBarangays = false;
+
+    public $newRule = '';
+    public $houseRules = [];
 
     protected $messages = [
         'houseName.required' => 'The property name is required.',
@@ -230,7 +234,6 @@ class CreateListing extends Component
         $address = $this->street . ', ' . $this->city . ', ' . $this->province . ', Philippines';
         
         try {
-            // Using a simple geocoding service (you can replace with your preferred service)
             $response = Http::get('https://nominatim.openstreetmap.org/search', [
                 'q' => $address,
                 'format' => 'json',
@@ -343,6 +346,18 @@ class CreateListing extends Component
         $this->$field = ($this->$field > 1) ? $this->$field - 1 : 1;
     }
 
+    public function addRule()
+    {
+        $this->validate([
+            'newRule' => 'required|string|max:255'
+        ]);
+        $rule = trim($this->newRule);
+        if ($rule && !in_array($rule, $this->houseRules)) {
+            $this->houseRules[] = $rule;
+        }
+        $this->newRule = '';
+    }
+
     public function save()
     {
         // Validate all steps
@@ -389,6 +404,7 @@ class CreateListing extends Component
             'total_rooms' => $this->total_rooms,
             'total_bathrooms' => $this->total_bathrooms,
             'description' => $this->description,
+            'rules' => !empty($this->houseRules) ? implode("\n", $this->houseRules) : null,
             'has_aircon' => $this->has_aircon,
             'has_kitchen' => $this->has_kitchen,
             'has_wifi' => $this->has_wifi,

@@ -384,22 +384,43 @@
                 <div class="bg-white rounded-xl shadow p-6">
                     <h2 class="text-xl font-semibold text-gray-900 mb-4">Location & Neighborhood</h2>
                     <p class="text-gray-700 mb-4">Located in the vibrant Quezon City area, this property is surrounded by excellent dining options, shopping centers, and entertainment venues.</p>
-                    <div class="h-64 bg-gray-200 rounded-lg flex items-center justify-center text-gray-500">
-                        Map Placeholder
-                    </div>
+                    @if($house->latitude && $house->longitude)
+                        <div class="w-full h-96 rounded mb-2" id="map-{{ $house->id }}"></div>
+                        @push('scripts')
+                        <script>
+                            document.addEventListener('DOMContentLoaded', function () {
+                                if (document.getElementById('map-{{ $house->id }}')) {
+                                    let map = L.map('map-{{ $house->id }}').setView([{{ $house->latitude }}, {{ $house->longitude }}], 15);
+                                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                                        attribution: '© OpenStreetMap contributors'
+                                    }).addTo(map);
+                                    L.marker([{{ $house->latitude }}, {{ $house->longitude }}]).addTo(map);
+                                    setTimeout(() => { map.invalidateSize(); }, 200);
+                                }
+                            });
+                        </script>
+                        @endpush
+                    @else
+                        <div class="h-96 bg-gray-200 rounded-lg flex items-center justify-center text-gray-500">
+                            Location not available
+                        </div>
+                    @endif
                 </div>
 
                 <!-- House Rules -->
                 <div class="bg-white rounded-xl shadow p-6 w-full">
                     <h2 class="text-xl font-semibold text-gray-900 mb-4">House Rules</h2>
-                    <ul class="space-y-2 text-gray-700">
-                        <li>• Check-in: 3:00 PM - 11:00 PM</li>
-                        <li>• Check-out: 11:00 AM</li>
-                        <li>• No smoking inside the property</li>
-                        <li>• No parties or events</li>
-                        <li>• Pets allowed with prior approval</li>
-                        <li>• Maximum 6 guests</li>
-                    </ul>
+                    @if(!empty($house->rules))
+                        <ul class="list-disc pl-6 space-y-2 text-gray-700">
+                            @foreach(explode("\n", $house->rules) as $rule)
+                                @if(trim($rule) !== '')
+                                    <li>{{ $rule }}</li>
+                                @endif
+                            @endforeach
+                        </ul>
+                    @else
+                        <p class="text-gray-500">No house rules provided.</p>
+                    @endif
                 </div>
             </div>
 
