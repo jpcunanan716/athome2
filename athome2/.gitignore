@@ -21,6 +21,5 @@ yarn-error.log
 /.nova
 /.vscode
 /.zed
-!/public/storage/seeders/
-!/public/storage/seeders/images/
+!/public/seeders/
 !/public/storage/seeders/images/**
