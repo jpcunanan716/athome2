@@ -41,8 +41,8 @@
                     &copy; {{ date('Y') }} athome. All rights reserved.
                 </div>
                 <div class="flex gap-4 items-center text-sm">
-                    <a href="{{ route('privacy.policy') }}" class="text-fuchsia-700 hover:underline">Privacy Policy</a>
-                    <a href="{{ route('terms.service') }}" class="text-fuchsia-700 hover:underline">Terms of Service</a>
+                    <a href="{{ route('privacy.policy') }}" target="_blank" class="text-fuchsia-700 hover:underline">Privacy Policy</a>
+                    <a href="{{ route('terms.service') }}" target="_blank" class="text-fuchsia-700 hover:underline">Terms of Service</a>
                     <a href="https://www.linkedin.com/in/jp-cunanan-508470276/" target="_blank" rel="noopener" aria-label="LinkedIn" class="text-gray-500 hover:text-fuchsia-700">
                         <!-- LinkedIn Icon -->
                         <svg class="w-6 h-6 inline" fill="currentColor" viewBox="0 0 24 24">
