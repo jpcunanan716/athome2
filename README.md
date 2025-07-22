@@ -75,6 +75,12 @@ npm run dev
 php artisan serve
 ```
 
+### 8. To run both Assets and Application
+
+```sh
+composer run dev
+```
+
 Visit [http://localhost:8000](http://localhost:8000)
 
 ---
