@@ -4,7 +4,7 @@
             <!-- Step 1: House Name & Type -->
             @if ($currentStep == 1)
                 <div class="space-y-6 pt-16">
-                    <h3 class="text-2xl font-semibold text-gray-800 mb-2">Tell us what kind of place you want to rent</h3>
+                    <h3 class="text-2xl font-semibold text-gray-800 mb-2">Tell us what kind of place you want to list</h3>
                     
                     <!-- House Name -->
                    <div>
