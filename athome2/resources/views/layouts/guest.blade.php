@@ -20,7 +20,7 @@
                     <path d="M30 75 L60 37 L90 75 M38 75 V105 H82 V75" stroke="#C026D3" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
                     <line x1="60" y1="105" x2="60" y2="86" stroke="#C026D3" stroke-width="8" stroke-linecap="round"/>
                 </svg>
-                <span class="text-5xl font-bold text-fuchsia-700 tracking-tight mt-4">athome</span>
+                <span class="text-5xl font-bold text-fuchsia-700 tracking-tight mt-4">atHome</span>
             </div>
 
             <div class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white shadow-md overflow-hidden sm:rounded-lg">
